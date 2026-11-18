@@ -372,7 +372,9 @@ locais. Desserializadores, ORMs e APIs HTTP exigem testes de integração própr
   aplica propagação de falha e cancelamento a `Task`, `WhenAll` e pipelines.
 - **Aplicações:** [C06 — Composição e pipeline no ASP.NET Core](../aplicacoes-e-dados/c06-composicao-pipeline-aspnet-core.md)
   aplica validação na composição; [C07 — APIs HTTP e integrações resilientes](../aplicacoes-e-dados/c07-apis-http-integracoes-resilientes.md)
-  traduz falhas para contratos HTTP; C09 trata fronteiras de persistência.
+  traduz falhas para contratos HTTP;
+  [C09](../aplicacoes-e-dados/c09-fronteiras-concorrencia-ef-core.md) trata
+  fronteiras de persistência.
 
 ## Referências
 

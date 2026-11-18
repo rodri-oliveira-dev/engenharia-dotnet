@@ -10,8 +10,10 @@ dados.
 - **C07 · Intermediário · Publicado:**
   [APIs HTTP e integrações resilientes](c07-apis-http-integracoes-resilientes.md).
 - **C10 · Fundamental · Planejado:** Fundamentos de persistência SQL e NoSQL.
-- **C08 · Intermediário · Planejado:** Consultas eficientes com EF Core.
-- **C09 · Intermediário · Planejado:** Fronteiras e concorrência no EF Core.
+- **C08 · Intermediário · Publicado:**
+  [Consultas eficientes com EF Core](c08-consultas-ef-core.md).
+- **C09 · Intermediário · Publicado:**
+  [Fronteiras e concorrência no EF Core](c09-fronteiras-concorrencia-ef-core.md).
 
 Consulte o [mapa editorial](../planejamento/mapa-editorial.md) para escopo,
 dependências e estratégia de exemplos. Volte ao [índice central](../indice.md).

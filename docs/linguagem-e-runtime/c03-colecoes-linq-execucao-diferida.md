@@ -318,8 +318,8 @@ pré-condições; a decisão de performance requer dados do ambiente de destino.
   usa filas e streaming em concorrência.
 - **Paginação:** [C07 — APIs HTTP e integrações resilientes](../aplicacoes-e-dados/c07-apis-http-integracoes-resilientes.md)
   aplica materialização limitada e ordenação estável em contratos HTTP.
-- **Aplicação planejada:** C08 distingue LINQ to Objects de consultas traduzidas
-  por EF Core.
+- **Aplicação:** [C08 — Consultas eficientes com EF Core](../aplicacoes-e-dados/c08-consultas-ef-core.md)
+  distingue LINQ to Objects de consultas traduzidas pelo provider.
 
 ## Referências
 
