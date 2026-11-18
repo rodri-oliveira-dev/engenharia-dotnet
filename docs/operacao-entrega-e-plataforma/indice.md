@@ -10,8 +10,8 @@ infraestrutura.
   incidentes.
 - **C29 · Avançado · Planejado:** Entrega compatível e gestão de risco no
   pipeline.
-- **C20 · Intermediário · Planejado:** Infraestrutura como código e controle de
-  drift.
+- **C20 · Intermediário · Publicado:** [Infraestrutura como código e controle de
+  drift](c20-infraestrutura-como-codigo-drift.md).
 
 Consulte o [mapa editorial](../planejamento/mapa-editorial.md) para escopo,
 dependências e estratégia de exemplos. Volte ao [índice central](../indice.md).

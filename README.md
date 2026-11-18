@@ -59,7 +59,8 @@ distinguem claramente o que existe do que está planejado.
   [fundamentos de persistência SQL e NoSQL](docs/aplicacoes-e-dados/c10-fundamentos-persistencia-sql-nosql.md).
 - [Domínio e arquitetura](docs/dominio-e-arquitetura/indice.md)
   — DDD estratégico, [entidades, value objects e agregados](docs/dominio-e-arquitetura/c11-entidades-value-objects-agregados.md),
-  [serviços e integração entre modelos](docs/dominio-e-arquitetura/c12-servicos-dominio-integracao-modelos.md).
+  [serviços e integração entre modelos](docs/dominio-e-arquitetura/c12-servicos-dominio-integracao-modelos.md) e
+  [documentação arquitetural viva](docs/dominio-e-arquitetura/c19-documentacao-arquitetural-viva.md).
 - [Sistemas distribuídos](docs/sistemas-distribuidos/indice.md)
   — comunicação, entrega confiável, consistência e
   [evolução de monólitos para microserviços](docs/sistemas-distribuidos/c18-limites-microservicos-evolucao-monolitos.md).
@@ -68,6 +69,8 @@ distinguem claramente o que existe do que está planejado.
   [integração real e evolução segura de legado](docs/qualidade-e-seguranca/c24-integracao-real-testes-legado.md),
   [cobertura, E2E e carga](docs/qualidade-e-seguranca/c25-cobertura-e2e-carga.md).
 - [Operação, entrega e plataforma](docs/operacao-entrega-e-plataforma/indice.md)
+  — [infraestrutura como código e controle de
+  drift](docs/operacao-entrega-e-plataforma/c20-infraestrutura-como-codigo-drift.md).
 - [IA e prática profissional](docs/ia-e-pratica-profissional/indice.md)
 - [Estudos de caso](docs/estudos-de-caso/indice.md)
 

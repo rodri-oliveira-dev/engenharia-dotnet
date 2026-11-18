@@ -1,0 +1,4 @@
+---
+output_dir: /tmp/engenharia-dotnet-c20
+api_environment: desenvolvimento
+api_log_level: Information

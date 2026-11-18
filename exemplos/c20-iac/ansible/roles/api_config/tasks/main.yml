@@ -1,0 +1,12 @@
+---
+- name: Garantir diretório de configuração
+  ansible.builtin.file:
+    path: "{{ output_dir }}"
+    state: directory
+    mode: "0750"
+
+- name: Renderizar configuração da API
+  ansible.builtin.template:
+    src: appsettings.json.j2
+    dest: "{{ output_dir }}/appsettings.json"
+    mode: "0640"

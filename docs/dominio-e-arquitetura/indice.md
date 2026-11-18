@@ -12,7 +12,8 @@ arquiteturais.
   propósito](c13-dependencias-abstracoes-padroes.md).
 - **C14 · Avançado · Publicado:** [CQRS e modelos orientados ao
   uso](c14-cqrs-modelos-orientados-uso.md).
-- **C19 · Fundamental · Planejado:** Documentação arquitetural viva.
+- **C19 · Fundamental · Publicado:** [Documentação arquitetural
+  viva](c19-documentacao-arquitetural-viva.md).
 
 Consulte o [mapa editorial](../planejamento/mapa-editorial.md) para escopo,
 dependências e estratégia de exemplos. Volte ao [índice central](../indice.md).
