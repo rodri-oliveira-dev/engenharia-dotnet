@@ -29,4 +29,6 @@
   <Project Path="c26-seguranca/C26.Seguranca.Tests.csproj" />
   <Project Path="c27-c28-observabilidade/C27C28.Observabilidade.csproj" />
   <Project Path="c27-c28-observabilidade/C27C28.Observabilidade.Tests.csproj" />
+  <Project Path="c29-entrega/C29.Entrega.csproj" />
+  <Project Path="c29-entrega/C29.Entrega.Tests.csproj" />
 </Solution>

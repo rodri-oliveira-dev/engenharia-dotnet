@@ -44,9 +44,12 @@ O repositório será organizado por **trilhas de conhecimento**, não pelas cate
 | 27 | C20 | Plataforma | **Infraestrutura como código e controle de drift** — provisionamento versus configuração, estado, revisão, detecção e reconciliação. | Intermediário | C19, C29 | Não |
 | 28 | C21 | IA aplicada | **Fundamentos de LLM, MCP e RAG** — contexto, recuperação, permissões, auditoria, avaliação e limites contra alucinação. | Intermediário | C19, C23 | Parcial |
 | 29 | C22 | IA aplicada | **Agentes, orquestração e desenvolvimento orientado por especificações** — decomposição, estado, validação, custo e revisão humana. | Avançado | C21, C23 | Parcial |
-| 30 | C30 | Prática profissional | **Decisão técnica, revisão e mentoria** — evidências, trade-offs, governança, code review, pairing e autonomia progressiva. | Fundamental | C19, C23 | Não |
-| 31 | C31 | Estudos de caso | **Pagamentos sem duplicidade durante instabilidades** — investigação temporal e composição de idempotência, restrição única, transação, Outbox e retries. | Avançado | C09, C16, C27, C28 | Sim |
-| 32 | C32 | Estudos de caso | **Diagnóstico de backlog em filas** — lag, concorrência, partições, locks, I/O, downstream, rate limits, backpressure e escala útil. | Avançado | C05, C15, C27, C28 | Sim |
+| 30 | C30 | Prática profissional | **Decisão, revisão e maturidade técnica** — evidências, trade-offs, governança, code review, mentoria, dívida e autonomia progressiva. | Fundamental | C19, C23 | Não |
+| 31 | C31 | Estudos de caso | **API de pagamentos com operações duplicadas** — investigação temporal e composição de idempotência, restrição única, transação, Outbox e retries. | Avançado | C09, C16, C27, C28 | Sim |
+| 32 | C32 | Estudos de caso | **API com aumento de latência após deploy** — métricas, tracing, rollback, profiling e investigação causal. | Avançado | C04, C27, C28, C29 | Parcial |
+| 33 | C33 | Estudos de caso | **Sistema legado com baixa testabilidade** — caracterização, seams, refatoração incremental e mitigação de risco. | Intermediário | C13, C23, C24 | Parcial |
+| 34 | C34 | Estudos de caso | **Migração gradual de monólito** — limites, Strangler Fig, contratos, dados e observabilidade durante a convivência. | Avançado | C12, C18, C27, C29 | Parcial |
+| 35 | C35 | Estudos de caso | **Pipeline com dependência vulnerável** — alcance, segurança, políticas, atualização e decisão de liberação. | Avançado | C26, C29, C30 | Não |
 
 ## Dependências conceituais
 
@@ -65,7 +68,7 @@ Segurança, telemetria e operação (C26 → C27 → C28)
      ↓
 Entrega e plataforma (C29 → C20)
      ↓
-IA aplicada (C21 → C22) e estudos integrados (C31/C32)
+IA aplicada (C21 → C22) e estudos integrados (C31–C35)
 ```
 
 Essa é uma ordem de implementação editorial, não uma sequência obrigatória de leitura. Links de pré-requisito permitem ao leitor entrar pelo problema que precisa resolver.
@@ -79,7 +82,7 @@ Essa é uma ordem de implementação editorial, não uma sequência obrigatória
 5. **Qualidade e segurança (C23–C26):** confiança no comportamento e proteção de fronteiras.
 6. **Operação, entrega e plataforma (C27–C29, C20):** diagnóstico, confiabilidade, releases e infraestrutura.
 7. **IA e prática profissional (C21, C22, C30):** uso responsável de IA e maturidade de equipe.
-8. **Estudos de caso (C31–C32):** síntese prática sem duplicar os fundamentos.
+8. **Estudos de caso (C31–C35):** síntese prática sem duplicar os fundamentos.
 
 ## Fases de implementação
 
@@ -89,7 +92,7 @@ Essa é uma ordem de implementação editorial, não uma sequência obrigatória
 | 2 — aplicação | C05, C07, C08, C09, C12, C24, C26, C30 | Exemplos de aplicação, persistência, segurança e testes executáveis. |
 | 3 — distribuição e operação | C15, C16, C17, C18, C27, C28 | Narrativa coerente de sistemas distribuídos, resiliência e operação. |
 | 4 — aprofundamentos | C04, C14, C25, C29, C20 | Performance, CQRS, qualidade sistêmica e entrega segura apoiados nas bases. |
-| 5 — IA e síntese | C21, C22, C31, C32 | Temas emergentes e estudos integrados apoiados em capítulos já publicados. |
+| 5 — IA e síntese | C21, C22, C31–C35 | Temas emergentes e estudos integrados apoiados em capítulos já publicados. |
 
 Dentro de cada fase, a ordem da tabela de capítulos prevalece. Um capítulo só entra em redação quando seus pré-requisitos estiverem publicados ou tiverem um resumo provisório claramente marcado.
 

@@ -15,7 +15,7 @@ capítulos publicados dos itens que permanecem no roadmap.
    C20 e C27 a C29.
 7. [IA e prática profissional](ia-e-pratica-profissional/indice.md) — C21, C22 e
    C30.
-8. [Estudos de caso](estudos-de-caso/indice.md) — C31 e C32.
+8. [Estudos de caso](estudos-de-caso/indice.md) — C31 a C35.
 
 ## Capítulos publicados
 
@@ -47,11 +47,20 @@ capítulos publicados dos itens que permanecem no roadmap.
 - [C26 — Segurança nas fronteiras da aplicação](qualidade-e-seguranca/c26-seguranca-fronteiras-aplicacao.md)
 - [C27 — Telemetria e diagnóstico distribuído](operacao-entrega-e-plataforma/c27-telemetria-diagnostico-distribuido.md)
 - [C28 — Confiabilidade de serviço e resposta a incidentes](operacao-entrega-e-plataforma/c28-confiabilidade-resposta-incidentes.md)
+- [C29 — Entrega compatível e gestão de risco no pipeline](operacao-entrega-e-plataforma/c29-entrega-compativel-risco-pipeline.md)
+- [C30 — Decisão, revisão e maturidade técnica](ia-e-pratica-profissional/c30-decisao-revisao-maturidade-tecnica.md)
+- [C31 — API de pagamentos com operações duplicadas](estudos-de-caso/c31-pagamentos-operacoes-duplicadas.md)
+- [C32 — API com aumento de latência após deploy](estudos-de-caso/c32-latencia-apos-deploy.md)
+- [C33 — Sistema legado com baixa testabilidade](estudos-de-caso/c33-legado-baixa-testabilidade.md)
+- [C34 — Migração gradual de monólito](estudos-de-caso/c34-migracao-gradual-monolito.md)
+- [C35 — Pipeline com dependência vulnerável](estudos-de-caso/c35-pipeline-dependencia-vulneravel.md)
 
 ## Documentação do projeto
 
 - [Guia de estilo editorial](guia-de-estilo.md)
 - [Template de capítulo técnico](templates/capitulo-tecnico.md)
+- [Checklist de code review](templates/checklist-code-review.md)
+- [Modelo de decisão técnica](templates/registro-decisao-tecnica.md)
 - [Estratégia para exemplos compiláveis](exemplos-compilaveis.md)
 - [Inventário de temas](planejamento/inventario.md)
 - [Mapa editorial](planejamento/mapa-editorial.md)
@@ -60,6 +69,6 @@ capítulos publicados dos itens que permanecem no roadmap.
 
 ## Status editorial
 
-O roadmap possui 32 capítulos distribuídos em cinco fases. A situação e a ordem
+O roadmap possui 35 capítulos distribuídos em cinco fases. A situação e a ordem
 de cada capítulo estão nos índices das áreas; a definição completa de escopo,
 dependências e fases permanece no [mapa editorial](planejamento/mapa-editorial.md).

@@ -71,13 +71,15 @@ distinguem claramente o que existe do que está planejado.
   [segurança nas fronteiras da aplicação](docs/qualidade-e-seguranca/c26-seguranca-fronteiras-aplicacao.md).
 - [Operação, entrega e plataforma](docs/operacao-entrega-e-plataforma/indice.md)
   — [telemetria e diagnóstico distribuído](docs/operacao-entrega-e-plataforma/c27-telemetria-diagnostico-distribuido.md),
-  [confiabilidade e resposta a incidentes](docs/operacao-entrega-e-plataforma/c28-confiabilidade-resposta-incidentes.md)
+  [confiabilidade e resposta a incidentes](docs/operacao-entrega-e-plataforma/c28-confiabilidade-resposta-incidentes.md),
+  [entrega compatível e gestão de risco](docs/operacao-entrega-e-plataforma/c29-entrega-compativel-risco-pipeline.md)
   e [infraestrutura como código e controle de
   drift](docs/operacao-entrega-e-plataforma/c20-infraestrutura-como-codigo-drift.md).
 - [IA e prática profissional](docs/ia-e-pratica-profissional/indice.md)
   — [fundamentos de LLM, MCP e RAG](docs/ia-e-pratica-profissional/c21-fundamentos-llm-mcp-rag.md)
   e [agentes, orquestração e desenvolvimento orientado por
-  especificações](docs/ia-e-pratica-profissional/c22-agentes-orquestracao-sdd.md).
+  especificações](docs/ia-e-pratica-profissional/c22-agentes-orquestracao-sdd.md),
+  além de [decisão, revisão e maturidade técnica](docs/ia-e-pratica-profissional/c30-decisao-revisao-maturidade-tecnica.md).
 - [Estudos de caso](docs/estudos-de-caso/indice.md)
 
 ## Níveis de conhecimento

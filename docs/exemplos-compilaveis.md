@@ -43,6 +43,10 @@ logs estruturados, métricas, traces, propagação HTTP, OpenTelemetry e health
 checks. A dependência e sua latência são simuladas; o exemplo não publica
 resultados de performance nem exige backend comercial.
 
+O laboratório `c29-entrega/` demonstra uma feature flag com os caminhos estável
+e novo isolados e testados. A fonte de configuração é deliberadamente local: o
+exemplo não simula propagação, auditoria ou consistência de um serviço de flags.
+
 ## Quando criar um projeto
 
 Crie um laboratório quando compilação, testes, benchmark ou integração forem

@@ -39,6 +39,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: validar-documentacao-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   markdownlint:
     name: Markdown lint
@@ -53,6 +57,7 @@ jobs:
   exemplos-dotnet:
     name: Compilar e testar exemplos .NET
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Obter repositório
         uses: actions/checkout@v7
@@ -62,8 +67,33 @@ jobs:
         with:
           global-json-file: global.json
 
-      - name: Compilar e testar em Release
-        run: dotnet test exemplos/EngenhariaDotnet.slnx --configuration Release
+      - name: Restaurar dependências
+        run: dotnet restore exemplos/EngenhariaDotnet.slnx
+
+      - name: Compilar em Release
+        run: dotnet build exemplos/EngenhariaDotnet.slnx --configuration Release --no-restore
+
+      - name: Executar testes em Release
+        run: dotnet test exemplos/EngenhariaDotnet.slnx --configuration Release --no-build
+
+  dependencias:
+    name: Analisar dependências
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Obter repositório
+        uses: actions/checkout@v7
+
+      - name: Configurar SDK .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      - name: Restaurar dependências
+        run: dotnet restore exemplos/EngenhariaDotnet.slnx
+
+      - name: Relatar pacotes vulneráveis
+        run: dotnet package list --project exemplos/EngenhariaDotnet.slnx --vulnerable --include-transitive --no-restore
 
   exemplos-iac:
     name: Validar exemplos de IaC
