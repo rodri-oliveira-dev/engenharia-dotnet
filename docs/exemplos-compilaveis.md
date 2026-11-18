@@ -1,25 +1,28 @@
 # Estratégia para exemplos compiláveis
 
-Exemplos executáveis serão adicionados sob demanda, junto ao primeiro capítulo
-que necessitar deles. Esta estratégia evita projetos vazios e mantém cada
-laboratório proporcional ao conceito demonstrado.
+Exemplos executáveis são adicionados sob demanda, junto ao capítulo que necessita
+deles. Esta estratégia evita projetos vazios e mantém cada laboratório
+proporcional ao conceito demonstrado.
 
 ## Estrutura prevista
 
-Quando existirem exemplos, a raiz `exemplos/` terá uma única solução para
-descoberta e execução em conjunto. Cada laboratório ficará isolado em um
+Cada laboratório fica isolado em um
 diretório `cXX-nome-do-exemplo/` e poderá conter um projeto de produção e um de
 testes apenas quando ambos tiverem função didática.
 
 ```text
 exemplos/
 ├── EngenhariaDotnet.slnx
-└── cXX-nome-do-exemplo/
-    ├── CXX.NomeDoExemplo.csproj
-    └── CXX.NomeDoExemplo.Tests.csproj
+├── c01-tipos-modelagem/
+│   ├── C01.TiposModelagem.csproj
+│   └── C01.TiposModelagem.Tests.csproj
+└── c02-nulabilidade/
+    ├── C02.Nulabilidade.csproj
+    └── C02.Nulabilidade.Tests.csproj
 ```
 
-Essa árvore é uma convenção futura, não representa arquivos já publicados.
+O SDK está fixado em `global.json`; projetos novos devem usar o mesmo target ou
+documentar por que precisam de uma versão diferente.
 
 ## Quando criar um projeto
 

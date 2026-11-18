@@ -46,9 +46,8 @@ Há três formas recomendadas de navegação:
 3. Use os pré-requisitos e capítulos relacionados para formar uma trilha própria
    conforme o problema que deseja resolver.
 
-O mapa não impõe leitura sequencial. Enquanto os capítulos técnicos ainda são
-produzidos, os índices de área funcionam como roadmap e distinguem claramente o
-que existe do que está planejado.
+O mapa não impõe leitura sequencial. Os índices de área funcionam como roadmap e
+distinguem claramente o que existe do que está planejado.
 
 ## Áreas de conhecimento
 

@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="c01-tipos-modelagem/C01.TiposModelagem.csproj" />
+  <Project Path="c01-tipos-modelagem/C01.TiposModelagem.Tests.csproj" />
+  <Project Path="c02-nulabilidade/C02.Nulabilidade.csproj" />
+  <Project Path="c02-nulabilidade/C02.Nulabilidade.Tests.csproj" />
+</Solution>

@@ -1,9 +1,8 @@
 # Índice
 
 Este é o ponto central de navegação do Engenharia .NET. A estrutura reflete os
-oito agrupamentos definidos no mapa editorial. Neste momento, os capítulos
-técnicos estão planejados e ainda não foram publicados; os links abaixo levam
-somente a índices existentes.
+oito agrupamentos definidos no mapa editorial. Os índices de área distinguem
+capítulos publicados dos itens que permanecem no roadmap.
 
 ## Áreas de conhecimento
 
@@ -17,6 +16,11 @@ somente a índices existentes.
 7. [IA e prática profissional](ia-e-pratica-profissional/indice.md) — C21, C22 e
    C30.
 8. [Estudos de caso](estudos-de-caso/indice.md) — C31 e C32.
+
+## Capítulos publicados
+
+- [C01 — Tipos, identidade e modelagem em C#](linguagem-e-runtime/c01-tipos-identidade-modelagem.md)
+- [C02 — Nulabilidade, falhas e exceções](linguagem-e-runtime/c02-nulabilidade-falhas-excecoes.md)
 
 ## Documentação do projeto
 
