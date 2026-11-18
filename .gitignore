@@ -1,0 +1,16 @@
+**/bin/
+**/obj/
+.vs/
+TestResults/
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+**/c20-iac/terraform/saida/
+**/c20-iac/ansible/.vault-password

@@ -3,13 +3,18 @@
 Composição de aplicações .NET, fronteiras HTTP, persistência e concorrência de
 dados.
 
-## Roadmap
+## Capítulos publicados
 
-- **C06 · Fundamental · Planejado:** Composição e pipeline no ASP.NET Core.
-- **C07 · Intermediário · Planejado:** APIs HTTP e integrações resilientes.
-- **C10 · Fundamental · Planejado:** Fundamentos de persistência SQL e NoSQL.
-- **C08 · Intermediário · Planejado:** Consultas eficientes com EF Core.
-- **C09 · Intermediário · Planejado:** Fronteiras e concorrência no EF Core.
+- **C06 · Fundamental · Publicado:**
+  [Composição e pipeline no ASP.NET Core](c06-composicao-pipeline-aspnet-core.md).
+- **C07 · Intermediário · Publicado:**
+  [APIs HTTP e integrações resilientes](c07-apis-http-integracoes-resilientes.md).
+- **C10 · Fundamental · Publicado:**
+  [Fundamentos de persistência SQL e NoSQL](c10-fundamentos-persistencia-sql-nosql.md).
+- **C08 · Intermediário · Publicado:**
+  [Consultas eficientes com EF Core](c08-consultas-ef-core.md).
+- **C09 · Intermediário · Publicado:**
+  [Fronteiras e concorrência no EF Core](c09-fronteiras-concorrencia-ef-core.md).
 
 Consulte o [mapa editorial](../planejamento/mapa-editorial.md) para escopo,
 dependências e estratégia de exemplos. Volte ao [índice central](../indice.md).

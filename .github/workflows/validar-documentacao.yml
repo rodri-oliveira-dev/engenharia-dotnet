@@ -4,18 +4,46 @@ on:
   pull_request:
     paths:
       - "**/*.md"
+      - "**/*.cs"
+      - "**/*.csproj"
+      - "**/*.props"
+      - "**/*.ps1"
+      - "**/*.slnx"
+      - "**/*.tf"
+      - "**/.terraform.lock.hcl"
+      - "**/*.yml"
+      - "**/*.ini"
+      - "**/*.j2"
       - ".markdownlint-cli2.yaml"
       - ".github/workflows/validar-documentacao.yml"
+      - "global.json"
+      - "NuGet.Config"
   push:
     branches:
       - main
     paths:
       - "**/*.md"
+      - "**/*.cs"
+      - "**/*.csproj"
+      - "**/*.props"
+      - "**/*.ps1"
+      - "**/*.slnx"
+      - "**/*.tf"
+      - "**/.terraform.lock.hcl"
+      - "**/*.yml"
+      - "**/*.ini"
+      - "**/*.j2"
       - ".markdownlint-cli2.yaml"
       - ".github/workflows/validar-documentacao.yml"
+      - "global.json"
+      - "NuGet.Config"
 
 permissions:
   contents: read
+
+concurrency:
+  group: validar-documentacao-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   markdownlint:
@@ -23,7 +51,86 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Obter repositório
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Validar Markdown
-        uses: DavidAnson/markdownlint-cli2-action@v25
+        uses: DavidAnson/markdownlint-cli2-action@696eb3f2509270d7b882d2aa68347bc676e7af34 # v25.0.0
+
+      - name: Validar links internos
+        shell: pwsh
+        run: ./scripts/validar-links-internos.ps1
+
+      - name: Verificar segredos em arquivos versionados
+        shell: pwsh
+        run: ./scripts/verificar-segredos.ps1
+
+  exemplos-dotnet:
+    name: Compilar e testar exemplos .NET
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Obter repositório
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Configurar SDK .NET
+        uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+        with:
+          global-json-file: global.json
+
+      - name: Restaurar dependências
+        run: dotnet restore exemplos/EngenhariaDotnet.slnx
+
+      - name: Compilar em Release
+        run: dotnet build exemplos/EngenhariaDotnet.slnx --configuration Release --no-restore
+
+      - name: Executar testes em Release
+        run: dotnet test exemplos/EngenhariaDotnet.slnx --configuration Release --no-build
+
+  dependencias:
+    name: Analisar dependências
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Obter repositório
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Configurar SDK .NET
+        uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+        with:
+          global-json-file: global.json
+
+      - name: Restaurar dependências
+        run: dotnet restore exemplos/EngenhariaDotnet.slnx
+
+      - name: Relatar pacotes vulneráveis
+        run: dotnet package list --project exemplos/EngenhariaDotnet.slnx --vulnerable --include-transitive --no-restore
+
+  exemplos-iac:
+    name: Validar exemplos de IaC
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obter repositório
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Configurar Terraform
+        uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e # v4.0.1
+        with:
+          terraform_version: 1.17.2
+
+      - name: Validar Terraform sem aplicar
+        run: |
+          terraform fmt -check -recursive exemplos/c20-iac/terraform
+          terraform -chdir=exemplos/c20-iac/terraform init -backend=false -input=false
+          terraform -chdir=exemplos/c20-iac/terraform validate
+
+      - name: Configurar Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: "3.13"
+
+      - name: Instalar Ansible
+        run: python -m pip install ansible-core==2.20.1
+
+      - name: Validar sintaxe do playbook sem executar
+        working-directory: exemplos/c20-iac/ansible
+        run: ansible-playbook -i inventory.ini playbook.yml --syntax-check

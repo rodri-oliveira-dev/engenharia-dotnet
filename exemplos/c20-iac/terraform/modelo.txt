@@ -1,0 +1,3 @@
+aplicacao=api-pedidos
+ambiente=${ambiente}
+gerenciado_por=terraform

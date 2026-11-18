@@ -1,25 +1,51 @@
 # Estratégia para exemplos compiláveis
 
-Exemplos executáveis serão adicionados sob demanda, junto ao primeiro capítulo
-que necessitar deles. Esta estratégia evita projetos vazios e mantém cada
-laboratório proporcional ao conceito demonstrado.
+Exemplos executáveis são adicionados sob demanda, junto ao capítulo que necessita
+deles. Esta estratégia evita projetos vazios e mantém cada laboratório
+proporcional ao conceito demonstrado.
 
 ## Estrutura prevista
 
-Quando existirem exemplos, a raiz `exemplos/` terá uma única solução para
-descoberta e execução em conjunto. Cada laboratório ficará isolado em um
+Cada laboratório fica isolado em um
 diretório `cXX-nome-do-exemplo/` e poderá conter um projeto de produção e um de
 testes apenas quando ambos tiverem função didática.
 
 ```text
 exemplos/
 ├── EngenhariaDotnet.slnx
-└── cXX-nome-do-exemplo/
-    ├── CXX.NomeDoExemplo.csproj
-    └── CXX.NomeDoExemplo.Tests.csproj
+├── c01-tipos-modelagem/
+│   ├── C01.TiposModelagem.csproj
+│   └── C01.TiposModelagem.Tests.csproj
+└── c02-nulabilidade/
+    ├── C02.Nulabilidade.csproj
+    └── C02.Nulabilidade.Tests.csproj
 ```
 
-Essa árvore é uma convenção futura, não representa arquivos já publicados.
+Capítulos fortemente relacionados podem compartilhar um laboratório, como
+`c06-c07-aspnet-core/`, quando o mesmo host é necessário para testar composição,
+pipeline e contratos HTTP sem duplicar infraestrutura.
+
+O laboratório `c23-c25-testes/` reúne regras unitárias, dublês, API,
+persistência, Testcontainers e caracterização de legado. Testes com a trait
+`Category=Docker` exigem daemon Docker ativo; os demais não acessam serviços
+externos.
+
+O laboratório `c21-c22-ia/` reúne workflow com modelo falso, RAG local, agente
+limitado, especificação rastreável e server MCP stdio. Os testes não acessam
+modelos nem serviços externos; somente o projeto do server usa o SDK C# oficial
+do MCP com versão fixada.
+
+O SDK está fixado em `global.json`; projetos novos devem usar o mesmo target ou
+documentar por que precisam de uma versão diferente.
+
+O laboratório `c27-c28-observabilidade/` reúne uma aplicação ASP.NET Core com
+logs estruturados, métricas, traces, propagação HTTP, OpenTelemetry e health
+checks. A dependência e sua latência são simuladas; o exemplo não publica
+resultados de performance nem exige backend comercial.
+
+O laboratório `c29-entrega/` demonstra uma feature flag com os caminhos estável
+e novo isolados e testados. A fonte de configuração é deliberadamente local: o
+exemplo não simula propagação, auditoria ou consistência de um serviço de flags.
 
 ## Quando criar um projeto
 
@@ -65,5 +91,5 @@ devem duplicar a infraestrutura de medição.
 ## Evolução
 
 O código faz parte da documentação: uma mudança conceitual exige atualizar o
-laboratório e seus testes no mesmo pull request. A validação de build será
-adicionada ao CI somente quando o primeiro projeto executável existir.
+laboratório e seus testes no mesmo pull request. O CI restaura, compila e testa a
+solução, além de validar os exemplos de Terraform e a sintaxe do playbook Ansible.

@@ -1,0 +1,7 @@
+---
+- name: Configurar API de exemplo
+  hosts: laboratorio
+  gather_facts: false
+
+  roles:
+    - role: api_config
