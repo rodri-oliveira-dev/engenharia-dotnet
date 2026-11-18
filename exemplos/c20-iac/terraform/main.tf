@@ -8,7 +8,6 @@ variable "ambiente" {
     error_message = "Use desenvolvimento ou homologacao neste laboratório."
   }
 }
-
 data "local_file" "modelo" {
   filename = "${path.module}/modelo.txt"
 }
@@ -23,4 +22,3 @@ output "manifesto" {
   description = "Caminho do arquivo gerenciado pelo laboratório."
   value       = local_file.manifesto.filename
 }
-

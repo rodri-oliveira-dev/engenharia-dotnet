@@ -3,7 +3,7 @@
 Modelagem de domínio, organização de dependências e documentação das decisões
 arquiteturais.
 
-## Roadmap
+## Capítulos publicados
 
 - **C11 · Fundamental · Publicado:** [Entidades, value objects e agregados](c11-entidades-value-objects-agregados.md).
 - **C12 · Intermediário · Publicado:** [Serviços de domínio e integração entre

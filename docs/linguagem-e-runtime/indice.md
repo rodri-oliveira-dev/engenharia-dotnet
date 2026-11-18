@@ -2,7 +2,7 @@
 
 Base conceitual para escrever código C# correto, previsível e eficiente.
 
-## Roadmap
+## Capítulos publicados
 
 - **C01 · Fundamental · Publicado:**
   [Tipos, identidade e modelagem em C#](c01-tipos-identidade-modelagem.md).

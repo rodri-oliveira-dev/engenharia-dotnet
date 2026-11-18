@@ -123,5 +123,5 @@ mudança com evidência.
 
 ## Referências
 
-- [Working Effectively with Legacy Code](https://www.oreilly.com/library/view/working-effectively-with/0131177052/)
+- [Working Effectively with Legacy Code](https://www.pearson.com/en-us/subject-catalog/p/Feathers-FEATHERS-WORK-EFFECT-LEG-CODE-p-1/P200000008984)
   — Michael Feathers, acesso em 18 novembro 2026.

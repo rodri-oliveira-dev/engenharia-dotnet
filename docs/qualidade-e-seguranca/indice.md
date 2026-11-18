@@ -3,7 +3,7 @@
 Confiança no comportamento dos sistemas e proteção consistente de suas
 fronteiras.
 
-## Roadmap
+## Capítulos publicados
 
 - **C23 · Fundamental · Publicado:** [Testes orientados a comportamento e
   risco](c23-testes-comportamento-risco.md).

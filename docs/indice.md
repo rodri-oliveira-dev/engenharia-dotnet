@@ -1,8 +1,7 @@
 # Índice
 
 Este é o ponto central de navegação do Engenharia .NET. A estrutura reflete os
-oito agrupamentos definidos no mapa editorial. Os índices de área distinguem
-capítulos publicados dos itens que permanecem no roadmap.
+oito agrupamentos definidos no mapa editorial e os 35 capítulos publicados.
 
 ## Áreas de conhecimento
 
@@ -65,10 +64,12 @@ capítulos publicados dos itens que permanecem no roadmap.
 - [Inventário de temas](planejamento/inventario.md)
 - [Mapa editorial](planejamento/mapa-editorial.md)
 - [Diretrizes editoriais originais](planejamento/diretrizes-editoriais.md)
+- [Relatório final de auditoria](planejamento/relatorio-final.md)
 - [Guia de contribuição](../CONTRIBUTING.md)
 
 ## Status editorial
 
-O roadmap possui 35 capítulos distribuídos em cinco fases. A situação e a ordem
-de cada capítulo estão nos índices das áreas; a definição completa de escopo,
-dependências e fases permanece no [mapa editorial](planejamento/mapa-editorial.md).
+O mapa possui 35 capítulos publicados, distribuídos em cinco fases editoriais. A
+ordem de cada capítulo está nos índices das áreas; a definição completa de
+escopo, dependências e fases permanece no [mapa
+editorial](planejamento/mapa-editorial.md).

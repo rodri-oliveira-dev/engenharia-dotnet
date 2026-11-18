@@ -3,7 +3,7 @@
 Diagnóstico, confiabilidade, evolução segura e gestão declarativa de
 infraestrutura.
 
-## Roadmap
+## Capítulos publicados
 
 - **C27 · Intermediário · Publicado:** [Telemetria e diagnóstico
   distribuído](c27-telemetria-diagnostico-distribuido.md).

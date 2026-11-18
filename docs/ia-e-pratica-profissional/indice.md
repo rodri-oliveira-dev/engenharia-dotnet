@@ -3,7 +3,7 @@
 Uso responsável de IA aplicada e práticas para decisões, revisão e crescimento
 técnico de equipes.
 
-## Roadmap
+## Capítulos publicados
 
 - **C21 · Intermediário · Publicado:** [Fundamentos de LLM, MCP e
   RAG](c21-fundamentos-llm-mcp-rag.md).

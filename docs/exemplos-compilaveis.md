@@ -91,5 +91,5 @@ devem duplicar a infraestrutura de medição.
 ## Evolução
 
 O código faz parte da documentação: uma mudança conceitual exige atualizar o
-laboratório e seus testes no mesmo pull request. A validação de build será
-adicionada ao CI somente quando o primeiro projeto executável existir.
+laboratório e seus testes no mesmo pull request. O CI restaura, compila e testa a
+solução, além de validar os exemplos de Terraform e a sintaxe do playbook Ansible.

@@ -13,18 +13,33 @@ public sealed class AtrasoReal : IAtraso
         Task.Delay(duracao, cancellationToken);
 }
 
-public sealed class RetryControlado(
-    IAtraso atraso,
-    int maximoTentativas,
-    Func<int, TimeSpan> calcularAtraso)
+public sealed class RetryControlado
 {
+    private readonly IAtraso _atraso;
+    private readonly int _maximoTentativas;
+    private readonly Func<int, TimeSpan> _calcularAtraso;
+
+    public RetryControlado(
+        IAtraso atraso,
+        int maximoTentativas,
+        Func<int, TimeSpan> calcularAtraso)
+    {
+        ArgumentNullException.ThrowIfNull(atraso);
+        ArgumentOutOfRangeException.ThrowIfLessThan(maximoTentativas, 1);
+        ArgumentNullException.ThrowIfNull(calcularAtraso);
+
+        _atraso = atraso;
+        _maximoTentativas = maximoTentativas;
+        _calcularAtraso = calcularAtraso;
+    }
+
     public async Task ExecutarAsync(
         Func<CancellationToken, Task> operacao,
         Func<Exception, bool> falhaTransitoria,
         CancellationToken cancellationToken)
     {
-        if (maximoTentativas < 1)
-            throw new ArgumentOutOfRangeException(nameof(maximoTentativas));
+        ArgumentNullException.ThrowIfNull(operacao);
+        ArgumentNullException.ThrowIfNull(falhaTransitoria);
 
         for (var tentativa = 1; ; tentativa++)
         {
@@ -37,10 +52,10 @@ public sealed class RetryControlado(
             }
             catch (Exception ex) when (
                 ex is not OperationCanceledException &&
-                tentativa < maximoTentativas &&
+                tentativa < _maximoTentativas &&
                 falhaTransitoria(ex))
             {
-                await atraso.AguardarAsync(calcularAtraso(tentativa), cancellationToken);
+                await _atraso.AguardarAsync(_calcularAtraso(tentativa), cancellationToken);
             }
         }
     }

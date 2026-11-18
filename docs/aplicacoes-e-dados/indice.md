@@ -3,7 +3,7 @@
 Composição de aplicações .NET, fronteiras HTTP, persistência e concorrência de
 dados.
 
-## Roadmap
+## Capítulos publicados
 
 - **C06 · Fundamental · Publicado:**
   [Composição e pipeline no ASP.NET Core](c06-composicao-pipeline-aspnet-core.md).

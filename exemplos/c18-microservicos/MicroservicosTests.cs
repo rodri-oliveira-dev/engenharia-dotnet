@@ -76,6 +76,17 @@ public sealed class MicroservicosTests
     }
 
     [Fact]
+    public void Retry_rejeita_configuracao_invalida_na_construcao()
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(
+            () => new RetryControlado(new AtrasoCaptura(), 0, _ => TimeSpan.Zero));
+        Assert.Throws<ArgumentNullException>(
+            () => new RetryControlado(null!, 1, _ => TimeSpan.Zero));
+        Assert.Throws<ArgumentNullException>(
+            () => new RetryControlado(new AtrasoCaptura(), 1, null!));
+    }
+
+    [Fact]
     public async Task Cancelamento_interrompe_retry_sem_nova_tentativa()
     {
         using var cancelamento = new CancellationTokenSource();

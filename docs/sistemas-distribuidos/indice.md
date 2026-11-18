@@ -3,7 +3,7 @@
 Comunicação, entrega confiável, consistência e evolução de limites entre
 serviços.
 
-## Roadmap
+## Capítulos publicados
 
 - **C15 · Intermediário · Publicado:** [Comunicação entre serviços e mensageria
   resiliente](c15-comunicacao-mensageria-resiliente.md).

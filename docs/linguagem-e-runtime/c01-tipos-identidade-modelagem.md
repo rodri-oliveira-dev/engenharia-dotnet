@@ -426,8 +426,12 @@ demonstram semântica; eventuais custos devem ser medidos no contexto real.
   trata o comportamento em coleções; [C04 — Memória, runtime e engenharia de
   performance](c04-memoria-runtime-performance.md) trata GC, profiling, boxing e
   otimização baseada em evidência.
-- **Aplicações planejadas:** C11 usa identidade e igualdade para distinguir
-  entidades e value objects; C13 aprofunda abstrações, composição e herança.
+- **Aplicações:** [C11 — Entidades, value objects e
+  agregados](../dominio-e-arquitetura/c11-entidades-value-objects-agregados.md)
+  usa identidade e igualdade para distinguir entidades e value objects; [C13 —
+  Dependências, abstrações e padrões com
+  propósito](../dominio-e-arquitetura/c13-dependencias-abstracoes-padroes.md)
+  aprofunda abstrações, composição e herança.
 
 ## Referências
 

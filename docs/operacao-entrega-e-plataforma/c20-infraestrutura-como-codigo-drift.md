@@ -6,8 +6,9 @@
 > governáveis com estado desejado, Terraform, Ansible e reconciliação de drift.
 >
 > **Pré-requisitos:** [C19 — Documentação arquitetural
-> viva](../dominio-e-arquitetura/c19-documentacao-arquitetural-viva.md). C29 —
-> Entrega compatível e gestão de risco no pipeline permanece planejado.
+> viva](../dominio-e-arquitetura/c19-documentacao-arquitetural-viva.md) e
+> [C29 — Entrega compatível e gestão de risco no
+> pipeline](c29-entrega-compativel-risco-pipeline.md).
 >
 > **Última revisão:** 2026-11-18
 

@@ -164,6 +164,6 @@ A máquina em memória é didática; não demonstra durabilidade, broker ou time
 - [Saga distributed transactions pattern](https://learn.microsoft.com/azure/architecture/patterns/saga)
   — Azure Architecture Center, transações locais, compensações, pivot e estilos,
   acesso em 18 novembro 2026.
-- [Data consistency primer](https://learn.microsoft.com/azure/architecture/data-guide/relational-data/data-consistency)
-  — Azure Architecture Center, modelos de consistência, acesso em 18 novembro
-  2026.
+- [Data considerations for microservices](https://learn.microsoft.com/azure/architecture/microservices/design/data-considerations)
+  — Azure Architecture Center, fronteiras de dados e consistência entre
+  serviços, acesso em 18 novembro 2026.
