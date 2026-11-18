@@ -101,6 +101,12 @@ Nem tudo cabe em um trecho de Markdown. Quando o assunto exige compilação, tes
 
 Os detalhes estão na [estratégia para exemplos compiláveis](docs/exemplos-compilaveis.md).
 
+## Testes
+
+Os capítulos de [Qualidade e segurança](docs/qualidade-e-seguranca/indice.md) abordam estratégia de testes, integração e cobertura. Para explorar esses conceitos em um projeto executável, consulte o laboratório [Pirâmide de testes e cobertura em .NET](https://github.com/rodri-oliveira-dev/dotnet-code-coverage).
+
+O projeto demonstra testes unitários, de integração HTTP e de ponta a ponta (E2E), além de métricas de cobertura, *mutation testing* e validações automatizadas de qualidade (*quality gates*) no CI. A proposta é mostrar como combinar camadas de teste e interpretar métricas sem tratar cobertura alta como sinônimo de testes eficazes.
+
 ## Quer contribuir?
 
 Encontrou um erro, acha que algum trecho poderia ser mais claro ou quer sugerir um tema? Correções, discussões técnicas e contribuições são bem-vindas.
