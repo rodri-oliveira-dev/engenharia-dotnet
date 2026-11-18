@@ -52,7 +52,8 @@ distinguem claramente o que existe do que está planejado.
 ## Áreas de conhecimento
 
 - [Linguagem e runtime](docs/linguagem-e-runtime/indice.md)
-  — tipos, nulabilidade, coleções, LINQ, memória e performance.
+  — tipos, nulabilidade, coleções, LINQ, memória, assincronismo, concorrência e
+  performance.
 - [Aplicações e dados](docs/aplicacoes-e-dados/indice.md)
 - [Domínio e arquitetura](docs/dominio-e-arquitetura/indice.md)
 - [Sistemas distribuídos](docs/sistemas-distribuidos/indice.md)

@@ -23,6 +23,7 @@ capítulos publicados dos itens que permanecem no roadmap.
 - [C02 — Nulabilidade, falhas e exceções](linguagem-e-runtime/c02-nulabilidade-falhas-excecoes.md)
 - [C03 — Coleções, LINQ e execução diferida](linguagem-e-runtime/c03-colecoes-linq-execucao-diferida.md)
 - [C04 — Memória, runtime e engenharia de performance](linguagem-e-runtime/c04-memoria-runtime-performance.md)
+- [C05 — Assincronicidade e concorrência controlada](linguagem-e-runtime/c05-assincronicidade-concorrencia-controlada.md)
 
 ## Documentação do projeto
 

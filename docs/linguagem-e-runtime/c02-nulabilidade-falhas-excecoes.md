@@ -274,6 +274,26 @@ Não capture `Exception` apenas para registrar e relançar em todas as camadas:
 isso tende a duplicar logs. Registre na fronteira que conhece a operação e a
 resposta; preserve a exceção original como `InnerException` ao traduzi-la.
 
+### Trate na fronteira que pode decidir
+
+Uma captura é útil quando existe uma decisão concreta: recuperar com uma
+alternativa segura, traduzir uma falha de infraestrutura para um contrato da
+aplicação, liberar recursos ou formar a resposta da fronteira. Capturar todas as
+exceções em uma camada intermediária e retornar `null`, `false` ou sucesso apaga
+a diferença entre ausência prevista, cancelamento e corrupção de estado.
+
+Na fronteira HTTP, worker ou comando, registre uma vez com identificador de
+correlação, operação, dependência e contexto não sensível. Preserve tipo, stack
+trace e `InnerException`; métricas devem distinguir falha, timeout e
+cancelamento solicitado pelo chamador. Logs sem a exceção ou com mensagens
+recriadas perdem a evidência necessária para diagnóstico.
+
+`CancellationToken` faz parte desse contrato. Encaminhe o token até o I/O e não
+capture `OperationCanceledException` indiscriminadamente como erro. Quando a
+exceção corresponde ao token esperado, a fronteira pode representar
+cancelamento; quando outro timeout ou token interno disparou, a política pode
+ser diferente. Cancelamento não desfaz efeitos já confirmados.
+
 ## Exemplo de fronteira validada
 
 O laboratório recebe dados anuláveis, pois simula uma fronteira externa, e cria
@@ -324,6 +344,10 @@ ramificação rotineira em um fluxo esperado e frequente.
   externa sem teste de integração.
 - Capturar, registrar e relançar a mesma exceção em várias camadas.
 - Usar `throw ex;` e perder a origem original do stack trace.
+- Converter qualquer exceção em `null` ou `Result` genérico, perdendo causa,
+  pilha e distinção entre falha e ausência.
+- Registrar cancelamento cooperativo como erro interno sem verificar o token que
+  originou a interrupção.
 
 ## Como verificar
 
@@ -343,8 +367,9 @@ locais. Desserializadores, ORMs e APIs HTTP exigem testes de integração própr
 - **Pré-requisito:** [C01 — Tipos, identidade e modelagem em C#](c01-tipos-identidade-modelagem.md)
   estabelece tipos por valor e referência, records e imutabilidade.
 - **Aprofundamentos:** [C03 — Coleções, LINQ e execução diferida](c03-colecoes-linq-execucao-diferida.md)
-  trata ausência em coleções e consultas; C05 tratará exceções e cancelamento em
-  operações assíncronas.
+  trata ausência em coleções e consultas;
+  [C05 — Assincronicidade e concorrência controlada](c05-assincronicidade-concorrencia-controlada.md)
+  aplica propagação de falha e cancelamento a `Task`, `WhenAll` e pipelines.
 - **Aplicações planejadas:** C06 aplica validação na composição do ASP.NET Core;
   C07 traduz falhas para contratos HTTP; C09 trata fronteiras de persistência.
 

@@ -314,8 +314,10 @@ pré-condições; a decisão de performance requer dados do ambiente de destino.
   explica igualdade, mutabilidade e armazenamento de valores em coleções.
 - **Aprofundamento:** [C04 — Memória, runtime e engenharia de performance](c04-memoria-runtime-performance.md)
   trata alocações, GC, profiling e benchmarks.
-- **Aplicações planejadas:** C05 usa filas e streaming em concorrência; C08
-  distingue LINQ to Objects de consultas traduzidas por EF Core.
+- **Aplicação:** [C05 — Assincronicidade e concorrência controlada](c05-assincronicidade-concorrencia-controlada.md)
+  usa filas e streaming em concorrência.
+- **Aplicação planejada:** C08 distingue LINQ to Objects de consultas traduzidas
+  por EF Core.
 
 ## Referências
 

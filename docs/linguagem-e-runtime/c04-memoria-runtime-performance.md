@@ -259,6 +259,92 @@ entrada apenas para somá-la é pior do que processar o span diretamente. Ele
 demonstra o contrato de aluguel e devolução, não uma recomendação para esse
 algoritmo.
 
+## JIT, Native AOT e trimming
+
+Projetos .NET normalmente compilam C# para Common Intermediate Language (CIL) e
+metadados. No modelo convencional, o runtime carrega os assemblies e o
+compilador Just-in-Time (JIT) gera código de máquina quando um método precisa
+executar. Isso permite gerar código para a arquitetura e o ambiente atuais. Com
+compilação em camadas, o runtime pode produzir código inicial rapidamente e
+recompilar métodos quentes com otimizações adicionais.
+
+Essa descrição é um modelo operacional, não uma garantia de que cada método
+será compilado isoladamente ou apenas uma vez. Inlining, generics, ReadyToRun,
+profile-guided optimization e versões do runtime alteram o código produzido.
+Não baseie correção em uma decisão do JIT; use disassembly e métricas quando a
+forma do código nativo for relevante para performance.
+
+O custo do JIT aparece durante a execução, sobretudo no startup e na primeira
+passagem por caminhos ainda não compilados. Em aplicações de longa duração, a
+otimização adaptativa pode beneficiar throughput. Em funções curtas, ferramentas
+de linha de comando ou cenários com muitas instâncias efêmeras, startup e
+memória por processo podem ter peso maior.
+
+### Native AOT
+
+Native Ahead-of-Time (AOT) compila IL para código nativo durante a publicação. O
+artefato é self-contained e específico para um Runtime Identifier (RID), como
+`linux-x64`; ele não usa JIT durante a execução. Isso pode reduzir tempo de
+inicialização e memória em workloads compatíveis, mas aumenta o trabalho de
+build, exige publicação por plataforma e perde parte da adaptação dinâmica que
+o JIT pode fazer durante uma execução longa.
+
+Native AOT não é uma opção superior por definição. Uma API ASP.NET Core com
+startup crítico e conjunto de recursos compatível pode se beneficiar. Uma
+aplicação extensível por plugins, dependente de geração dinâmica de código ou de
+bibliotecas não preparadas pode exigir reengenharia ou permanecer no modelo JIT.
+Compare o artefato publicado, startup, conjunto de trabalho, throughput,
+diagnóstico e custo do pipeline no ambiente de destino.
+
+```bash
+dotnet publish -c Release -r linux-x64 -p:PublishAot=true
+```
+
+### Reflection, geração de código e compatibilidade
+
+Native AOT não oferece carregamento dinâmico irrestrito nem geração de código
+com `System.Reflection.Emit`. Reflection conhecida pelo analisador pode
+funcionar, mas descoberta aberta de tipos por nome, serializers baseados em
+reflection, proxies dinâmicos e sistemas de plugins são fontes comuns de
+incompatibilidade. Source generators e metadados explícitos tornam dependências
+visíveis no build, mas também alteram desenho e manutenção.
+
+Compatibilidade precisa ser avaliada no grafo completo de dependências. Marcar o
+projeto principal como compatível não corrige uma biblioteca que depende de
+código dinâmico. Habilite os analisadores, trate os warnings e teste o binário
+publicado; executar apenas o build JIT não valida o modelo AOT.
+
+### Trimming não é apenas remoção de arquivos
+
+O trimmer analisa código alcançável e remove partes que parecem não usadas para
+reduzir a publicação. Reflection e carregamento dinâmico podem ocultar essa
+alcançabilidade. Um build que ignora warnings pode publicar com sucesso e falhar
+somente quando um caminho removido for ativado em produção.
+
+Native AOT implica trimming, mas trimming também pode ser usado sem Native AOT.
+Anotações como `DynamicallyAccessedMembers`, descritores e supressões devem
+expressar uma prova específica; suprimir todos os warnings apenas transfere o
+risco para runtime. Prefira APIs e bibliotecas declaradamente compatíveis e
+exercite serialização, configuração, DI e caminhos pouco frequentes no artefato
+final.
+
+### Critérios de deployment
+
+Escolha o modelo a partir das restrições:
+
+- **JIT/framework-dependent:** artefato menor e portável entre ambientes com o
+  runtime instalado, atualização de runtime separada e maior compatibilidade
+  dinâmica;
+- **self-contained com JIT:** runtime incluído e deployment mais isolado, ao
+  custo de artefato maior e publicação por plataforma;
+- **Native AOT:** startup previsível e ausência de JIT, com build mais caro,
+  restrições dinâmicas, trimming obrigatório e diagnóstico parcialmente
+  diferente.
+
+Não extrapole números de uma aplicação para outra. Publique cada candidato com
+a mesma configuração, valide funcionalidade e meça as métricas operacionais que
+motivaram a decisão.
+
 ## Performance orientada por medição
 
 Uma investigação reproduzível segue uma sequência:
@@ -322,6 +408,10 @@ profiling ou carga no fluxo integrado.
 - Manter buffers alugados indefinidamente, reduzindo a disponibilidade do pool.
 - Publicar um resultado de microbenchmark sem ambiente, baseline, dispersão e
   versão do runtime.
+- Adotar Native AOT apenas por expectativa genérica de performance, sem validar
+  compatibilidade, warnings, startup, memória e throughput do artefato final.
+- Suprimir warnings de trimming sem demonstrar como membros acessados
+  dinamicamente permanecem alcançáveis.
 
 ## Quando utilizar e quando evitar
 
@@ -354,8 +444,10 @@ configuração, commit e saída completa ao usar os dados numa decisão.
 - **Pré-requisitos:** [C01 — Tipos, identidade e modelagem em C#](c01-tipos-identidade-modelagem.md)
   cobre tipos por valor, cópia e boxing; [C03 — Coleções, LINQ e execução diferida](c03-colecoes-linq-execucao-diferida.md)
   cobre materialização e complexidade.
-- **Aplicações planejadas:** C05 aprofunda lifetime e buffers em código
-  assíncrono; C25 aplica métricas a testes de carga; C27 trata telemetria.
+- **Aplicação:** [C05 — Assincronicidade e concorrência controlada](c05-assincronicidade-concorrencia-controlada.md)
+  aprofunda lifetime e buffers em código assíncrono.
+- **Aplicações planejadas:** C25 aplica métricas a testes de carga; C27 trata
+  telemetria.
 
 ## Referências
 
@@ -378,6 +470,16 @@ configuração, commit e saída completa ao usar os dados numa decisão.
   — APIs .NET 10, acesso em 18 novembro 2026.
 - [Visão geral das ferramentas de diagnóstico .NET](https://learn.microsoft.com/dotnet/core/diagnostics/)
   — Microsoft Learn, acesso em 18 novembro 2026.
+- [Compilação gerenciada](https://learn.microsoft.com/dotnet/standard/managed-execution-process)
+  e [compilação em camadas](https://learn.microsoft.com/dotnet/core/runtime-config/compilation)
+  — modelo JIT e configurações do runtime, acesso em 18 novembro 2026.
+- [Deployment com Native AOT](https://learn.microsoft.com/dotnet/core/deploying/native-aot/)
+  — benefícios, requisitos e limitações, acesso em 18 novembro 2026.
+- [Preparar bibliotecas para trimming](https://learn.microsoft.com/dotnet/core/deploying/trimming/prepare-libraries-for-trimming)
+  e [incompatibilidades conhecidas](https://learn.microsoft.com/dotnet/core/deploying/trimming/incompatibilities)
+  — documentação .NET, acesso em 18 novembro 2026.
+- [Suporte do ASP.NET Core a Native AOT](https://learn.microsoft.com/aspnet/core/fundamentals/native-aot?view=aspnetcore-10.0)
+  — matriz de recursos do ASP.NET Core 10, acesso em 18 novembro 2026.
 - [`dotnet-counters`](https://learn.microsoft.com/dotnet/core/diagnostics/dotnet-counters)
   e [`dotnet-trace`](https://learn.microsoft.com/dotnet/core/diagnostics/dotnet-trace)
   — ferramentas .NET, acesso em 18 novembro 2026.

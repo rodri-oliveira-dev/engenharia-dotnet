@@ -8,4 +8,6 @@
   <Project Path="c04-memoria-performance/C04.MemoriaPerformance.csproj" />
   <Project Path="c04-memoria-performance/C04.MemoriaPerformance.Tests.csproj" />
   <Project Path="c04-memoria-performance/C04.MemoriaPerformance.Benchmarks.csproj" />
+  <Project Path="c05-assincronismo-concorrencia/C05.AssincronismoConcorrencia.csproj" />
+  <Project Path="c05-assincronismo-concorrencia/C05.AssincronismoConcorrencia.Tests.csproj" />
 </Solution>
