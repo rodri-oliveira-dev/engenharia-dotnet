@@ -82,6 +82,30 @@ public sealed class AssincronismoConcorrenciaTests
     }
 
     [Fact]
+    public async Task Falha_ao_enumerar_nao_inicia_operacoes_parciais()
+    {
+        var operacoesIniciadas = 0;
+
+        static IEnumerable<int> ItensComFalha()
+        {
+            yield return 1;
+            throw new InvalidOperationException("falha durante a enumeração");
+        }
+
+        await Assert.ThrowsAsync<InvalidOperationException>(() =>
+            ProcessamentoAssincrono.ProcessarComLimiteAsync(
+                ItensComFalha(),
+                limite: 2,
+                (_, _) =>
+                {
+                    Interlocked.Increment(ref operacoesIniciadas);
+                    return Task.CompletedTask;
+                }));
+
+        Assert.Equal(0, operacoesIniciadas);
+    }
+
+    [Fact]
     public async Task WhenAll_sem_limite_inicia_todo_o_lote()
     {
         var liberar = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);

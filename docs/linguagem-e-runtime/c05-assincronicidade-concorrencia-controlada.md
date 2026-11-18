@@ -275,9 +275,10 @@ API existente, mas não armazena itens, não distribui trabalho entre processos,
 não implementa cota temporal e não oferece, por si só, uma política de fila.
 
 ```csharp
+var itensMaterializados = itens.ToArray();
 using var semaforo = new SemaphoreSlim(limite, limite);
 
-var tarefas = itens.Select(async item =>
+var tarefas = itensMaterializados.Select(async item =>
 {
     await semaforo.WaitAsync(cancellationToken);
     try
@@ -293,9 +294,11 @@ var tarefas = itens.Select(async item =>
 await Task.WhenAll(tarefas);
 ```
 
-Esse padrão limita a região crítica, embora ainda crie uma task por item. Para
-fluxos extensos ou contínuos, uma fila limitada evita representar todo o backlog
-como tasks pendentes.
+Esse padrão limita a região crítica, embora materialize a entrada e ainda crie
+uma task por item. Materializar antes de iniciar trabalho impede que uma falha no
+enumerador deixe tasks parciais executando depois do descarte do semáforo. Para
+fluxos extensos ou contínuos, uma fila limitada evita manter a entrada e todo o
+backlog como memória e tasks pendentes.
 
 ### `Parallel.ForEachAsync`
 

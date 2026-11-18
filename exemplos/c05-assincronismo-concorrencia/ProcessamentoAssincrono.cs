@@ -55,9 +55,10 @@ public static class ProcessamentoAssincrono
         ArgumentNullException.ThrowIfNull(processarAsync);
         ArgumentOutOfRangeException.ThrowIfLessThan(limite, 1);
 
+        var itensMaterializados = itens.ToArray();
         using var semaforo = new SemaphoreSlim(limite, limite);
 
-        var tarefas = itens.Select(async item =>
+        var tarefas = itensMaterializados.Select(async item =>
         {
             await semaforo.WaitAsync(cancellationToken);
             try
