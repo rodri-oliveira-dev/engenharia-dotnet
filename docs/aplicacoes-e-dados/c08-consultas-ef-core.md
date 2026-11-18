@@ -6,7 +6,7 @@
 > realizado no banco, dos dados transferidos e dos objetos materializados.
 >
 > **Pré-requisitos:** [C03 — Coleções, LINQ e execução diferida](../linguagem-e-runtime/c03-colecoes-linq-execucao-diferida.md).
-> Os fundamentos de índices e planos pertencem ao C10, ainda planejado.
+> [C10 — Fundamentos de persistência SQL e NoSQL](c10-fundamentos-persistencia-sql-nosql.md).
 >
 > **Última revisão:** 2026-11-18
 
@@ -343,7 +343,8 @@ esse provider e, quando necessário, uma instância efêmera via Testcontainers.
   processo de profiling, baseline e benchmark.
 - [C09](c09-fronteiras-concorrencia-ef-core.md) trata `DbContext`, escrita,
   concorrência otimista e limites arquiteturais.
-- C10 tratará índices, transações, isolamento e locks como fundamentos de banco.
+- [C10](c10-fundamentos-persistencia-sql-nosql.md) trata índices, transações,
+  isolamento e locks como fundamentos de banco.
 
 ## Referências
 

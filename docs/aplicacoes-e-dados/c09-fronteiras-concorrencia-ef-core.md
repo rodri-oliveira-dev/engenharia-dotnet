@@ -258,9 +258,11 @@ cache. Monitore crescimento de entradas em processos longos. `ChangeTracker.Clea
 remove todas com mais eficiência que desanexar uma a uma, mas muitas chamadas
 podem indicar que a unidade de trabalho está ampla demais.
 
-Migrações, evolução de schema e deploy compatível serão tratados no C10 e no
-capítulo de entrega. A estratégia de concorrência faz parte do schema: alterar
-token ou trigger precisa ser versionado e testado junto com a aplicação.
+Fundamentos de constraints, transações e isolamento estão no
+[C10](c10-fundamentos-persistencia-sql-nosql.md); migrações e deploy compatível
+serão tratados no capítulo de entrega. A estratégia de concorrência faz parte
+do schema: alterar token ou trigger precisa ser versionado e testado junto com
+a aplicação.
 
 ## Laboratório executável
 
@@ -293,7 +295,8 @@ ou unidade de trabalho próprios somente quando expressarem uma regra que
   descarte no container de DI.
 - [C08](c08-consultas-ef-core.md) cobre tradução, tracking de leitura, N+1 e
   diagnóstico de SQL.
-- C10 tratará transações, índices, constraints e isolamento.
+- [C10](c10-fundamentos-persistencia-sql-nosql.md) trata transações, índices,
+  constraints e isolamento.
 - C11 tratará entidades, agregados e invariantes; C13, dependências e abstrações.
 - C16 tratará idempotência e Outbox em efeitos distribuídos.
 

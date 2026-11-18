@@ -28,6 +28,7 @@ capítulos publicados dos itens que permanecem no roadmap.
 - [C07 — APIs HTTP e integrações resilientes](aplicacoes-e-dados/c07-apis-http-integracoes-resilientes.md)
 - [C08 — Consultas eficientes com EF Core](aplicacoes-e-dados/c08-consultas-ef-core.md)
 - [C09 — Fronteiras e concorrência no EF Core](aplicacoes-e-dados/c09-fronteiras-concorrencia-ef-core.md)
+- [C10 — Fundamentos de persistência SQL e NoSQL](aplicacoes-e-dados/c10-fundamentos-persistencia-sql-nosql.md)
 
 ## Documentação do projeto
 

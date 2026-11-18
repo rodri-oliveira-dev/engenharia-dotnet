@@ -9,7 +9,8 @@ dados.
   [Composição e pipeline no ASP.NET Core](c06-composicao-pipeline-aspnet-core.md).
 - **C07 · Intermediário · Publicado:**
   [APIs HTTP e integrações resilientes](c07-apis-http-integracoes-resilientes.md).
-- **C10 · Fundamental · Planejado:** Fundamentos de persistência SQL e NoSQL.
+- **C10 · Fundamental · Publicado:**
+  [Fundamentos de persistência SQL e NoSQL](c10-fundamentos-persistencia-sql-nosql.md).
 - **C08 · Intermediário · Publicado:**
   [Consultas eficientes com EF Core](c08-consultas-ef-core.md).
 - **C09 · Intermediário · Publicado:**
