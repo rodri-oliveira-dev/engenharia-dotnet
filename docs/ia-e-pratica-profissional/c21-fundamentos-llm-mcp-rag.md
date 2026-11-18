@@ -374,6 +374,9 @@ quando uma métrica de tarefa ou uma restrição operacional demonstra o ganho.
   decisões, limites e ameaças visíveis.
 - [C23](../qualidade-e-seguranca/c23-testes-comportamento-risco.md) define a
   estratégia de testes; avaliação de IA a complementa.
+- [C26](../qualidade-e-seguranca/c26-seguranca-fronteiras-aplicacao.md) define
+  autenticação, autorização por recurso, segredos e proteção de dados reutilizados
+  por RAG e tools.
 - [C22](c22-agentes-orquestracao-sdd.md) usa esta base em agentes e workflows.
 
 ## Referências

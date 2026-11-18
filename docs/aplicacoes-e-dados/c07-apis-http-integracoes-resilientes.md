@@ -303,8 +303,9 @@ rejeitam trabalho; consumidores precisam entender a degradação resultante.
   explica materialização e execução diferida.
 - **Aplicações:** [C15](../sistemas-distribuidos/c15-comunicacao-mensageria-resiliente.md)
   trata comunicação e mensageria; [C16](../sistemas-distribuidos/c16-idempotencia-entrega-confiavel.md)
-  aprofunda idempotência e circuit breaker. C26 trata autorização; C27 trata
-  telemetria distribuída.
+  aprofunda idempotência e circuit breaker.
+  [C26](../qualidade-e-seguranca/c26-seguranca-fronteiras-aplicacao.md) trata
+  autorização; C27 trata telemetria distribuída.
 
 ## Referências
 

@@ -321,8 +321,9 @@ testável é preferível a indireção sem política ou substituição real.
 - **Concorrência:** [C05](../linguagem-e-runtime/c05-assincronicidade-concorrencia-controlada.md)
   fundamenta cancelamento, thread safety e ciclo de vida de tasks.
 - **Aplicações:** [C09 — Fronteiras e concorrência no EF Core](c09-fronteiras-concorrencia-ef-core.md)
-  usa scoped para unidade de trabalho; C26 trata autorização e segredos; C27
-  aprofunda telemetria distribuída.
+  usa scoped para unidade de trabalho;
+  [C26 — Segurança nas fronteiras da aplicação](../qualidade-e-seguranca/c26-seguranca-fronteiras-aplicacao.md)
+  trata autorização e segredos; C27 aprofunda telemetria distribuída.
 
 ## Referências
 

@@ -44,6 +44,7 @@ capítulos publicados dos itens que permanecem no roadmap.
 - [C23 — Testes orientados a comportamento e risco](qualidade-e-seguranca/c23-testes-comportamento-risco.md)
 - [C24 — Integração real e testes incrementais de legado](qualidade-e-seguranca/c24-integracao-real-testes-legado.md)
 - [C25 — Cobertura, E2E e testes de carga](qualidade-e-seguranca/c25-cobertura-e2e-carga.md)
+- [C26 — Segurança nas fronteiras da aplicação](qualidade-e-seguranca/c26-seguranca-fronteiras-aplicacao.md)
 
 ## Documentação do projeto
 

@@ -67,7 +67,8 @@ distinguem claramente o que existe do que está planejado.
 - [Qualidade e segurança](docs/qualidade-e-seguranca/indice.md)
   — [testes orientados a comportamento e risco](docs/qualidade-e-seguranca/c23-testes-comportamento-risco.md),
   [integração real e evolução segura de legado](docs/qualidade-e-seguranca/c24-integracao-real-testes-legado.md),
-  [cobertura, E2E e carga](docs/qualidade-e-seguranca/c25-cobertura-e2e-carga.md).
+  [cobertura, E2E e carga](docs/qualidade-e-seguranca/c25-cobertura-e2e-carga.md) e
+  [segurança nas fronteiras da aplicação](docs/qualidade-e-seguranca/c26-seguranca-fronteiras-aplicacao.md).
 - [Operação, entrega e plataforma](docs/operacao-entrega-e-plataforma/indice.md)
   — [infraestrutura como código e controle de
   drift](docs/operacao-entrega-e-plataforma/c20-infraestrutura-como-codigo-drift.md).

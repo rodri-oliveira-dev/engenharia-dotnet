@@ -423,6 +423,8 @@ verificável dentro de risco e custo aceitáveis e pode ser compreendido e opera
   specs, ADRs e limites arquiteturais.
 - [C23](../qualidade-e-seguranca/c23-testes-comportamento-risco.md) orienta testes
   por risco e revisão independente.
+- [C26](../qualidade-e-seguranca/c26-seguranca-fronteiras-aplicacao.md) é a base
+  para identidade, autorização por tool/recurso, segredos e resposta a exposição.
 
 ## Referências
 

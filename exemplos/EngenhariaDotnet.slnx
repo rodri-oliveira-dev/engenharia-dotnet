@@ -25,4 +25,6 @@
   <Project Path="c21-c22-ia/C21C22.Ia.Tests.csproj" />
   <Project Path="c23-c25-testes/C23C25.Testes.csproj" />
   <Project Path="c23-c25-testes/C23C25.Testes.Tests.csproj" />
+  <Project Path="c26-seguranca/C26.Seguranca.csproj" />
+  <Project Path="c26-seguranca/C26.Seguranca.Tests.csproj" />
 </Solution>

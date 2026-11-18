@@ -36,7 +36,7 @@ O repositório será organizado por **trilhas de conhecimento**, não pelas cate
 | 19 | C18 | Sistemas distribuídos | **Limites de microserviços e evolução de monólitos** — autonomia, seleção de padrões, Strangler Fig e prevenção do monólito distribuído. | Avançado | C12, C13, C15 | Parcial |
 | 20 | C23 | Qualidade | **Testes orientados a comportamento e risco** — unitário versus integração, dublês, matchers e redução de acoplamento à implementação. | Fundamental | C02, C13 | Sim |
 | 21 | C24 | Qualidade | **Integração real e testes incrementais de legado** — Testcontainers, testes de caracterização, seams e cobertura progressiva de fluxos críticos. | Intermediário | C08, C23 | Sim |
-| 22 | C26 | Segurança | **Segurança nas fronteiras da aplicação** — autorização por objeto, isolamento, segredos, resposta a exposição, dados sensíveis e risco de dependências. | Intermediário | C06, C07 | Sim |
+| 22 | C26 | Segurança | **Segurança nas fronteiras da aplicação** — fundamentos, identidade, autorização por objeto, APIs, vulnerabilidades, segredos, dados, dependências, pipelines e fronteiras de IA. | Intermediário | C06, C07 | Sim |
 | 23 | C27 | Operação | **Telemetria e diagnóstico distribuído** — logs estruturados, métricas, traces, correlação, cardinalidade e proteção de dados. | Intermediário | C07, C15, C26 | Sim |
 | 24 | C25 | Qualidade | **Cobertura, E2E e testes de carga** — qualidade de asserts, metas, ambiente, latência, throughput, saturação e limites da cobertura. | Avançado | C07, C23, C27 | Sim |
 | 25 | C28 | Operação | **Confiabilidade de serviço e resposta a incidentes** — SLIs, SLOs, error budgets, burn rate, triagem, mitigação e aprendizado. | Avançado | C27 | Parcial |
