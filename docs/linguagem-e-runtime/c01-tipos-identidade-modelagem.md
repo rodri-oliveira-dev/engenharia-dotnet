@@ -18,8 +18,9 @@ dicionários, cópias caras ou hierarquias que não preservam invariantes.
 Este capítulo apresenta classes, `record class`, structs e `record struct`, a
 diferença entre tipos por referência e por valor, o controle de herança com
 `sealed` e as conversões de boxing e unboxing. Garbage Collector (GC), profiling
-e otimização sistemática pertencem ao futuro C04 — Memória, runtime e engenharia
-de performance; entidades e value objects de domínio serão aprofundados em C11.
+e otimização sistemática pertencem ao
+[C04 — Memória, runtime e engenharia de performance](c04-memoria-runtime-performance.md);
+entidades e value objects de domínio serão aprofundados em C11.
 
 ## O problema começa pela semântica
 
@@ -421,9 +422,10 @@ demonstram semântica; eventuais custos devem ser medidos no contexto real.
 
 - **Próximo fundamento:** [C02 — Nulabilidade, falhas e exceções](c02-nulabilidade-falhas-excecoes.md)
   adiciona contratos de ausência às categorias de tipo apresentadas aqui.
-- **Aprofundamentos planejados:** C03 trata o comportamento em coleções e
-  execução diferida; C04 trata GC, profiling, boxing e otimização baseada em
-  evidência.
+- **Aprofundamentos:** [C03 — Coleções, LINQ e execução diferida](c03-colecoes-linq-execucao-diferida.md)
+  trata o comportamento em coleções; [C04 — Memória, runtime e engenharia de
+  performance](c04-memoria-runtime-performance.md) trata GC, profiling, boxing e
+  otimização baseada em evidência.
 - **Aplicações planejadas:** C11 usa identidade e igualdade para distinguir
   entidades e value objects; C13 aprofunda abstrações, composição e herança.
 

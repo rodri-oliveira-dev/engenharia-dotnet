@@ -3,4 +3,9 @@
   <Project Path="c01-tipos-modelagem/C01.TiposModelagem.Tests.csproj" />
   <Project Path="c02-nulabilidade/C02.Nulabilidade.csproj" />
   <Project Path="c02-nulabilidade/C02.Nulabilidade.Tests.csproj" />
+  <Project Path="c03-colecoes-linq/C03.ColecoesLinq.csproj" />
+  <Project Path="c03-colecoes-linq/C03.ColecoesLinq.Tests.csproj" />
+  <Project Path="c04-memoria-performance/C04.MemoriaPerformance.csproj" />
+  <Project Path="c04-memoria-performance/C04.MemoriaPerformance.Tests.csproj" />
+  <Project Path="c04-memoria-performance/C04.MemoriaPerformance.Benchmarks.csproj" />
 </Solution>

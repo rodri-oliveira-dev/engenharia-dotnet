@@ -342,8 +342,9 @@ locais. Desserializadores, ORMs e APIs HTTP exigem testes de integração própr
 
 - **Pré-requisito:** [C01 — Tipos, identidade e modelagem em C#](c01-tipos-identidade-modelagem.md)
   estabelece tipos por valor e referência, records e imutabilidade.
-- **Aprofundamentos planejados:** C03 trata ausência em coleções e consultas;
-  C05 trata exceções e cancelamento em operações assíncronas.
+- **Aprofundamentos:** [C03 — Coleções, LINQ e execução diferida](c03-colecoes-linq-execucao-diferida.md)
+  trata ausência em coleções e consultas; C05 tratará exceções e cancelamento em
+  operações assíncronas.
 - **Aplicações planejadas:** C06 aplica validação na composição do ASP.NET Core;
   C07 traduz falhas para contratos HTTP; C09 trata fronteiras de persistência.
 
