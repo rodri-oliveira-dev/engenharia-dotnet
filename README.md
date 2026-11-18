@@ -72,6 +72,9 @@ distinguem claramente o que existe do que está planejado.
   — [infraestrutura como código e controle de
   drift](docs/operacao-entrega-e-plataforma/c20-infraestrutura-como-codigo-drift.md).
 - [IA e prática profissional](docs/ia-e-pratica-profissional/indice.md)
+  — [fundamentos de LLM, MCP e RAG](docs/ia-e-pratica-profissional/c21-fundamentos-llm-mcp-rag.md)
+  e [agentes, orquestração e desenvolvimento orientado por
+  especificações](docs/ia-e-pratica-profissional/c22-agentes-orquestracao-sdd.md).
 - [Estudos de caso](docs/estudos-de-caso/indice.md)
 
 ## Níveis de conhecimento

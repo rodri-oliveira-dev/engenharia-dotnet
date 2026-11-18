@@ -42,8 +42,8 @@ O repositório será organizado por **trilhas de conhecimento**, não pelas cate
 | 25 | C28 | Operação | **Confiabilidade de serviço e resposta a incidentes** — SLIs, SLOs, error budgets, burn rate, triagem, mitigação e aprendizado. | Avançado | C27 | Parcial |
 | 26 | C29 | Entrega | **Entrega compatível e gestão de risco no pipeline** — expand-migrate-contract, contratos, canary/flags, rollback e triagem de vulnerabilidades. | Avançado | C10, C23, C26, C27 | Parcial |
 | 27 | C20 | Plataforma | **Infraestrutura como código e controle de drift** — provisionamento versus configuração, estado, revisão, detecção e reconciliação. | Intermediário | C19, C29 | Não |
-| 28 | C21 | IA aplicada | **Contexto e ferramentas para sistemas de IA** — RAG e MCP, recuperação, permissões, auditoria, avaliação e limites contra alucinação. | Intermediário | C19, C26 | Parcial |
-| 29 | C22 | IA aplicada | **Workflows de agentes e desenvolvimento orientado por especificações** — decomposição, orquestração, estado, validação, custo e revisão humana. | Avançado | C21, C23 | Parcial |
+| 28 | C21 | IA aplicada | **Fundamentos de LLM, MCP e RAG** — contexto, recuperação, permissões, auditoria, avaliação e limites contra alucinação. | Intermediário | C19, C23 | Parcial |
+| 29 | C22 | IA aplicada | **Agentes, orquestração e desenvolvimento orientado por especificações** — decomposição, estado, validação, custo e revisão humana. | Avançado | C21, C23 | Parcial |
 | 30 | C30 | Prática profissional | **Decisão técnica, revisão e mentoria** — evidências, trade-offs, governança, code review, pairing e autonomia progressiva. | Fundamental | C19, C23 | Não |
 | 31 | C31 | Estudos de caso | **Pagamentos sem duplicidade durante instabilidades** — investigação temporal e composição de idempotência, restrição única, transação, Outbox e retries. | Avançado | C09, C16, C27, C28 | Sim |
 | 32 | C32 | Estudos de caso | **Diagnóstico de backlog em filas** — lag, concorrência, partições, locks, I/O, downstream, rate limits, backpressure e escala útil. | Avançado | C05, C15, C27, C28 | Sim |

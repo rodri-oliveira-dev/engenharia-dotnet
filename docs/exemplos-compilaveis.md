@@ -30,6 +30,11 @@ persistência, Testcontainers e caracterização de legado. Testes com a trait
 `Category=Docker` exigem daemon Docker ativo; os demais não acessam serviços
 externos.
 
+O laboratório `c21-c22-ia/` reúne workflow com modelo falso, RAG local, agente
+limitado, especificação rastreável e server MCP stdio. Os testes não acessam
+modelos nem serviços externos; somente o projeto do server usa o SDK C# oficial
+do MCP com versão fixada.
+
 O SDK está fixado em `global.json`; projetos novos devem usar o mesmo target ou
 documentar por que precisam de uma versão diferente.
 

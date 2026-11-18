@@ -39,6 +39,8 @@ capítulos publicados dos itens que permanecem no roadmap.
 - [C18 — Limites de microserviços e evolução de monólitos](sistemas-distribuidos/c18-limites-microservicos-evolucao-monolitos.md)
 - [C19 — Documentação arquitetural viva](dominio-e-arquitetura/c19-documentacao-arquitetural-viva.md)
 - [C20 — Infraestrutura como código e controle de drift](operacao-entrega-e-plataforma/c20-infraestrutura-como-codigo-drift.md)
+- [C21 — Fundamentos de LLM, MCP e RAG](ia-e-pratica-profissional/c21-fundamentos-llm-mcp-rag.md)
+- [C22 — Agentes, orquestração e desenvolvimento orientado por especificações](ia-e-pratica-profissional/c22-agentes-orquestracao-sdd.md)
 - [C23 — Testes orientados a comportamento e risco](qualidade-e-seguranca/c23-testes-comportamento-risco.md)
 - [C24 — Integração real e testes incrementais de legado](qualidade-e-seguranca/c24-integracao-real-testes-legado.md)
 - [C25 — Cobertura, E2E e testes de carga](qualidade-e-seguranca/c25-cobertura-e2e-carga.md)
