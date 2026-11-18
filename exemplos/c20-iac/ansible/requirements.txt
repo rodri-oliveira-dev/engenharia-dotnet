@@ -1,0 +1,2 @@
+# Dependencia usada na validacao Ansible do CI.
+ansible-core==2.20.1
