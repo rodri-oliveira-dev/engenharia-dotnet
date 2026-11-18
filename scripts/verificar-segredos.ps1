@@ -26,6 +26,7 @@ try {
     }
 
     Write-Output "Verificação básica de segredos concluída sem ocorrências."
+    exit 0
 }
 finally {
     Pop-Location
