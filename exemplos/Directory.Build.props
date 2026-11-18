@@ -1,5 +1,12 @@
 <Project>
+  <!-- Configuracoes compartilhadas pelos exemplos compilaveis. -->
   <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+
+    <!-- Mantem isolados os artefatos de projetos que dividem a mesma pasta. -->
     <BaseIntermediateOutputPath>obj/$(MSBuildProjectName)/</BaseIntermediateOutputPath>
     <BaseOutputPath>bin/$(MSBuildProjectName)/</BaseOutputPath>
     <DefaultItemExcludes>$(DefaultItemExcludes);obj/**;bin/**</DefaultItemExcludes>
