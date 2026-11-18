@@ -101,6 +101,18 @@ Nem tudo cabe em um trecho de Markdown. Quando o assunto exige compilação, tes
 
 Os detalhes estão na [estratégia para exemplos compiláveis](docs/exemplos-compilaveis.md).
 
+## Testes
+
+Os capítulos de [Qualidade e segurança](docs/qualidade-e-seguranca/indice.md) abordam estratégia de testes, integração e cobertura. Para explorar esses conceitos em um projeto executável, consulte o laboratório [Pirâmide de testes e cobertura em .NET](https://github.com/rodri-oliveira-dev/dotnet-code-coverage).
+
+O projeto demonstra testes unitários, de integração HTTP e de ponta a ponta (E2E), além de métricas de cobertura, *mutation testing* e validações automatizadas de qualidade (*quality gates*) no CI. A proposta é mostrar como combinar camadas de teste e interpretar métricas sem tratar cobertura alta como sinônimo de testes eficazes.
+
+## Observabilidade
+
+Os capítulos de [Operação, entrega e plataforma](docs/operacao-entrega-e-plataforma/indice.md) abordam telemetria, rastreamento distribuído e diagnóstico de sistemas. Para acompanhar esses conceitos em um ambiente executável, consulte o laboratório [Observabilidade em sistemas distribuídos com .NET](https://github.com/rodri-oliveira-dev/dotnet-observability-lab).
+
+O projeto utiliza .NET 10, .NET Aspire e OpenTelemetry para explorar *traces*, logs estruturados e métricas em APIs e workers de processamento assíncrono. Também apresenta cenários de falha, duplicidade e recuperação em um fluxo com RabbitMQ, PostgreSQL e padrões Outbox/Inbox, relacionando os sinais de telemetria ao comportamento do sistema e às decisões de arquitetura.
+
 ## Quer contribuir?
 
 Encontrou um erro, acha que algum trecho poderia ser mais claro ou quer sugerir um tema? Correções, discussões técnicas e contribuições são bem-vindas.
