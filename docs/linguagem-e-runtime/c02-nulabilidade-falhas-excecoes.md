@@ -370,8 +370,9 @@ locais. Desserializadores, ORMs e APIs HTTP exigem testes de integração própr
   trata ausência em coleções e consultas;
   [C05 — Assincronicidade e concorrência controlada](c05-assincronicidade-concorrencia-controlada.md)
   aplica propagação de falha e cancelamento a `Task`, `WhenAll` e pipelines.
-- **Aplicações planejadas:** C06 aplica validação na composição do ASP.NET Core;
-  C07 traduz falhas para contratos HTTP; C09 trata fronteiras de persistência.
+- **Aplicações:** [C06 — Composição e pipeline no ASP.NET Core](../aplicacoes-e-dados/c06-composicao-pipeline-aspnet-core.md)
+  aplica validação na composição; [C07 — APIs HTTP e integrações resilientes](../aplicacoes-e-dados/c07-apis-http-integracoes-resilientes.md)
+  traduz falhas para contratos HTTP; C09 trata fronteiras de persistência.
 
 ## Referências
 

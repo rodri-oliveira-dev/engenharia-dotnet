@@ -5,8 +5,10 @@ dados.
 
 ## Roadmap
 
-- **C06 · Fundamental · Planejado:** Composição e pipeline no ASP.NET Core.
-- **C07 · Intermediário · Planejado:** APIs HTTP e integrações resilientes.
+- **C06 · Fundamental · Publicado:**
+  [Composição e pipeline no ASP.NET Core](c06-composicao-pipeline-aspnet-core.md).
+- **C07 · Intermediário · Publicado:**
+  [APIs HTTP e integrações resilientes](c07-apis-http-integracoes-resilientes.md).
 - **C10 · Fundamental · Planejado:** Fundamentos de persistência SQL e NoSQL.
 - **C08 · Intermediário · Planejado:** Consultas eficientes com EF Core.
 - **C09 · Intermediário · Planejado:** Fronteiras e concorrência no EF Core.

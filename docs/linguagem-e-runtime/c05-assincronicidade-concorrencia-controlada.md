@@ -572,8 +572,10 @@ operacional revisável, não uma constante universal.
   define iteração sob demanda e reenumeração.
 - **Runtime:** [C04 — Memória, runtime e engenharia de performance](c04-memoria-runtime-performance.md)
   trata máquinas de estado sob a perspectiva de alocação, medição, JIT e AOT.
-- **Aplicações planejadas:** C07 aplicará cancelamento a HTTP e resiliência; C15
-  tratará filas externas e entrega; C32 investigará backlog operacional.
+- **Aplicações:** [C06 — Composição e pipeline no ASP.NET Core](../aplicacoes-e-dados/c06-composicao-pipeline-aspnet-core.md)
+  aplica thread safety aos lifetimes; [C07 — APIs HTTP e integrações resilientes](../aplicacoes-e-dados/c07-apis-http-integracoes-resilientes.md)
+  aplica cancelamento a HTTP; C15 tratará filas externas e entrega; C32
+  investigará backlog operacional.
 
 ## Referências
 

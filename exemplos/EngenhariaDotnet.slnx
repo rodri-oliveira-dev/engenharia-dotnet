@@ -10,4 +10,6 @@
   <Project Path="c04-memoria-performance/C04.MemoriaPerformance.Benchmarks.csproj" />
   <Project Path="c05-assincronismo-concorrencia/C05.AssincronismoConcorrencia.csproj" />
   <Project Path="c05-assincronismo-concorrencia/C05.AssincronismoConcorrencia.Tests.csproj" />
+  <Project Path="c06-c07-aspnet-core/C06C07.AspNetCore.csproj" />
+  <Project Path="c06-c07-aspnet-core/C06C07.AspNetCore.Tests.csproj" />
 </Solution>

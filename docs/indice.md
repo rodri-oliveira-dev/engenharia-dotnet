@@ -24,6 +24,8 @@ capítulos publicados dos itens que permanecem no roadmap.
 - [C03 — Coleções, LINQ e execução diferida](linguagem-e-runtime/c03-colecoes-linq-execucao-diferida.md)
 - [C04 — Memória, runtime e engenharia de performance](linguagem-e-runtime/c04-memoria-runtime-performance.md)
 - [C05 — Assincronicidade e concorrência controlada](linguagem-e-runtime/c05-assincronicidade-concorrencia-controlada.md)
+- [C06 — Composição e pipeline no ASP.NET Core](aplicacoes-e-dados/c06-composicao-pipeline-aspnet-core.md)
+- [C07 — APIs HTTP e integrações resilientes](aplicacoes-e-dados/c07-apis-http-integracoes-resilientes.md)
 
 ## Documentação do projeto
 

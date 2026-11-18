@@ -21,6 +21,10 @@ exemplos/
     └── C02.Nulabilidade.Tests.csproj
 ```
 
+Capítulos fortemente relacionados podem compartilhar um laboratório, como
+`c06-c07-aspnet-core/`, quando o mesmo host é necessário para testar composição,
+pipeline e contratos HTTP sem duplicar infraestrutura.
+
 O SDK está fixado em `global.json`; projetos novos devem usar o mesmo target ou
 documentar por que precisam de uma versão diferente.
 

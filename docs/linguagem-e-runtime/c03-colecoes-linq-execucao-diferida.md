@@ -316,6 +316,8 @@ pré-condições; a decisão de performance requer dados do ambiente de destino.
   trata alocações, GC, profiling e benchmarks.
 - **Aplicação:** [C05 — Assincronicidade e concorrência controlada](c05-assincronicidade-concorrencia-controlada.md)
   usa filas e streaming em concorrência.
+- **Paginação:** [C07 — APIs HTTP e integrações resilientes](../aplicacoes-e-dados/c07-apis-http-integracoes-resilientes.md)
+  aplica materialização limitada e ordenação estável em contratos HTTP.
 - **Aplicação planejada:** C08 distingue LINQ to Objects de consultas traduzidas
   por EF Core.
 
