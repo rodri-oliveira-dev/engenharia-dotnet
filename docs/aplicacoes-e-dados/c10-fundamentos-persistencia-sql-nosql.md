@@ -467,6 +467,9 @@ planos do PostgreSQL.
   transações e concorrência otimista no EF Core.
 - [C07](c07-apis-http-integracoes-resilientes.md) diferencia retry HTTP,
   idempotência e cancelamento nas integrações.
+- [C11](../dominio-e-arquitetura/c11-entidades-value-objects-agregados.md)
+  define invariantes e limites de consistência dos agregados que a persistência
+  precisa sustentar.
 - C16 aprofundará idempotência, consumidores e Outbox; C17 aprofundará
   consistência eventual e Sagas; C24 tratará testes com banco real; C29,
   evolução compatível de schema.

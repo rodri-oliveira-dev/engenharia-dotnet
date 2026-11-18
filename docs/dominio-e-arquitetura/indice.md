@@ -5,9 +5,9 @@ arquiteturais.
 
 ## Roadmap
 
-- **C11 · Fundamental · Planejado:** Entidades, value objects e agregados.
-- **C12 · Intermediário · Planejado:** Serviços de domínio e integração entre
-  modelos.
+- **C11 · Fundamental · Publicado:** [Entidades, value objects e agregados](c11-entidades-value-objects-agregados.md).
+- **C12 · Intermediário · Publicado:** [Serviços de domínio e integração entre
+  modelos](c12-servicos-dominio-integracao-modelos.md).
 - **C13 · Fundamental · Planejado:** Dependências, abstrações e padrões com
   propósito.
 - **C14 · Avançado · Planejado:** CQRS e modelos orientados ao uso.

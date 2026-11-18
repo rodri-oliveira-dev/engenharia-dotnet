@@ -297,7 +297,8 @@ ou unidade de trabalho próprios somente quando expressarem uma regra que
   diagnóstico de SQL.
 - [C10](c10-fundamentos-persistencia-sql-nosql.md) trata transações, índices,
   constraints e isolamento.
-- C11 tratará entidades, agregados e invariantes; C13, dependências e abstrações.
+- [C11](../dominio-e-arquitetura/c11-entidades-value-objects-agregados.md) trata
+  entidades, agregados e invariantes; C13 tratará dependências e abstrações.
 - C16 tratará idempotência e Outbox em efeitos distribuídos.
 
 ## Referências

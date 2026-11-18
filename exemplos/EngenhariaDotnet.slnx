@@ -14,4 +14,6 @@
   <Project Path="c06-c07-aspnet-core/C06C07.AspNetCore.Tests.csproj" />
   <Project Path="c08-c09-ef-core/C08C09.EfCore.csproj" />
   <Project Path="c08-c09-ef-core/C08C09.EfCore.Tests.csproj" />
+  <Project Path="c11-c12-ddd/C11C12.Ddd.csproj" />
+  <Project Path="c11-c12-ddd/C11C12.Ddd.Tests.csproj" />
 </Solution>

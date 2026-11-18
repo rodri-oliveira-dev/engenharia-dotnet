@@ -29,6 +29,8 @@ capítulos publicados dos itens que permanecem no roadmap.
 - [C08 — Consultas eficientes com EF Core](aplicacoes-e-dados/c08-consultas-ef-core.md)
 - [C09 — Fronteiras e concorrência no EF Core](aplicacoes-e-dados/c09-fronteiras-concorrencia-ef-core.md)
 - [C10 — Fundamentos de persistência SQL e NoSQL](aplicacoes-e-dados/c10-fundamentos-persistencia-sql-nosql.md)
+- [C11 — Entidades, value objects e agregados](dominio-e-arquitetura/c11-entidades-value-objects-agregados.md)
+- [C12 — Serviços de domínio e integração entre modelos](dominio-e-arquitetura/c12-servicos-dominio-integracao-modelos.md)
 
 ## Documentação do projeto
 

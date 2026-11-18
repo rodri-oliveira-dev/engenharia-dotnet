@@ -58,6 +58,8 @@ distinguem claramente o que existe do que está planejado.
   — ASP.NET Core, APIs HTTP, Entity Framework Core e
   [fundamentos de persistência SQL e NoSQL](docs/aplicacoes-e-dados/c10-fundamentos-persistencia-sql-nosql.md).
 - [Domínio e arquitetura](docs/dominio-e-arquitetura/indice.md)
+  — DDD estratégico, [entidades, value objects e agregados](docs/dominio-e-arquitetura/c11-entidades-value-objects-agregados.md),
+  [serviços e integração entre modelos](docs/dominio-e-arquitetura/c12-servicos-dominio-integracao-modelos.md).
 - [Sistemas distribuídos](docs/sistemas-distribuidos/indice.md)
 - [Qualidade e segurança](docs/qualidade-e-seguranca/indice.md)
 - [Operação, entrega e plataforma](docs/operacao-entrega-e-plataforma/indice.md)
