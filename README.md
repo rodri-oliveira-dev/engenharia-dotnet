@@ -1,55 +1,24 @@
 # Engenharia .NET
 
-Base pública de conhecimento sobre engenharia de software no ecossistema .NET,
-escrita em português e projetada para consulta direta no GitHub.
+Trabalho com C# e .NET há bastante tempo e sei que algumas dúvidas merecem mais do que uma resposta rápida. Criei este espaço para reunir explicações sobre a linguagem, o runtime e as decisões de engenharia que aparecem quando desenvolvemos, evoluímos e mantemos sistemas.
 
-O projeto organiza fundamentos, práticas e decisões de engenharia que ajudam a
-desenvolver, evoluir e operar sistemas .NET. O foco está em construir modelos
-mentais, explicitar trade-offs e conectar escolhas técnicas a problemas reais —
-não em oferecer respostas prontas para entrevistas ou um curso linear.
+A ideia não é decorar padrões ou acumular respostas prontas para entrevistas. É entender o que acontece por trás do código, quais alternativas existem, onde cada escolha pode falhar e o que vale a pena testar ou medir.
 
-## Propósito e público-alvo
+Todo o conteúdo está em português e pode ser consultado diretamente pelo GitHub. Você não precisa ler tudo em sequência: pode começar pelo assunto que faz sentido para você agora.
 
-Este guia é destinado a pessoas que desenvolvem, projetam, revisam ou operam
-sistemas com C# e .NET. Ele pode ser usado tanto para consolidar fundamentos
-quanto para apoiar decisões em aplicações, dados, arquitetura, sistemas
-distribuídos, qualidade, segurança e operação.
+## Por onde começar
 
-O leitor deve conseguir entrar por um problema concreto, entender os mecanismos
-relevantes, comparar alternativas e identificar como verificar a decisão.
+Se você chegou com uma dúvida específica, vá direto ao assunto. Se quiser explorar, os índices ajudam a encontrar uma sequência de leitura:
 
-## Filosofia editorial
+1. Abra o [índice central](docs/indice.md) para ter uma visão de todos os temas.
+2. Escolha uma área e consulte os capítulos disponíveis.
+3. Siga os pré-requisitos e os links entre assuntos quando quiser se aprofundar.
 
-- Conteúdo autoral exclusivamente em português, com termos técnicos em inglês
-  explicados quando necessário.
-- Recomendações contextualizadas por restrições, benefícios, custos, riscos e
-  alternativas mais simples.
-- Um capítulo canônico para cada conceito, conectado aos demais por links.
-- Afirmações técnicas sustentadas preferencialmente por documentação oficial,
-  especificações e fontes primárias verificadas.
-- Exemplos que demonstram comportamento ou decisões, sem complexidade
-  ornamental.
-- Evolução incremental: arquivos são criados quando há conteúdo útil, não para
-  simular capítulos ainda não escritos.
+Os capítulos indicam o nível de conhecimento e os pré-requisitos. Assim, quem está começando consegue construir uma base e quem já trabalha com .NET pode usar o repositório como material de consulta.
 
-As regras completas estão no [guia de estilo editorial](docs/guia-de-estilo.md).
-O [planejamento editorial](docs/planejamento/mapa-editorial.md) registra o escopo,
-as dependências e a ordem de implementação dos capítulos.
+## O que você vai encontrar
 
-## Como utilizar o guia
-
-Há três formas recomendadas de navegação:
-
-1. Consulte o [índice central](docs/indice.md) para escolher uma área.
-2. Entre pelo índice de uma área para conhecer seus capítulos e a ordem
-   sugerida.
-3. Use os pré-requisitos e capítulos relacionados para formar uma trilha própria
-   conforme o problema que deseja resolver.
-
-O mapa não impõe leitura sequencial. Os índices de área oferecem uma visão
-compacta do conteúdo publicado e de sua ordem editorial.
-
-## Áreas de conhecimento
+Os assuntos vão dos fundamentos de C# a problemas de arquitetura e operação. Cada área tem seu próprio índice:
 
 - [Linguagem e runtime](docs/linguagem-e-runtime/indice.md)
   — tipos, nulabilidade, coleções, LINQ, memória, assincronismo, concorrência e
@@ -81,8 +50,9 @@ compacta do conteúdo publicado e de sua ordem editorial.
   especificações](docs/ia-e-pratica-profissional/c22-agentes-orquestracao-sdd.md),
   além de [decisão, revisão e maturidade técnica](docs/ia-e-pratica-profissional/c30-decisao-revisao-maturidade-tecnica.md).
 - [Estudos de caso](docs/estudos-de-caso/indice.md)
+  — problemas de produção analisados a partir do contexto, das opções e das consequências.
 
-## Índice completo
+## Todos os capítulos
 
 | Área | Capítulos |
 |---|---|
@@ -95,38 +65,47 @@ compacta do conteúdo publicado e de sua ordem editorial.
 | IA e prática profissional | [C21](docs/ia-e-pratica-profissional/c21-fundamentos-llm-mcp-rag.md) · [C22](docs/ia-e-pratica-profissional/c22-agentes-orquestracao-sdd.md) · [C30](docs/ia-e-pratica-profissional/c30-decisao-revisao-maturidade-tecnica.md) |
 | Estudos de caso | [C31](docs/estudos-de-caso/c31-pagamentos-operacoes-duplicadas.md) · [C32](docs/estudos-de-caso/c32-latencia-apos-deploy.md) · [C33](docs/estudos-de-caso/c33-legado-baixa-testabilidade.md) · [C34](docs/estudos-de-caso/c34-migracao-gradual-monolito.md) · [C35](docs/estudos-de-caso/c35-pipeline-dependencia-vulneravel.md) |
 
-O [índice central](docs/indice.md) apresenta os títulos completos e a
-documentação de apoio.
+Para ver os títulos completos e a documentação de apoio, consulte o
+[índice central](docs/indice.md).
 
-## Níveis de conhecimento
+## Como escrevo os conteúdos
 
-- **Fundamental:** estabelece vocabulário, modelos mentais e contratos usados
-  por outros capítulos. Não pressupõe experiência com a técnica específica.
-- **Intermediário:** combina fundamentos explícitos para resolver problemas
-  recorrentes de produção.
-- **Avançado:** discute forças concorrentes, falhas parciais, custo operacional e
-  decisões orientadas por evidência. O nível não justifica complexidade gratuita.
+Procuro explicar os conceitos com a mesma preocupação que teria ao discutir uma solução com outra pessoa do time: clareza, contexto e espaço para questionar as escolhas.
 
-Cada capítulo declara seu nível e seus pré-requisitos. A dificuldade decorre do
-problema tratado, não da quantidade de padrões ou ferramentas citados.
+Na prática, isso significa:
 
-## Exemplos de código
+- Começar pelo problema e mostrar por que o assunto importa.
+- Comparar alternativas, benefícios, limitações e **trade-offs**, sem tratar uma técnica como resposta universal.
+- Usar exemplos que ajudem a observar um comportamento ou entender uma decisão, sem complexidade desnecessária.
+- Priorizar documentação oficial, especificações e outras fontes primárias para sustentar afirmações técnicas.
+- Manter cada conceito em um capítulo de referência e conectar os assuntos por links, em vez de repetir a mesma explicação.
+- Publicar conteúdo aos poucos, conforme os capítulos ficam úteis de verdade, sem criar páginas vazias só para completar o índice.
 
-Trechos em C# devem ser pequenos, verificáveis e coerentes com a versão de .NET
-declarada pelo repositório. Quando um comportamento exige compilação, testes,
-benchmark ou infraestrutura, o exemplo é mantido como laboratório isolado e
-reproduzível. Os projetos existentes correspondem a necessidades didáticas dos
-capítulos publicados.
+Esses critérios estão detalhados no [guia de estilo editorial](docs/guia-de-estilo.md). O [mapa editorial](docs/planejamento/mapa-editorial.md) mostra os temas previstos e como eles se relacionam.
 
-A convenção completa está na
-[estratégia para exemplos compiláveis](docs/exemplos-compilaveis.md).
+## Níveis dos capítulos
 
-## Contribuição
+Cada capítulo indica seu nível e os conhecimentos que ajudam a acompanhá-lo:
 
-Contribuições são bem-vindas. Antes de propor um capítulo, correção técnica ou
-exemplo, leia o [guia de contribuição](CONTRIBUTING.md), o
-[mapa editorial](docs/planejamento/mapa-editorial.md) e o
-[guia de estilo](docs/guia-de-estilo.md).
+- **Fundamental:** apresenta conceitos e comportamentos importantes, mesmo que você ainda não tenha trabalhado com o tema.
+- **Intermediário:** conecta esses fundamentos a problemas comuns no desenvolvimento e na manutenção de aplicações.
+- **Avançado:** discute decisões com mais variáveis, como falhas parciais, concorrência, custo operacional e riscos de produção.
+
+Avançado não significa mais padrões ou mais ferramentas. Muitas vezes, a melhor decisão técnica é justamente manter a solução simples.
+
+## Código e exemplos
+
+Quando o código ajuda a explicar um conceito, uso exemplos pequenos em C#, com comportamento verificável e compatíveis com a versão de .NET indicada no repositório.
+
+Nem tudo cabe em um trecho de Markdown. Quando o assunto exige compilação, testes, benchmarks ou infraestrutura, a ideia é ter um laboratório separado e reproduzível. Os exemplos são adicionados conforme a necessidade dos capítulos, não apenas para aumentar a quantidade de projetos.
+
+Os detalhes estão na [estratégia para exemplos compiláveis](docs/exemplos-compilaveis.md).
+
+## Quer contribuir?
+
+Encontrou um erro, acha que algum trecho poderia ser mais claro ou quer sugerir um tema? Correções, discussões técnicas e contribuições são bem-vindas.
+
+Antes de abrir um pull request, dê uma olhada no [guia de contribuição](CONTRIBUTING.md), no [mapa editorial](docs/planejamento/mapa-editorial.md) e no [guia de estilo](docs/guia-de-estilo.md). Eles ajudam a manter os capítulos conectados e as explicações consistentes.
 
 ## Licença
 
