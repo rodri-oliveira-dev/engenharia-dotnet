@@ -164,6 +164,33 @@ catch
 }
 ```
 
+`Task.WhenAny` resolve outro problema: a task externa termina quando a primeira
+das tasks fornecidas termina e devolve essa task. A task externa termina com
+sucesso mesmo quando a vencedora falhou ou foi cancelada; é preciso aguardar a
+task devolvida para observar seu resultado. As demais não são canceladas nem
+aguardadas automaticamente.
+
+```csharp
+var pendentes = endpoints
+    .Select(endpoint => ConsultarAsync(endpoint, cancellationToken))
+    .ToList();
+
+while (pendentes.Count > 0)
+{
+    var concluida = await Task.WhenAny(pendentes);
+    pendentes.Remove(concluida);
+
+    var resposta = await concluida; // Observa falha ou cancelamento.
+    await PublicarAsync(resposta, cancellationToken);
+}
+```
+
+Esse padrão processa resultados na ordem de conclusão. Ele não cria limite de
+concorrência: todas as consultas do exemplo já foram iniciadas. Também não deve
+ser usado como timeout abandonando a operação perdedora. Para um timeout
+cancelável, vincule tokens, solicite cancelamento e aguarde o encerramento das
+operações iniciadas.
+
 Capturar `Exception` indiscriminadamente em cada camada, registrar e seguir em
 frente converte falhas em estados parcialmente válidos e duplica telemetria.
 Capture onde seja possível recuperar, traduzir com `InnerException`, acrescentar
@@ -198,6 +225,25 @@ continuação da aplicação web executa e não deve ser vendido como otimizaç�
 universal. Bibliotecas reutilizáveis ainda podem adotá-lo por não conhecerem o
 ambiente consumidor. Ele tampouco torna estado compartilhado thread-safe nem
 garante uma thread diferente após o `await`.
+
+## Structured concurrency como disciplina
+
+Structured concurrency é a disciplina de manter o ciclo de vida do trabalho
+concorrente dentro de um escopo léxico: o método que inicia operações filhas
+também as aguarda, propaga cancelamento e observa suas falhas antes de retornar.
+Isso torna propriedade, encerramento e erro visíveis na árvore de chamadas.
+
+`Task.WhenAll`, `await using`, tokens vinculados, `Parallel.ForEachAsync` e o
+encerramento explícito de producers e consumers permitem aplicar parte dessa
+disciplina. As APIs gerais de `Task`, porém, também permitem guardar tasks em
+estado global, iniciar trabalho sem proprietário ou retornar antes das filhas.
+Elas não impõem um task group léxico que cancele irmãs e aguarde todas ao sair.
+
+Portanto, trate structured concurrency como uma propriedade do desenho, não
+como garantia automática de `async`/`await`: cada task iniciada deve ter um
+proprietário, e todo caminho de sucesso, falha ou cancelamento deve chegar a um
+`await` de encerramento. Trabalho que precisa sobreviver à requisição pertence a
+um serviço hospedado ou fila com ciclo de vida próprio, e não a fire-and-forget.
 
 ## `WhenAll` não é um limitador
 
@@ -306,6 +352,22 @@ falhar. Consumidores precisam ser aguardados no encerramento. O laboratório usa
 vários consumidores e associa um número de sequência a cada entrada, porque
 concorrência não preserva automaticamente a ordem de conclusão.
 
+## Rate limiting e admissão
+
+Um limite de concorrência controla quantas operações permanecem em andamento;
+rate limiting controla quantas recebem permissão em uma janela ou orçamento.
+No .NET, `System.Threading.RateLimiting` oferece limitadores como token bucket,
+fixed window, sliding window e concorrência. `AcquireAsync` devolve um
+`RateLimitLease`: o chamador deve verificar `IsAcquired`, respeitar cancelamento
+e definir se uma admissão recusada espera, retorna erro ou será tentada depois.
+
+A fila interna também precisa ser limitada. Uma fila grande mascara sobrecarga,
+aumenta latência e pode entregar trabalho já obsoleto. Em várias réplicas, um
+limitador local aplica uma cota por processo; uma cota global exige coordenação
+externa ou divisão explícita do orçamento. Rate limiting não substitui
+backpressure: a primeira política decide admissão no tempo, enquanto a segunda
+faz a produção acompanhar a capacidade real do pipeline.
+
 ## Race conditions, thread safety e consistência
 
 Uma race condition ocorre quando o resultado depende da ordem imprevisível de
@@ -404,8 +466,9 @@ produtores e consumidores com buffer, prefira `Channel<T>`; um
 
 O laboratório em `exemplos/c05-assincronismo-concorrencia/` contém:
 
-- **Exemplo A:** processamento assíncrono com cancelamento cooperativo;
-- **Exemplo B:** `Task.WhenAll` sem limite e adaptação com `SemaphoreSlim`;
+- **Exemplo A:** `Task.WhenAll` sem limite versus adaptação com `SemaphoreSlim`;
+- **Exemplo B:** consumo de API externa com `HttpClient` e
+  `CancellationToken` propagado;
 - **Exemplo C:** pipeline produtor/consumidor com `Channel<T>` limitado;
 - **Exemplo D:** relançamento com `throw;` e teste da origem da pilha;
 - **Exemplo E:** streaming cancelável com `IAsyncEnumerable<T>`;
@@ -422,6 +485,24 @@ dotnet test exemplos/c05-assincronismo-concorrencia/C05.AssincronismoConcorrenci
 Os testes coordenam concorrência com sinais e capacidade de fila, sem depender
 de atrasos arbitrários. Eles comprovam contratos funcionais, não throughput ou
 superioridade de performance.
+
+### Compatibilidade das APIs
+
+O laboratório usa .NET 10. Para projetos em versões anteriores, os pontos de
+corte relevantes são:
+
+- `IAsyncEnumerable<T>` e as interfaces de async streams fazem parte do .NET
+  Standard 2.1 e do .NET Core 3.0, com suporte de linguagem a partir do C# 8;
+- `System.Threading.Channels` integra o shared framework desde o .NET Core 3.0 e
+  também está disponível como pacote para outros targets compatíveis;
+- `Parallel.ForEachAsync` está disponível a partir do .NET 6;
+- as APIs `System.Threading.RateLimiting` e o middleware correspondente do
+  ASP.NET Core chegaram ao conjunto de APIs do .NET 7 e também podem ser usados
+  pelo pacote compatível com o target declarado.
+
+Confirme o target e a versão do pacote no projeto consumidor; disponibilidade
+de uma API não garante que uma biblioteca ou framework ao redor preserve a
+mesma semântica operacional.
 
 ## Dicas de engenharia
 
@@ -499,6 +580,8 @@ operacional revisável, não uma constante universal.
   — documentação .NET, acesso em 18 novembro 2026.
 - [`Task.WhenAll`](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task.whenall?view=net-10.0)
   — API .NET 10, acesso em 18 novembro 2026.
+- [`Task.WhenAny`](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task.whenany?view=net-10.0)
+  — API .NET 10, acesso em 18 novembro 2026.
 - [Cancelamento em threads gerenciadas](https://learn.microsoft.com/dotnet/standard/threading/cancellation-in-managed-threads)
   — documentação .NET, acesso em 18 novembro 2026.
 - [`ConfigureAwait` FAQ](https://devblogs.microsoft.com/dotnet/configureawait-faq/)
@@ -510,6 +593,8 @@ operacional revisável, não uma constante universal.
 - [`Parallel.ForEachAsync`](https://learn.microsoft.com/dotnet/api/system.threading.tasks.parallel.foreachasync?view=net-10.0)
   — API .NET 10, acesso em 18 novembro 2026.
 - [Channels no .NET](https://learn.microsoft.com/dotnet/core/extensions/channels)
+  — documentação .NET, acesso em 18 novembro 2026.
+- [Rate limiting em um cliente HTTP](https://learn.microsoft.com/dotnet/core/extensions/http-ratelimiter)
   — documentação .NET, acesso em 18 novembro 2026.
 - [`ValueTask<T>`](https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask-1?view=net-10.0)
   e [entendendo quando usá-la](https://devblogs.microsoft.com/dotnet/understanding-the-whys-whats-and-whens-of-valuetask/)

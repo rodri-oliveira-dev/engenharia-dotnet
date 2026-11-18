@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Threading.Channels;
 using EngenhariaDotnet.AssincronismoConcorrencia;
 using Xunit;
@@ -7,6 +8,28 @@ namespace EngenhariaDotnet.AssincronismoConcorrencia.Tests;
 
 public sealed class AssincronismoConcorrenciaTests
 {
+    [Fact]
+    public async Task Cliente_http_encaminha_cancelamento_a_operacao_externa()
+    {
+        var manipulador = new ManipuladorAguardandoCancelamento();
+        using var cliente = new HttpClient(manipulador);
+        using var cancellationTokenSource = new CancellationTokenSource();
+
+        var leitura = ProcessamentoAssincrono.LerApiExternaAsync(
+            cliente,
+            "https://exemplo.invalid/recurso",
+            cancellationTokenSource.Token);
+
+        await manipulador.RequisicaoRecebida;
+        cancellationTokenSource.Cancel();
+
+        var excecao = await Assert.ThrowsAnyAsync<OperationCanceledException>(
+            () => leitura);
+        Assert.True(manipulador.TokenRecebido.CanBeCanceled);
+        Assert.True(manipulador.TokenRecebido.IsCancellationRequested);
+        Assert.Equal(cancellationTokenSource.Token, excecao.CancellationToken);
+    }
+
     [Fact]
     public async Task Cancelamento_cooperativo_interrompe_o_processamento()
     {
@@ -93,6 +116,23 @@ public sealed class AssincronismoConcorrenciaTests
 
         Assert.NotNull(todas.Exception);
         Assert.Equal(2, todas.Exception.InnerExceptions.Count);
+    }
+
+    [Fact]
+    public async Task WhenAny_devolve_a_task_concluida_e_exige_observar_sua_falha()
+    {
+        var pendente = new TaskCompletionSource(
+            TaskCreationOptions.RunContinuationsAsynchronously);
+        var falha = Task.FromException(new InvalidOperationException("primeira"));
+
+        var concluida = await Task.WhenAny(pendente.Task, falha);
+
+        Assert.Same(falha, concluida);
+        Assert.False(pendente.Task.IsCompleted);
+        await Assert.ThrowsAsync<InvalidOperationException>(async () => await concluida);
+
+        pendente.SetResult();
+        await pendente.Task;
     }
 
     [Fact]
@@ -192,5 +232,24 @@ public sealed class AssincronismoConcorrenciaTests
                 return;
         }
         while (Interlocked.CompareExchange(ref destino, candidato, observado) != observado);
+    }
+
+    private sealed class ManipuladorAguardandoCancelamento : HttpMessageHandler
+    {
+        private readonly TaskCompletionSource _requisicaoRecebida = new(
+            TaskCreationOptions.RunContinuationsAsynchronously);
+
+        public Task RequisicaoRecebida => _requisicaoRecebida.Task;
+        public CancellationToken TokenRecebido { get; private set; }
+
+        protected override async Task<HttpResponseMessage> SendAsync(
+            HttpRequestMessage request,
+            CancellationToken cancellationToken)
+        {
+            TokenRecebido = cancellationToken;
+            _requisicaoRecebida.SetResult();
+            await Task.Delay(Timeout.InfiniteTimeSpan, cancellationToken);
+            throw new UnreachableException();
+        }
     }
 }

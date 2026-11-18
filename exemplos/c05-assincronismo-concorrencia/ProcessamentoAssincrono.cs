@@ -6,6 +6,19 @@ namespace EngenhariaDotnet.AssincronismoConcorrencia;
 
 public static class ProcessamentoAssincrono
 {
+    public static async Task<string> LerApiExternaAsync(
+        HttpClient cliente,
+        string endereco,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(cliente);
+        ArgumentException.ThrowIfNullOrWhiteSpace(endereco);
+
+        using var resposta = await cliente.GetAsync(endereco, cancellationToken);
+        resposta.EnsureSuccessStatusCode();
+        return await resposta.Content.ReadAsStringAsync(cancellationToken);
+    }
+
     public static async Task ProcessarEmSequenciaAsync<T>(
         IEnumerable<T> itens,
         Func<T, CancellationToken, Task> processarAsync,

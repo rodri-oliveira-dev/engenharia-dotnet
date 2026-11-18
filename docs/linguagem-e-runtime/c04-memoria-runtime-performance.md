@@ -289,6 +289,12 @@ inicialização e memória em workloads compatíveis, mas aumenta o trabalho de
 build, exige publicação por plataforma e perde parte da adaptação dinâmica que
 o JIT pode fazer durante uma execução longa.
 
+O modelo de publicação Native AOT suportado pelo SDK foi introduzido no .NET 7,
+inicialmente concentrado em aplicações console; o suporte do ASP.NET Core foi
+adicionado no .NET 8 e continua sujeito ao subconjunto compatível do framework.
+O laboratório fixa .NET 10, portanto essas versões mínimas servem para avaliar
+backports, não para alterar seu target atual.
+
 Native AOT não é uma opção superior por definição. Uma API ASP.NET Core com
 startup crítico e conjunto de recursos compatível pode se beneficiar. Uma
 aplicação extensível por plugins, dependente de geração dinâmica de código ou de
