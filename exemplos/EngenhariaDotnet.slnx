@@ -18,4 +18,6 @@
   <Project Path="c11-c12-ddd/C11C12.Ddd.Tests.csproj" />
   <Project Path="c13-c17-arquitetura/C13C17.Arquitetura.csproj" />
   <Project Path="c13-c17-arquitetura/C13C17.Arquitetura.Tests.csproj" />
+  <Project Path="c18-microservicos/C18.Microservicos.csproj" />
+  <Project Path="c18-microservicos/C18.Microservicos.Tests.csproj" />
 </Solution>

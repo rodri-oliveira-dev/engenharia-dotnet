@@ -36,6 +36,7 @@ capítulos publicados dos itens que permanecem no roadmap.
 - [C15 — Comunicação entre serviços e mensageria resiliente](sistemas-distribuidos/c15-comunicacao-mensageria-resiliente.md)
 - [C16 — Idempotência e entrega confiável](sistemas-distribuidos/c16-idempotencia-entrega-confiavel.md)
 - [C17 — Consistência eventual e sagas](sistemas-distribuidos/c17-consistencia-eventual-sagas.md)
+- [C18 — Limites de microserviços e evolução de monólitos](sistemas-distribuidos/c18-limites-microservicos-evolucao-monolitos.md)
 
 ## Documentação do projeto
 

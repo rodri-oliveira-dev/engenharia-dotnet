@@ -61,6 +61,8 @@ distinguem claramente o que existe do que está planejado.
   — DDD estratégico, [entidades, value objects e agregados](docs/dominio-e-arquitetura/c11-entidades-value-objects-agregados.md),
   [serviços e integração entre modelos](docs/dominio-e-arquitetura/c12-servicos-dominio-integracao-modelos.md).
 - [Sistemas distribuídos](docs/sistemas-distribuidos/indice.md)
+  — comunicação, entrega confiável, consistência e
+  [evolução de monólitos para microserviços](docs/sistemas-distribuidos/c18-limites-microservicos-evolucao-monolitos.md).
 - [Qualidade e segurança](docs/qualidade-e-seguranca/indice.md)
 - [Operação, entrega e plataforma](docs/operacao-entrega-e-plataforma/indice.md)
 - [IA e prática profissional](docs/ia-e-pratica-profissional/indice.md)

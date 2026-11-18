@@ -231,7 +231,7 @@ public readonly record struct Percentual
 }
 ```
 
-### Integração com tipos de C#
+### Integração com tipos de C\#
 
 `readonly record struct` é adequado para valores pequenos, imutáveis e usados
 com frequência, mas cópias de structs grandes custam. `sealed record` é útil

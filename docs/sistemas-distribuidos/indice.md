@@ -11,8 +11,8 @@ serviços.
   confiável](c16-idempotencia-entrega-confiavel.md).
 - **C17 · Avançado · Publicado:** [Consistência eventual e
   sagas](c17-consistencia-eventual-sagas.md).
-- **C18 · Avançado · Planejado:** Limites de microserviços e evolução de
-  monólitos.
+- **C18 · Avançado · Publicado:** [Limites de microserviços e evolução de
+  monólitos](c18-limites-microservicos-evolucao-monolitos.md).
 
 Consulte o [mapa editorial](../planejamento/mapa-editorial.md) para escopo,
 dependências e estratégia de exemplos. Volte ao [índice central](../indice.md).
