@@ -1,0 +1,95 @@
+# Atualizacoes agrupadas por ecossistema para facilitar a revisao.
+version: 2
+updates:
+  # Projetos C# em exemplos: pacotes NuGet em todos os subdiretorios.
+  - package-ecosystem: "nuget"
+    directories:
+      - "/exemplos/*"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/Sao_Paulo"
+    open-pull-requests-limit: 5
+    groups:
+      nuget-minor-patch:
+        applies-to: "version-updates"
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+      nuget-major:
+        applies-to: "version-updates"
+        patterns:
+          - "*"
+        update-types:
+          - "major"
+      nuget-security:
+        applies-to: "security-updates"
+        patterns:
+          - "*"
+
+  # Versao do SDK fixada na raiz em global.json.
+  - package-ecosystem: "dotnet-sdk"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/Sao_Paulo"
+    open-pull-requests-limit: 5
+    groups:
+      dotnet-sdk:
+        patterns:
+          - "*"
+
+  # Actions usadas nos workflows da pasta .github/workflows.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/Sao_Paulo"
+    open-pull-requests-limit: 5
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+      github-actions-security:
+        applies-to: "security-updates"
+        patterns:
+          - "*"
+
+  # Providers e modulos do exemplo de Terraform.
+  - package-ecosystem: "terraform"
+    directory: "/exemplos/c20-iac/terraform"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/Sao_Paulo"
+    open-pull-requests-limit: 5
+    groups:
+      terraform-providers:
+        patterns:
+          - "*"
+
+  # ansible-core instalado via pip no workflow de validacao.
+  - package-ecosystem: "pip"
+    directory: "/exemplos/c20-iac/ansible"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/Sao_Paulo"
+    open-pull-requests-limit: 5
+    groups:
+      ansible-python:
+        patterns:
+          - "*"
+      ansible-security:
+        applies-to: "security-updates"
+        patterns:
+          - "*"
