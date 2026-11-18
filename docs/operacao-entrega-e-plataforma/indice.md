@@ -5,9 +5,10 @@ infraestrutura.
 
 ## Roadmap
 
-- **C27 · Intermediário · Planejado:** Telemetria e diagnóstico distribuído.
-- **C28 · Avançado · Planejado:** Confiabilidade de serviço e resposta a
-  incidentes.
+- **C27 · Intermediário · Publicado:** [Telemetria e diagnóstico
+  distribuído](c27-telemetria-diagnostico-distribuido.md).
+- **C28 · Avançado · Publicado:** [Confiabilidade de serviço e resposta a
+  incidentes](c28-confiabilidade-resposta-incidentes.md).
 - **C29 · Avançado · Planejado:** Entrega compatível e gestão de risco no
   pipeline.
 - **C20 · Intermediário · Publicado:** [Infraestrutura como código e controle de

@@ -7,8 +7,8 @@
 >
 > **Pré-requisitos:** [C07 — APIs HTTP e integrações
 > resilientes](../aplicacoes-e-dados/c07-apis-http-integracoes-resilientes.md) e
-> [C23 — Testes orientados a comportamento e risco](c23-testes-comportamento-risco.md).
-> C27 — Telemetria e diagnóstico distribuído permanece planejado.
+> [C23 — Testes orientados a comportamento e risco](c23-testes-comportamento-risco.md)
+> e [C27 — Telemetria e diagnóstico distribuído](../operacao-entrega-e-plataforma/c27-telemetria-diagnostico-distribuido.md).
 >
 > **Última revisão:** 2026-11-18
 
@@ -290,8 +290,8 @@ evidência menor e mais diagnosticável.
   alocação e diagnóstico de runtime.
 - [C18](../sistemas-distribuidos/c18-limites-microservicos-evolucao-monolitos.md)
   relaciona filas, dependências e observabilidade distribuída.
-- C27 — Telemetria e diagnóstico distribuído aprofundará métricas, traces e
-  cardinalidade quando publicado.
+- [C27](../operacao-entrega-e-plataforma/c27-telemetria-diagnostico-distribuido.md)
+  aprofunda métricas, traces e cardinalidade.
 
 ## Referências
 

@@ -561,8 +561,8 @@ Antes de aprovar uma extração, responda:
 - [C07](../aplicacoes-e-dados/c07-apis-http-integracoes-resilientes.md) detalha
   contratos HTTP, timeout e resiliência; [C10](../aplicacoes-e-dados/c10-fundamentos-persistencia-sql-nosql.md)
   é canônico para transações e consistência local.
-- C27 — Telemetria e diagnóstico distribuído aprofundará instrumentação,
-  cardinalidade e proteção de dados quando publicado.
+- [C27 — Telemetria e diagnóstico distribuído](../operacao-entrega-e-plataforma/c27-telemetria-diagnostico-distribuido.md)
+  aprofunda instrumentação, cardinalidade e proteção de dados.
 
 ## Referências
 

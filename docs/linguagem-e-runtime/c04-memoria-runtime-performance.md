@@ -452,8 +452,10 @@ configuração, commit e saída completa ao usar os dados numa decisão.
   cobre materialização e complexidade.
 - **Aplicação:** [C05 — Assincronicidade e concorrência controlada](c05-assincronicidade-concorrencia-controlada.md)
   aprofunda lifetime e buffers em código assíncrono.
-- **Aplicações planejadas:** C25 aplica métricas a testes de carga; C27 trata
-  telemetria.
+- **Aplicações:** [C25](../qualidade-e-seguranca/c25-cobertura-e2e-carga.md)
+  aplica métricas a testes de carga;
+  [C27](../operacao-entrega-e-plataforma/c27-telemetria-diagnostico-distribuido.md)
+  trata telemetria.
 
 ## Referências
 

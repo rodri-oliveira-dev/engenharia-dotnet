@@ -305,7 +305,8 @@ rejeitam trabalho; consumidores precisam entender a degradação resultante.
   trata comunicação e mensageria; [C16](../sistemas-distribuidos/c16-idempotencia-entrega-confiavel.md)
   aprofunda idempotência e circuit breaker.
   [C26](../qualidade-e-seguranca/c26-seguranca-fronteiras-aplicacao.md) trata
-  autorização; C27 trata telemetria distribuída.
+  autorização; [C27](../operacao-entrega-e-plataforma/c27-telemetria-diagnostico-distribuido.md)
+  trata telemetria distribuída.
 
 ## Referências
 

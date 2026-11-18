@@ -323,7 +323,9 @@ testável é preferível a indireção sem política ou substituição real.
 - **Aplicações:** [C09 — Fronteiras e concorrência no EF Core](c09-fronteiras-concorrencia-ef-core.md)
   usa scoped para unidade de trabalho;
   [C26 — Segurança nas fronteiras da aplicação](../qualidade-e-seguranca/c26-seguranca-fronteiras-aplicacao.md)
-  trata autorização e segredos; C27 aprofunda telemetria distribuída.
+  trata autorização e segredos;
+  [C27](../operacao-entrega-e-plataforma/c27-telemetria-diagnostico-distribuido.md)
+  aprofunda telemetria distribuída.
 
 ## Referências
 

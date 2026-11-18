@@ -45,6 +45,8 @@ capítulos publicados dos itens que permanecem no roadmap.
 - [C24 — Integração real e testes incrementais de legado](qualidade-e-seguranca/c24-integracao-real-testes-legado.md)
 - [C25 — Cobertura, E2E e testes de carga](qualidade-e-seguranca/c25-cobertura-e2e-carga.md)
 - [C26 — Segurança nas fronteiras da aplicação](qualidade-e-seguranca/c26-seguranca-fronteiras-aplicacao.md)
+- [C27 — Telemetria e diagnóstico distribuído](operacao-entrega-e-plataforma/c27-telemetria-diagnostico-distribuido.md)
+- [C28 — Confiabilidade de serviço e resposta a incidentes](operacao-entrega-e-plataforma/c28-confiabilidade-resposta-incidentes.md)
 
 ## Documentação do projeto
 

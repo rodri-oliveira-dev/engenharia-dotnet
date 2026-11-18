@@ -38,6 +38,11 @@ do MCP com versão fixada.
 O SDK está fixado em `global.json`; projetos novos devem usar o mesmo target ou
 documentar por que precisam de uma versão diferente.
 
+O laboratório `c27-c28-observabilidade/` reúne uma aplicação ASP.NET Core com
+logs estruturados, métricas, traces, propagação HTTP, OpenTelemetry e health
+checks. A dependência e sua latência são simuladas; o exemplo não publica
+resultados de performance nem exige backend comercial.
+
 ## Quando criar um projeto
 
 Crie um laboratório quando compilação, testes, benchmark ou integração forem

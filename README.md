@@ -70,7 +70,9 @@ distinguem claramente o que existe do que está planejado.
   [cobertura, E2E e carga](docs/qualidade-e-seguranca/c25-cobertura-e2e-carga.md) e
   [segurança nas fronteiras da aplicação](docs/qualidade-e-seguranca/c26-seguranca-fronteiras-aplicacao.md).
 - [Operação, entrega e plataforma](docs/operacao-entrega-e-plataforma/indice.md)
-  — [infraestrutura como código e controle de
+  — [telemetria e diagnóstico distribuído](docs/operacao-entrega-e-plataforma/c27-telemetria-diagnostico-distribuido.md),
+  [confiabilidade e resposta a incidentes](docs/operacao-entrega-e-plataforma/c28-confiabilidade-resposta-incidentes.md)
+  e [infraestrutura como código e controle de
   drift](docs/operacao-entrega-e-plataforma/c20-infraestrutura-como-codigo-drift.md).
 - [IA e prática profissional](docs/ia-e-pratica-profissional/indice.md)
   — [fundamentos de LLM, MCP e RAG](docs/ia-e-pratica-profissional/c21-fundamentos-llm-mcp-rag.md)

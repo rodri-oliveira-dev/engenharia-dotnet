@@ -723,8 +723,9 @@ Complexidade de segurança não testada também cria vulnerabilidade.
 - [C21](../ia-e-pratica-profissional/c21-fundamentos-llm-mcp-rag.md) e
   [C22](../ia-e-pratica-profissional/c22-agentes-orquestracao-sdd.md) aprofundam
   segurança de RAG, MCP, tools e agentes.
-- C27 aprofundará telemetria com proteção de dados; C29 aprofundará promoção,
-  rollback e governança do pipeline.
+- [C27](../operacao-entrega-e-plataforma/c27-telemetria-diagnostico-distribuido.md)
+  aprofunda telemetria com proteção de dados; C29 aprofundará promoção, rollback
+  e governança do pipeline.
 
 ## Referências
 
