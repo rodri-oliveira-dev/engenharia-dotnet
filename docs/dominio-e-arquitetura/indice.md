@@ -8,9 +8,10 @@ arquiteturais.
 - **C11 · Fundamental · Publicado:** [Entidades, value objects e agregados](c11-entidades-value-objects-agregados.md).
 - **C12 · Intermediário · Publicado:** [Serviços de domínio e integração entre
   modelos](c12-servicos-dominio-integracao-modelos.md).
-- **C13 · Fundamental · Planejado:** Dependências, abstrações e padrões com
-  propósito.
-- **C14 · Avançado · Planejado:** CQRS e modelos orientados ao uso.
+- **C13 · Fundamental · Publicado:** [Dependências, abstrações e padrões com
+  propósito](c13-dependencias-abstracoes-padroes.md).
+- **C14 · Avançado · Publicado:** [CQRS e modelos orientados ao
+  uso](c14-cqrs-modelos-orientados-uso.md).
 - **C19 · Fundamental · Planejado:** Documentação arquitetural viva.
 
 Consulte o [mapa editorial](../planejamento/mapa-editorial.md) para escopo,

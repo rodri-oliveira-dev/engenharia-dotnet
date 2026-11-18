@@ -306,8 +306,10 @@ comportamento não está protegendo o modelo.
   clientes HTTP, timeout, retry e contratos de API.
 - [C09](../aplicacoes-e-dados/c09-fronteiras-concorrencia-ef-core.md) desenvolve
   repositórios, unidade de trabalho e concorrência no EF Core.
-- C13 tratará regra de dependência e custo de abstrações; C15 e C16 aprofundarão
-  mensageria, idempotência e Outbox.
+- [C13](c13-dependencias-abstracoes-padroes.md) trata regra de dependência e
+  custo de abstrações; [C15](../sistemas-distribuidos/c15-comunicacao-mensageria-resiliente.md)
+  e [C16](../sistemas-distribuidos/c16-idempotencia-entrega-confiavel.md)
+  aprofundam mensageria, idempotência e Outbox.
 
 ## Referências
 

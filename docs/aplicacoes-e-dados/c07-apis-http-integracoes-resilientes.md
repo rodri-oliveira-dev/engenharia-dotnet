@@ -301,8 +301,10 @@ rejeitam trabalho; consumidores precisam entender a degradação resultante.
   diferencia ausência, resultado esperado e exceção.
 - **Streaming e paginação:** [C03](../linguagem-e-runtime/c03-colecoes-linq-execucao-diferida.md)
   explica materialização e execução diferida.
-- **Aplicações planejadas:** C15 trata comunicação e mensageria; C16 aprofunda
-  idempotência; C26 trata autorização; C27 trata telemetria distribuída.
+- **Aplicações:** [C15](../sistemas-distribuidos/c15-comunicacao-mensageria-resiliente.md)
+  trata comunicação e mensageria; [C16](../sistemas-distribuidos/c16-idempotencia-entrega-confiavel.md)
+  aprofunda idempotência e circuit breaker. C26 trata autorização; C27 trata
+  telemetria distribuída.
 
 ## Referências
 

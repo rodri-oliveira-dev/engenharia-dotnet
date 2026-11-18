@@ -31,6 +31,11 @@ capítulos publicados dos itens que permanecem no roadmap.
 - [C10 — Fundamentos de persistência SQL e NoSQL](aplicacoes-e-dados/c10-fundamentos-persistencia-sql-nosql.md)
 - [C11 — Entidades, value objects e agregados](dominio-e-arquitetura/c11-entidades-value-objects-agregados.md)
 - [C12 — Serviços de domínio e integração entre modelos](dominio-e-arquitetura/c12-servicos-dominio-integracao-modelos.md)
+- [C13 — Dependências, abstrações e padrões com propósito](dominio-e-arquitetura/c13-dependencias-abstracoes-padroes.md)
+- [C14 — CQRS e modelos orientados ao uso](dominio-e-arquitetura/c14-cqrs-modelos-orientados-uso.md)
+- [C15 — Comunicação entre serviços e mensageria resiliente](sistemas-distribuidos/c15-comunicacao-mensageria-resiliente.md)
+- [C16 — Idempotência e entrega confiável](sistemas-distribuidos/c16-idempotencia-entrega-confiavel.md)
+- [C17 — Consistência eventual e sagas](sistemas-distribuidos/c17-consistencia-eventual-sagas.md)
 
 ## Documentação do projeto
 

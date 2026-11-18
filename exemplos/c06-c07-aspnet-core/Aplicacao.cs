@@ -100,6 +100,10 @@ public static class Aplicacao
             options.Retry.BackoffType = DelayBackoffType.Exponential;
             options.Retry.UseJitter = useJitter;
             options.Retry.DisableForUnsafeHttpMethods();
+            options.CircuitBreaker.FailureRatio = 0.5;
+            options.CircuitBreaker.MinimumThroughput = 20;
+            options.CircuitBreaker.SamplingDuration = TimeSpan.FromSeconds(30);
+            options.CircuitBreaker.BreakDuration = TimeSpan.FromSeconds(15);
         });
 
         return clientBuilder;
