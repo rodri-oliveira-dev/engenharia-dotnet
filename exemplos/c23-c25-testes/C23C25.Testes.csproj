@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Dominio.cs" />
+    <Compile Include="Notificacoes.cs" />
+    <Compile Include="ProcessamentoAssincrono.cs" />
+    <Compile Include="Legado.cs" />
+    <Compile Include="Persistencia.cs" />
+    <Compile Include="Aplicacao.cs" />
+    <Compile Include="Program.cs" />
+  </ItemGroup>
+</Project>

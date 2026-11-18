@@ -64,6 +64,9 @@ distinguem claramente o que existe do que está planejado.
   — comunicação, entrega confiável, consistência e
   [evolução de monólitos para microserviços](docs/sistemas-distribuidos/c18-limites-microservicos-evolucao-monolitos.md).
 - [Qualidade e segurança](docs/qualidade-e-seguranca/indice.md)
+  — [testes orientados a comportamento e risco](docs/qualidade-e-seguranca/c23-testes-comportamento-risco.md),
+  [integração real e evolução segura de legado](docs/qualidade-e-seguranca/c24-integracao-real-testes-legado.md),
+  [cobertura, E2E e carga](docs/qualidade-e-seguranca/c25-cobertura-e2e-carga.md).
 - [Operação, entrega e plataforma](docs/operacao-entrega-e-plataforma/indice.md)
 - [IA e prática profissional](docs/ia-e-pratica-profissional/indice.md)
 - [Estudos de caso](docs/estudos-de-caso/indice.md)

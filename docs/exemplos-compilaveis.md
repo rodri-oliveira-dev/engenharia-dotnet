@@ -25,6 +25,11 @@ Capítulos fortemente relacionados podem compartilhar um laboratório, como
 `c06-c07-aspnet-core/`, quando o mesmo host é necessário para testar composição,
 pipeline e contratos HTTP sem duplicar infraestrutura.
 
+O laboratório `c23-c25-testes/` reúne regras unitárias, dublês, API,
+persistência, Testcontainers e caracterização de legado. Testes com a trait
+`Category=Docker` exigem daemon Docker ativo; os demais não acessam serviços
+externos.
+
 O SDK está fixado em `global.json`; projetos novos devem usar o mesmo target ou
 documentar por que precisam de uma versão diferente.
 

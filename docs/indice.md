@@ -37,6 +37,9 @@ capítulos publicados dos itens que permanecem no roadmap.
 - [C16 — Idempotência e entrega confiável](sistemas-distribuidos/c16-idempotencia-entrega-confiavel.md)
 - [C17 — Consistência eventual e sagas](sistemas-distribuidos/c17-consistencia-eventual-sagas.md)
 - [C18 — Limites de microserviços e evolução de monólitos](sistemas-distribuidos/c18-limites-microservicos-evolucao-monolitos.md)
+- [C23 — Testes orientados a comportamento e risco](qualidade-e-seguranca/c23-testes-comportamento-risco.md)
+- [C24 — Integração real e testes incrementais de legado](qualidade-e-seguranca/c24-integracao-real-testes-legado.md)
+- [C25 — Cobertura, E2E e testes de carga](qualidade-e-seguranca/c25-cobertura-e2e-carga.md)
 
 ## Documentação do projeto
 
