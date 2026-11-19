@@ -167,6 +167,41 @@ Não há transição de volta. Se o negócio permitir correção após confirma�
 deve ganhar nome, autorização e efeito próprios. Um setter de `Estado` permitiria
 saltos que nunca foram discutidos.
 
+### C# 15: hierarquias fechadas para estados finitos
+
+Uma hierarquia `closed` limita os descendentes **diretos** ao assembly
+que declara o tipo base. Quando os descendentes também são `sealed`,
+o compilador pode exigir que um `switch` trate todos os estados sem um
+fallback artificial:
+
+```csharp
+public closed record class EtapaSeparacao;
+public sealed record class AguardandoSeparacao : EtapaSeparacao;
+public sealed record class Separando(int ItensConcluidos) : EtapaSeparacao;
+public sealed record class SeparacaoConcluida : EtapaSeparacao;
+
+string Descrever(EtapaSeparacao etapa) => etapa switch
+{
+    AguardandoSeparacao => "Aguardando",
+    Separando(var itens) => $"Separando {itens}",
+    SeparacaoConcluida => "Concluída"
+};
+```
+
+O laboratório `FluxoSeparacao` ilustra também a rejeição de transições
+inválidas e testa os três casos. O exemplo é **independente** da entidade
+`Pedido` e do `enum EstadoPedido` já usado pelo agregado; migrar a entidade
+seria uma alteração de contrato que precisa de motivação e testes próprios.
+
+Diferentemente de `sealed`, `closed` **não impede toda herança**:
+descendentes diretos devem estar no mesmo assembly, mas um descendente
+não selado ainda pode receber subclasses externas. Também não substitui
+invariantes ou mecanismos de persistência. Prefira `enum` para estados
+simples sem dados associados e avalie o impacto de acrescentar um novo
+estado sobre consumidores externos antes de mudar uma API pública.
+
+Referência: [modificador closed do C# 15](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/closed).
+
 ### Modelo anêmico e entidade rica
 
 Um modelo anêmico contém dados e deixa regras em services procedurais. Isso é

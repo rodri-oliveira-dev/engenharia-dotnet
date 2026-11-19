@@ -253,6 +253,44 @@ exaustivas e visíveis. Para uma consulta simples, `T?` pode ser a alternativa
 mais clara. Exceções continuam apropriadas para argumento inválido, falha de I/O
 ou violação de uma promessa que impede o método de concluir.
 
+### C# 15: resultado de negócio com union
+
+O C# 15 permite declarar uma união de casos existentes. Em vez de aceitar
+`Cadastro?` como se ausência e e-mail duplicado fossem a mesma coisa, um
+registro pode devolver explicitamente sucesso ou recusa:
+
+```csharp
+public sealed record CadastroRegistrado(Cadastro Cadastro);
+public sealed record EmailEmUso(string Email);
+
+public union ResultadoRegistro(CadastroRegistrado, EmailEmUso);
+
+string Descrever(ResultadoRegistro resultado) => resultado switch
+{
+    CadastroRegistrado(var cadastro) => cadastro.Email,
+    EmailEmUso(var email) => $"Já cadastrado: {email}"
+};
+```
+
+A conversão de cada caso para a união é implícita; o `switch` exige cobrir
+os casos declarados. O laboratório implementa `RegistroComResultado.Registrar`,
+sem alterar o contrato anterior de `CadastroFactory.Criar`: entrada inválida
+continua lançando `ArgumentException`, enquanto e-mail já registrado é uma
+recusa de negócio. O custo é criar tipos e exigir tratamento explícito;
+para uma ausência simples, `T?` ainda costuma ser suficiente.
+
+**Serialização:** os dois casos são objetos JSON. Para desserializá-los,
+o laboratório usa `[JsonUnion(TypeClassifier = typeof(JsonUnionTypeStructuralClassifier))]`
+e propriedades de raiz distintas (`Cadastro` e `Email`). Sem um discriminador
+ou classificador adequado, dois objetos JSON parecidos podem ser ambíguos.
+`default(ResultadoRegistro)` não representa sucesso: a união gerada é um
+`struct` cujo valor padrão não contém um caso ativo. Não publique essa
+representação como contrato HTTP sem especificar como erros e versões
+são representados.
+
+Referências: [Tipos de união no C# 15](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/union)
+e [serialização de uniões no System.Text.Json](https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/union-types).
+
 ### Preserve a informação da exceção
 
 Capture onde for possível acrescentar contexto, recuperar ou traduzir na

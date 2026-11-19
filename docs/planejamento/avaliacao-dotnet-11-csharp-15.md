@@ -39,10 +39,10 @@ de implementação com testes e explicação, não apenas da alteração de cód
 | Tema e novidade | Ponto existente no repositório | Ganho e teste proposto | Prioridade | Complexidade |
 |---|---|---|---|---|
 | **ASP.NET Core 11: filtros após falha de binding** | `Pipeline.cs` e `AplicacaoTests.cs` (C06/C07) | **Implementado:** filtro de paginação observa status 400 antes de acessar argumentos; testes HTTP cobrem query inválida/ausente e leitura de JSON inválida (que não executa filtros). | **P0** | Baixa/média |
-| **C# 15: tipos de união** | C02, C12, C14; resultados de aplicação e possíveis respostas HTTP | **Modelagem:** distinguir sucesso, falha de negócio e entrada inválida sem exceções de fluxo. Testar correspondência exaustiva, serialização e contrato HTTP; não converter todas as APIs indiscriminadamente. | **P1** | Média |
-| **C# 15: hierarquias fechadas (`closed`)** | C01, C11 e `exemplos/c11-c12-ddd/` | **Segurança de modelagem:** exemplificar conjunto finito de estados/eventos com `switch` exaustivo. Testar transições válidas e avaliar efeito sobre extensibilidade entre assemblies. | **P1** | Média |
-| **LINQ .NET 11: `FullJoin`** | C03 e `exemplos/c03-colecoes-linq/` | **Didática:** comparar inner, left e full join em memória com casos sem correspondência em ambos os lados. Testar valores nulos, cardinalidade e duplicatas. EF Core 11 também pode traduzir `FullJoin` em SQL; validar `ToQueryString()` e resultados no provider SQLite antes de ensinar o caso relacional. | **P1** | Baixa/média |
-| **C# 15: argumentos em expressões de coleção (`with(...)`)** | C03, `BuscarClientesPermitidos`; C04 | **Clareza e controle:** demonstrar comparer em `HashSet` e capacidade em `List`. Testar deduplicação case-insensitive; discutir alocação sem alegar ganho sem benchmark. | **P1** | Baixa |
+| **C# 15: tipos de união** | C02, `Cadastro.cs` e `CadastroTests.cs` | **Implementado:** `ResultadoRegistro` distingue cadastro criado e e-mail já cadastrado, com switch exaustivo e round-trip JSON por classificador estrutural. Entrada inválida mantém exceção; nenhum contrato HTTP foi alterado. | **P1** | Média |
+| **C# 15: hierarquias fechadas (`closed`)** | C11, `DominioPedidos.cs` e `DominioPedidosTests.cs` | **Implementado:** etapas de separação fechadas, descendentes selados, `switch` exaustivo e testes de transição, sem modificar o agregado existente. | **P1** | Média |
+| **LINQ .NET 11: `FullJoin`** | C03, `ColecoesLinq.cs` e testes | **Implementado:** conciliação em memória com clientes/pedidos órfãos, duplicatas, comparação com `Join` e `LeftJoin` e fontes vazias. Não afirma tradução SQL. | **P1** | Baixa/média |
+| **C# 15: argumentos em expressões de coleção (`with(...)`)** | C03, `ColecoesLinq.cs` e testes | **Implementado:** comparador OrdinalIgnoreCase no `HashSet` e capacidade inicial da `List`, com testes de igualdade, reserva e ordem, sem alegar performance não medida. | **P1** | Baixa |
 | **EF Core 11: SQL mais enxuto e melhorias em `GroupBy`** | C08, `Consultas.cs` e `PersistenciaTests.cs` | **Diagnóstico:** comparar SQL gerado para cenários de inclusão, referência e agrupamento. Usar `ToQueryString()` e medir quando relevante; nem toda otimização da documentação se manifesta no modelo atual. | **P2** | Média |
 | **EF Core 11 + SQLite: ordenação em `group_concat`** | C08, contexto SQLite dos testes | **Tradução SQL:** criar caso com `string.Join` e `OrderBy` em coleção relacionada, validar SQL e sequência resultante. Requer SQLite **3.44+** e teste do provider usado no CI. | **P2** | Média |
 | **.NET 11: validação assíncrona em DataAnnotations/Minimal APIs** | C06/C07, `Aplicacao.cs`, validação de opções e requisições | **I/O não bloqueante:** exemplo de validação de unicidade ou regra externa com cancelamento. Separar validação estrutural de política de negócio; evitar I/O remoto real nos testes. | **P2** | Média/alta |
@@ -89,6 +89,23 @@ do produto permanecem intactas. O tratamento específico da paginação
 - **Expressões de coleção com argumentos:** comparar com construtores
   explícitos e explicar por que `StringComparer.OrdinalIgnoreCase` muda
   semântica, enquanto capacidade inicial depende do volume esperado.
+
+### P1: implementação dos quatro exemplos
+
+Os quatro tópicos P1 foram adicionados aos laboratórios existentes, com
+testes unitários específicos e explicações nos capítulos C02, C03 e C11:
+
+- União: `ResultadoRegistro`, conversões de casos, switch exaustivo e
+  classificação estrutural ao serializar/desserializar JSON.
+- Hierarquia fechada: `EtapaSeparacao` e `FluxoSeparacao`, com
+  descendentes selados e regras explícitas de transição.
+- LINQ: `ConciliarClientesPedidos` usa `FullJoin` em memória para
+  preservar correspondências e registros órfãos.
+- Expressões de coleção: `with(...)` informa comparer de `HashSet`
+  e capacidade inicial de `List`.
+
+Nenhum exemplo substituiu automaticamente os contratos anteriores, e os
+ganhos de memória ou tempo de CPU continuam condicionados a medição.
 
 ### P2: experimentar com prova, não pressupor ganhos
 
