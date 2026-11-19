@@ -414,6 +414,14 @@ locais. Desserializadores, ORMs e APIs HTTP exigem testes de integração própr
   [C09](../aplicacoes-e-dados/c09-fronteiras-concorrencia-ef-core.md) trata
   fronteiras de persistência.
 
+## Autoavaliação
+
+Teste seu entendimento com as
+[questões de autoavaliação do C02](../autoavaliacao/c02-nulabilidade-falhas-excecoes.md),
+que aplicam Nullable Reference Types, atributos de análise, fallback, resultados
+explícitos e tratamento de exceções a cenários concretos, com gabarito
+comentado.
+
 ## Referências
 
 - [Nullable reference types](https://learn.microsoft.com/dotnet/csharp/nullable-references)

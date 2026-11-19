@@ -54,6 +54,14 @@ oito agrupamentos definidos no mapa editorial e os 35 capítulos publicados.
 - [C34 — Migração gradual de monólito](estudos-de-caso/c34-migracao-gradual-monolito.md)
 - [C35 — Pipeline com dependência vulnerável](estudos-de-caso/c35-pipeline-dependencia-vulneravel.md)
 
+## Autoavaliação
+
+Questões de múltipla escolha com gabarito comentado, para fixar o conteúdo de
+cada capítulo:
+
+- [C01 — Tipos, identidade e modelagem em C#](autoavaliacao/c01-tipos-identidade-modelagem.md)
+- [C02 — Nulabilidade, falhas e exceções](autoavaliacao/c02-nulabilidade-falhas-excecoes.md)
+
 ## Documentação do projeto
 
 - [Guia de estilo editorial](guia-de-estilo.md)
