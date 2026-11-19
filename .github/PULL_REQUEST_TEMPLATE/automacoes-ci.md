@@ -1,3 +1,5 @@
+# Pull request de automações e CI
+
 ## Motivação e escopo
 
 <!-- Qual problema de manutenção, qualidade ou segurança este ajuste resolve? -->
