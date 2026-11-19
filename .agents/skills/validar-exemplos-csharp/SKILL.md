@@ -6,7 +6,7 @@ description: >-
   ou revisar snippets em capítulos, questionários e arquivos .cs.
 ---
 
-# Validar exemplos C#
+# Validar exemplos de C# e .NET
 
 Siga `AGENTS.md` e `docs/exemplos-compilaveis.md`.
 
