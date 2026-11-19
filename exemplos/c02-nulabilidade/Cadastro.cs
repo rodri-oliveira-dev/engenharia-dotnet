@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace C02.Nulabilidade;
 
@@ -33,4 +34,35 @@ public static class CadastroFactory
 
         return normalizado;
     }
+}
+
+// Resultado de negocio esperado; argumentos invalidos seguem o contrato de Criar.
+public sealed record CadastroRegistrado(Cadastro Cadastro);
+public sealed record EmailEmUso(string Email);
+
+// Dois objetos JSON com propriedades de raiz distintas: Cadastro ou Email.
+[JsonUnion(TypeClassifier = typeof(JsonUnionTypeStructuralClassifier))]
+public union ResultadoRegistro(CadastroRegistrado, EmailEmUso);
+
+public static class RegistroComResultado
+{
+    public static ResultadoRegistro Registrar(
+        string? nome,
+        string? email,
+        IEnumerable<string> emailsJaCadastrados)
+    {
+        ArgumentNullException.ThrowIfNull(emailsJaCadastrados);
+        var cadastro = CadastroFactory.Criar(nome, email);
+
+        return emailsJaCadastrados.Contains(
+            cadastro.Email, StringComparer.OrdinalIgnoreCase)
+            ? new EmailEmUso(cadastro.Email)
+            : new CadastroRegistrado(cadastro);
+    }
+
+    public static string Descrever(ResultadoRegistro resultado) => resultado switch
+    {
+        CadastroRegistrado(var cadastro) => $"Cadastro criado: {cadastro.Email}",
+        EmailEmUso(var email) => $"E-mail ja utilizado: {email}"
+    };
 }

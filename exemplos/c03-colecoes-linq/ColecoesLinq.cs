@@ -2,6 +2,10 @@ namespace EngenhariaDotnet.ColecoesLinq;
 
 public sealed record Pedido(int Id, int ClienteId, decimal Total);
 
+public sealed record Cliente(int Id, string Nome);
+
+public sealed record ConciliacaoClientePedido(int ClienteId, string? NomeCliente, int? PedidoId);
+
 public static class Consultas
 {
     public static IReadOnlyList<Pedido> BuscarRepetidamente(
@@ -46,6 +50,47 @@ public static class Consultas
 
     public static ILookup<int, Pedido> AgruparPorCliente(IEnumerable<Pedido> pedidos) =>
         pedidos.ToLookup(pedido => pedido.ClienteId);
+
+    // Inclui clientes sem pedidos e pedidos sem cliente cadastrado.
+    public static IReadOnlyList<ConciliacaoClientePedido> ConciliarClientesPedidos(
+        IEnumerable<Cliente> clientes,
+        IEnumerable<Pedido> pedidos)
+    {
+        ArgumentNullException.ThrowIfNull(clientes);
+        ArgumentNullException.ThrowIfNull(pedidos);
+
+        return clientes.FullJoin(
+                pedidos,
+                cliente => cliente.Id,
+                pedido => pedido.ClienteId,
+                (cliente, pedido) => new ConciliacaoClientePedido(
+                    cliente?.Id ?? pedido?.ClienteId
+                        ?? throw new InvalidOperationException("Par sem chave."),
+                    cliente?.Nome,
+                    pedido?.Id))
+            .ToArray();
+    }
+
+    // O comparer faz parte da semantica de igualdade, nao da normalizacao.
+    public static HashSet<string> CriarEtiquetasSemDuplicidade(IEnumerable<string> etiquetas)
+    {
+        ArgumentNullException.ThrowIfNull(etiquetas);
+        HashSet<string> resultado = [with(StringComparer.OrdinalIgnoreCase), .. etiquetas];
+        return resultado;
+    }
+
+    public static List<Pedido> CriarLoteComCapacidade(
+        IReadOnlyCollection<Pedido> pedidos,
+        int reserva)
+    {
+        ArgumentNullException.ThrowIfNull(pedidos);
+        ArgumentOutOfRangeException.ThrowIfNegative(reserva);
+
+        var capacidade = checked(pedidos.Count + reserva);
+        List<Pedido> resultado = [with(capacity: capacidade), .. pedidos];
+        return resultado;
+    }
+
 }
 
 public static class Enumeracao
