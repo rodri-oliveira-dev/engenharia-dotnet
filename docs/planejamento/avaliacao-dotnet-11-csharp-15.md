@@ -41,7 +41,7 @@ de implementação com testes e explicação, não apenas da alteração de cód
 | **ASP.NET Core 11: filtros após falha de binding** | `exemplos/c06-c07-aspnet-core/Pipeline.cs`, `ValidarProdutoFilter` | **Correção de contrato:** o filtro usa `Single()` para obter `CriarProdutoRequest`. Testar corpo JSON inválido, vazio e tipo incorreto, garantindo HTTP 400 sem exceção inesperada ou HTTP 500. Refatorar somente se o teste comprovar o problema. | **P0** | Baixa/média |
 | **C# 15: tipos de união** | C02, C12, C14; resultados de aplicação e possíveis respostas HTTP | **Modelagem:** distinguir sucesso, falha de negócio e entrada inválida sem exceções de fluxo. Testar correspondência exaustiva, serialização e contrato HTTP; não converter todas as APIs indiscriminadamente. | **P1** | Média |
 | **C# 15: hierarquias fechadas (`closed`)** | C01, C11 e `exemplos/c11-c12-ddd/` | **Segurança de modelagem:** exemplificar conjunto finito de estados/eventos com `switch` exaustivo. Testar transições válidas e avaliar efeito sobre extensibilidade entre assemblies. | **P1** | Média |
-| **LINQ .NET 11: `FullJoin`** | C03 e `exemplos/c03-colecoes-linq/` | **Didática:** comparar inner, left e full join em memória com casos sem correspondência em ambos os lados. Testar valores nulos, cardinalidade e duplicatas. Não prometer tradução SQL para SQLite. | **P1** | Baixa/média |
+| **LINQ .NET 11: `FullJoin`** | C03 e `exemplos/c03-colecoes-linq/` | **Didática:** comparar inner, left e full join em memória com casos sem correspondência em ambos os lados. Testar valores nulos, cardinalidade e duplicatas. EF Core 11 também pode traduzir `FullJoin` em SQL; validar `ToQueryString()` e resultados no provider SQLite antes de ensinar o caso relacional. | **P1** | Baixa/média |
 | **C# 15: argumentos em expressões de coleção (`with(...)`)** | C03, `BuscarClientesPermitidos`; C04 | **Clareza e controle:** demonstrar comparer em `HashSet` e capacidade em `List`. Testar deduplicação case-insensitive; discutir alocação sem alegar ganho sem benchmark. | **P1** | Baixa |
 | **EF Core 11: SQL mais enxuto e melhorias em `GroupBy`** | C08, `Consultas.cs` e `PersistenciaTests.cs` | **Diagnóstico:** comparar SQL gerado para cenários de inclusão, referência e agrupamento. Usar `ToQueryString()` e medir quando relevante; nem toda otimização da documentação se manifesta no modelo atual. | **P2** | Média |
 | **EF Core 11 + SQLite: ordenação em `group_concat`** | C08, contexto SQLite dos testes | **Tradução SQL:** criar caso com `string.Join` e `OrderBy` em coleção relacionada, validar SQL e sequência resultante. Requer SQLite **3.44+** e teste do provider usado no CI. | **P2** | Média |
@@ -71,9 +71,10 @@ Não alterar o middleware global ou a regra de validação sem reproduzir o caso
 - **Tipos de união e hierarquias fechadas:** escolher um caso de domínio
   representativo, documentar alternativas (`Result<T>` próprio, herança
   tradicional ou exceções) e testar exaustividade/serialização.
-- **`FullJoin`:** limitar o exemplo inicial a coleções em memória. A
-  tradução relacional descrita no EF Core 11 depende das capacidades do
-  banco/provedor; SQLite não disponibiliza `FULL OUTER JOIN` nativo.
+- **`FullJoin`:** limitar o exemplo inicial a coleções em memória. O
+  EF Core 11 traduz `FullJoin` em `FULL JOIN` em provedores relacionais;
+  SQLite suporta `FULL OUTER JOIN` desde a versão 3.39.0. O exercício
+  relacional deve validar a versão de SQLite, a tradução gerada e os resultados.
 - **Expressões de coleção com argumentos:** comparar com construtores
   explícitos e explicar por que `StringComparer.OrdinalIgnoreCase` muda
   semântica, enquanto capacidade inicial depende do volume esperado.
@@ -126,6 +127,7 @@ continuará com `TreatWarningsAsErrors=true`.
 - [Migração ASP.NET Core 10 para 11](https://learn.microsoft.com/en-us/aspnet/core/migration/100-to-110)
 - [Novidades no EF Core 11](https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-11.0/whatsnew)
 - [Breaking changes no EF Core 11](https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-11.0/breaking-changes)
+- [SQLite 3.39.0: suporte a FULL OUTER JOIN](https://www.sqlite.org/releaselog/3_39_0.html)
 
 A documentação oficial fundamenta a existência dos recursos. Sua
 aplicabilidade e a prioridade aqui são avaliações específicas deste
