@@ -1,3 +1,4 @@
+using System.Globalization;
 using NSubstitute;
 using NSubstitute.Exceptions;
 using Xunit;
@@ -105,18 +106,19 @@ public sealed class ProcessadorAssincronoTests
 public sealed class CalculadoraFreteLegadaTests
 {
     [Theory]
-    [InlineData(0, "SUL", 7.01)]
-    [InlineData(2, "SUL", 9.31)]
-    [InlineData(2, "sul", 9.71)]
+    // InlineData nao aceita literais decimais: usar texto evita conversoes imprecisas de double.
+    [InlineData(0, "SUL", "7.01")]
+    [InlineData(2, "SUL", "9.31")]
+    [InlineData(2, "sul", "9.71")]
     public void Calcular_CaracterizaComportamentoExistente(
-        double peso,
+        int peso,
         string regiao,
-        double resultadoHistorico)
+        string resultadoHistorico)
     {
         var sut = new CalculadoraFreteLegada();
 
-        var resultado = sut.Calcular((decimal)peso, regiao);
+        var resultado = sut.Calcular(peso, regiao);
 
-        Assert.Equal((decimal)resultadoHistorico, resultado);
+        Assert.Equal(decimal.Parse(resultadoHistorico, CultureInfo.InvariantCulture), resultado);
     }
 }
