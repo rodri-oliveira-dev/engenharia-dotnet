@@ -63,15 +63,19 @@ podem chegar ao endpoint filter, que deve observar o status HTTP antes de
 acessar argumentos parcialmente vinculados. O filtro específico da paginação
 C06/C07 agora responde com Problem Details preservando o HTTP 400.
 
-A hipótese inicial sobre `ValidarProdutoFilter` precisa de uma distinção:
-falhas de **leitura do body** não executam endpoint filters. Os testes
-de `POST /produtos` cobrem JSON malformado, tipo incompatível, body ausente
-e mídia não suportada. Os primeiros testes detectaram um defeito real:
-o `TratadorGlobalDeExcecoes` mapeava `BadHttpRequestException` para HTTP 500.
-O tratamento foi ajustado para preservar `StatusCode` e devolver Problem
-Details sem expor detalhes internos. A validação de campos do produto
-permaneceu intacta. A implementação também demonstra o comportamento
-documentado em `GET /produtos` sem alterar contratos de domínio.
+A hipótese inicial sobre `ValidarProdutoFilter` mostrou um defeito real.
+Erros de **leitura** de JSON malformado ou mídia não suportada não passam
+pelo filter. Porém, corpo ausente ou literal JSON `null` podem levar à
+execução do filtro com argumentos não vinculados: o uso anterior de
+`Single()` lançava exceção e convertia uma entrada inválida em HTTP 500.
+O filtro agora observa o status antes de ler os argumentos e valida a
+ausência do DTO sem lançar exceção.
+
+Por precaução, o `TratadorGlobalDeExcecoes` também preserva
+`BadHttpRequestException.StatusCode` e retorna Problem Details quando
+essa exceção chega à fronteira global. As regras de validação de campos
+do produto permanecem intactas. O tratamento específico da paginação
+`GET /produtos` demonstra a outra modalidade de falha de binding.
 
 ### P1: exemplos pequenos em vez de migração cosmética
 

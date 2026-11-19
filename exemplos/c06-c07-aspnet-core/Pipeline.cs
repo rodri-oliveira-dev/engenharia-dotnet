@@ -117,7 +117,24 @@ public sealed class ValidarProdutoFilter : IEndpointFilter
         EndpointFilterInvocationContext context,
         EndpointFilterDelegate next)
     {
-        var request = context.Arguments.OfType<CriarProdutoRequest>().Single();
+        // Binding pode falhar antes que exista um DTO válido no contexto.
+        var status = context.HttpContext.Response.StatusCode;
+        if (status >= StatusCodes.Status400BadRequest)
+        {
+            return Results.Problem(
+                title: "Não foi possível vincular o corpo da requisição.",
+                statusCode: status);
+        }
+
+        var request = context.Arguments.OfType<CriarProdutoRequest>().SingleOrDefault();
+        if (request is null)
+        {
+            return Results.ValidationProblem(new Dictionary<string, string[]>
+            {
+                ["produto"] = ["O corpo da requisição é obrigatório e deve ser válido."]
+            });
+        }
+
         var errors = new Dictionary<string, string[]>();
 
         if (string.IsNullOrWhiteSpace(request.Nome))

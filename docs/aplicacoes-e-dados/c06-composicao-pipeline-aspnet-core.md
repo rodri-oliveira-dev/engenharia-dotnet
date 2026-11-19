@@ -202,12 +202,17 @@ obrigatórios geram HTTP 400 com Problem Details. Valores válidos continuam
 passando pelo handler, e as regras de faixa de página/tamanho seguem separadas
 da conversão sintática.
 
-**Limite importante:** erros durante a leitura do corpo JSON (JSON malformado,
-tipo incompatível, mídia não suportada) são tratados antes dos endpoint filters.
-Não use o filtro de validação de `POST /produtos` para interceptá-los.
-Os testes HTTP verificam status 400 ou 415, conforme o erro. No ambiente
+**Limite importante:** falhas de *leitura* do corpo JSON (JSON malformado,
+tipo incompatível e mídia não suportada) são tratadas antes do endpoint filter.
+Já a ausência de corpo obrigatório ou o literal JSON `null` podem representar
+falhas de vinculação para as quais o filtro é executado. No
+`ValidarProdutoFilter`, verificamos o status da resposta primeiro e usamos
+`SingleOrDefault()` seguido de uma resposta 400 se o DTO não existir, em vez
+de deixar `Single()` lançar uma exceção e gerar HTTP 500.
+
+Os testes HTTP verificam 400 ou 415, conforme o erro. No ambiente
 `Development`, `ThrowOnBadRequest` é verdadeiro por padrão; configure-o como
-`false` apenas quando desejar que o filtro observe a falha de binding.
+`false` quando desejar que o filtro observe a falha de binding.
 A alteração deve ser testada nas configurações de execução pertinentes.
 
 Referência: [Filtros e falhas de binding no ASP.NET Core](https://learn.microsoft.com/aspnet/core/fundamentals/minimal-apis/min-api-filters#filters-and-parameter-binding-failures).
