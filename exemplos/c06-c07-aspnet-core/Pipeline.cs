@@ -81,6 +81,26 @@ public sealed class TratadorGlobalDeExcecoes(
 
 public sealed record CriarProdutoRequest(string Nome, decimal Preco);
 
+// No .NET 11, erros de binding de query podem chegar aos filtros antes do handler.
+// Nessa situação, argumentos ainda não são confiáveis: observar primeiro o status.
+public sealed class ValidarBindingPaginacaoFilter : IEndpointFilter
+{
+    public async ValueTask<object?> InvokeAsync(
+        EndpointFilterInvocationContext context,
+        EndpointFilterDelegate next)
+    {
+        var status = context.HttpContext.Response.StatusCode;
+        if (status >= StatusCodes.Status400BadRequest)
+        {
+            return Results.Problem(
+                title: "Não foi possível interpretar os parâmetros de paginação.",
+                statusCode: status);
+        }
+
+        return await next(context);
+    }
+}
+
 public sealed class ValidarProdutoFilter : IEndpointFilter
 {
     public async ValueTask<object?> InvokeAsync(
@@ -137,7 +157,7 @@ public static class Endpoints
             var todos = repositorio.Listar();
             var itens = todos.Skip((pagina - 1) * tamanho).Take(tamanho).ToArray();
             return Results.Ok(new Pagina<Produto>(itens, pagina, tamanho, todos.Count));
-        });
+        }).AddEndpointFilter<ValidarBindingPaginacaoFilter>();
 
         endpoints.MapGet("/produtos/{id:int}", async (
             int id,

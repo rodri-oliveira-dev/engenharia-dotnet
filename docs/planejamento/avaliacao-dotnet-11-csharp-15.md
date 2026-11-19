@@ -38,7 +38,7 @@ de implementação com testes e explicação, não apenas da alteração de cód
 
 | Tema e novidade | Ponto existente no repositório | Ganho e teste proposto | Prioridade | Complexidade |
 |---|---|---|---|---|
-| **ASP.NET Core 11: filtros após falha de binding** | `exemplos/c06-c07-aspnet-core/Pipeline.cs`, `ValidarProdutoFilter` | **Correção de contrato:** o filtro usa `Single()` para obter `CriarProdutoRequest`. Testar corpo JSON inválido, vazio e tipo incorreto, garantindo HTTP 400 sem exceção inesperada ou HTTP 500. Refatorar somente se o teste comprovar o problema. | **P0** | Baixa/média |
+| **ASP.NET Core 11: filtros após falha de binding** | `Pipeline.cs` e `AplicacaoTests.cs` (C06/C07) | **Implementado:** filtro de paginação observa status 400 antes de acessar argumentos; testes HTTP cobrem query inválida/ausente e leitura de JSON inválida (que não executa filtros). | **P0** | Baixa/média |
 | **C# 15: tipos de união** | C02, C12, C14; resultados de aplicação e possíveis respostas HTTP | **Modelagem:** distinguir sucesso, falha de negócio e entrada inválida sem exceções de fluxo. Testar correspondência exaustiva, serialização e contrato HTTP; não converter todas as APIs indiscriminadamente. | **P1** | Média |
 | **C# 15: hierarquias fechadas (`closed`)** | C01, C11 e `exemplos/c11-c12-ddd/` | **Segurança de modelagem:** exemplificar conjunto finito de estados/eventos com `switch` exaustivo. Testar transições válidas e avaliar efeito sobre extensibilidade entre assemblies. | **P1** | Média |
 | **LINQ .NET 11: `FullJoin`** | C03 e `exemplos/c03-colecoes-linq/` | **Didática:** comparar inner, left e full join em memória com casos sem correspondência em ambos os lados. Testar valores nulos, cardinalidade e duplicatas. EF Core 11 também pode traduzir `FullJoin` em SQL; validar `ToQueryString()` e resultados no provider SQLite antes de ensinar o caso relacional. | **P1** | Baixa/média |
@@ -58,13 +58,17 @@ de implementação com testes e explicação, não apenas da alteração de cód
 
 ### P0: cobertura de regressão HTTP
 
-Em ASP.NET Core 11, filtros de Minimal APIs passam a executar também em
-determinadas falhas de vinculação. No laboratório C06/C07, o filtro
-`ValidarProdutoFilter` faz `context.Arguments.OfType<CriarProdutoRequest>().Single()`.
-É uma suposição que merece teste explícito, sobretudo com body ausente,
-JSON malformado e tipos incompatíveis. O resultado esperado é uma resposta
-de cliente adequada (HTTP 400), sem transformar erro de entrada em 500.
-Não alterar o middleware global ou a regra de validação sem reproduzir o caso.
+Em ASP.NET Core 11, falhas de parsing em rota, query string e headers
+podem chegar ao endpoint filter, que deve observar o status HTTP antes de
+acessar argumentos parcialmente vinculados. O filtro específico da paginação
+C06/C07 agora responde com Problem Details preservando o HTTP 400.
+
+A hipótese inicial sobre `ValidarProdutoFilter` precisa de uma distinção:
+falhas de **leitura do body** não executam endpoint filters. Os testes
+de `POST /produtos` cobrem JSON malformado, tipo incompatível, body ausente
+e mídia não suportada, preservando os códigos HTTP apropriados sem modificar
+a validação de campos do produto. A implementação demonstra o comportamento
+documentado em `GET /produtos` sem alterar contratos de domínio.
 
 ### P1: exemplos pequenos em vez de migração cosmética
 

@@ -182,6 +182,84 @@ public sealed class AplicacaoTests
         Assert.Equal("application/problem+json", response.Content.Headers.ContentType?.MediaType);
     }
 
+    [Theory]
+    [InlineData("/produtos?pagina=abc&tamanho=2")]
+    [InlineData("/produtos?pagina=2&tamanho=abc")]
+    [InlineData("/produtos?pagina=2")]
+    [InlineData("/produtos?tamanho=2")]
+    public async Task Falha_de_binding_da_paginacao_preserva_400_com_problem_details(
+        string endereco)
+    {
+        await using var app = CriarAplicacaoDeTeste();
+        await app.StartAsync();
+        using var client = app.GetTestClient();
+
+        using var response = await client.GetAsync(endereco);
+        using var document = JsonDocument.Parse(await response.Content.ReadAsStreamAsync());
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Equal("application/problem+json", response.Content.Headers.ContentType?.MediaType);
+        Assert.Equal(400, document.RootElement.GetProperty("status").GetInt32());
+        Assert.Contains("paginação", document.RootElement.GetProperty("title").GetString());
+    }
+
+    [Theory]
+    [InlineData("{")]
+    [InlineData("{\"nome\":\"Produto\",\"preco\":\"invalido\"}")]
+    [InlineData("null")]
+    public async Task Corpo_json_invalido_retorna_400_sem_mascarar_falha_de_leitura(
+        string json)
+    {
+        await using var app = CriarAplicacaoDeTeste();
+        await app.StartAsync();
+        using var client = app.GetTestClient();
+        using var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        using var response = await client.PostAsync("/produtos", content);
+
+        // Falhas de leitura do body são tratadas antes de executar endpoint filters.
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Corpo_obrigatorio_ausente_retorna_400()
+    {
+        await using var app = CriarAplicacaoDeTeste();
+        await app.StartAsync();
+        using var client = app.GetTestClient();
+        using var request = new HttpRequestMessage(HttpMethod.Post, "/produtos");
+
+        using var response = await client.SendAsync(request);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Tipo_de_conteudo_incompativel_retorna_415()
+    {
+        await using var app = CriarAplicacaoDeTeste();
+        await app.StartAsync();
+        using var client = app.GetTestClient();
+        using var content = new StringContent("nome=Produto", Encoding.UTF8, "text/plain");
+
+        using var response = await client.PostAsync("/produtos", content);
+
+        Assert.Equal(HttpStatusCode.UnsupportedMediaType, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Endpoint_filter_permite_produto_valido_e_retorna_201()
+    {
+        await using var app = CriarAplicacaoDeTeste();
+        await app.StartAsync();
+        using var client = app.GetTestClient();
+
+        using var response = await client.PostAsJsonAsync(
+            "/produtos", new CriarProdutoRequest("Mouse", 50m));
+
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+    }
+
     private static WebApplication CriarAplicacaoDeTeste(
         IReadOnlyDictionary<string, string?>? overrides = null)
     {

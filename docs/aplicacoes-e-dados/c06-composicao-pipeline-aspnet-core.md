@@ -173,6 +173,45 @@ mais locais que middleware, evitam que uma regra de um endpoint afete tráfego
 não relacionado. Regras de domínio continuam no serviço de aplicação, não no
 filter.
 
+### Falhas de vinculação de parâmetros no ASP.NET Core 11
+
+No .NET 11, um endpoint filter pode executar mesmo quando a conversão de um
+parâmetro de rota, query string ou header falha. Com
+`RouteHandlerOptions.ThrowOnBadRequest=false`, o framework informa HTTP 400
+antes do filtro, sem garantir que os demais argumentos estejam vinculados.
+O filtro deve inspecionar `HttpContext.Response.StatusCode` **antes** de
+acessar `context.Arguments` ou chamar `next`:
+
+```csharp
+public async ValueTask<object?> InvokeAsync(
+    EndpointFilterInvocationContext context,
+    EndpointFilterDelegate next)
+{
+    var status = context.HttpContext.Response.StatusCode;
+    if (status >= StatusCodes.Status400BadRequest)
+        return Results.Problem(statusCode: status,
+            title: "Parâmetros inválidos.");
+
+    return await next(context);
+}
+```
+
+O laboratório associa o `ValidarBindingPaginacaoFilter` a
+`GET /produtos`. Valores como `pagina=abc` e a ausência de parâmetros
+obrigatórios geram HTTP 400 com Problem Details. Valores válidos continuam
+passando pelo handler, e as regras de faixa de página/tamanho seguem separadas
+da conversão sintática.
+
+**Limite importante:** erros durante a leitura do corpo JSON (JSON malformado,
+tipo incompatível, mídia não suportada) são tratados antes dos endpoint filters.
+Não use o filtro de validação de `POST /produtos` para interceptá-los.
+Os testes HTTP verificam status 400 ou 415, conforme o erro. No ambiente
+`Development`, `ThrowOnBadRequest` é verdadeiro por padrão; configure-o como
+`false` apenas quando desejar que o filtro observe a falha de binding.
+A alteração deve ser testada nas configurações de execução pertinentes.
+
+Referência: [Filtros e falhas de binding no ASP.NET Core](https://learn.microsoft.com/aspnet/core/fundamentals/minimal-apis/min-api-filters#filters-and-parameter-binding-failures).
+
 No MVC, authorization filters vêm primeiro; resource filters envolvem model
 binding; action filters cercam a action; exception filters observam parte das
 falhas; result filters cercam a execução do resultado. Dentro de uma categoria,
