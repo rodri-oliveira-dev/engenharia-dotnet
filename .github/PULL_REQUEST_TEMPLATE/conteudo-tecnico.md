@@ -1,3 +1,5 @@
+# Pull request de conteúdo técnico
+
 ## Contexto e objetivo editorial
 
 <!-- Qual problema de engenharia o capítulo ou a correção ajuda a compreender? -->
