@@ -138,6 +138,26 @@ public sealed class DominioPedidosTests
             () => bloqueado.ObterElegivelAsync("CLI-2", CancellationToken.None));
     }
 
+    [Fact]
+    public void Hierarquia_fechada_descreve_cada_estado_sem_fallback()
+    {
+        Assert.Equal("Aguardando separacao", FluxoSeparacao.Descrever(new AguardandoSeparacao()));
+        Assert.Equal("Separando: 2 itens", FluxoSeparacao.Descrever(new Separando(2)));
+        Assert.Equal("Separacao concluida", FluxoSeparacao.Descrever(new SeparacaoConcluida()));
+    }
+
+    [Fact]
+    public void Hierarquia_fechada_explicita_transicoes_validas_e_invalidas()
+    {
+        var concluida = FluxoSeparacao.Concluir(new Separando(3));
+
+        Assert.IsType<SeparacaoConcluida>(concluida);
+        Assert.Throws<RegraDeNegocioException>(() =>
+            FluxoSeparacao.Concluir(new AguardandoSeparacao()));
+        Assert.Throws<RegraDeNegocioException>(() =>
+            FluxoSeparacao.Concluir(new SeparacaoConcluida()));
+    }
+
     private static Pedido NovoPedido() =>
         new(Guid.NewGuid(), new Email("cliente@exemplo.com"), "BRL");
 

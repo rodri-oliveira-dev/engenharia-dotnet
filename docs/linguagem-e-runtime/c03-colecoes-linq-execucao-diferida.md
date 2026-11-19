@@ -111,7 +111,7 @@ genéricas não fornecem segurança para acesso concorrente por si mesmas.
 | consumir na chegada | `Queue<T>` | extremidades `O(1)` fora de resize | array circular e capacidade |
 | consumir em ordem inversa | `Stack<T>` | topo `O(1)` fora de resize | array e capacidade |
 
-Os custos descrevem operações típicas da implementação documentada do .NET 10.
+Os custos descrevem operações típicas da implementação documentada do .NET 11.
 Não substituem medição do caso concreto.
 
 ## LINQ e o contrato de `IEnumerable<T>`
@@ -257,6 +257,61 @@ Escolha `ToArray` para um snapshot de tamanho fixo e indexável. Escolha `ToList
 quando a lista será alterada ou APIs exigirem esse contrato. A diferença de
 performance entre ambos não deve ser presumida como critério principal sem um
 caminho medido.
+
+## Novidades em .NET 11 e C# 15: conciliação e construção de coleções
+
+### FullJoin reconcilia duas fontes sem descartar registros órfãos
+
+Em conciliações, o `Join` tradicional entrega apenas pares com chaves
+correspondentes; `LeftJoin` conserva clientes sem pedidos; `FullJoin`
+inclui **também pedidos cujo cliente não consta da fonte recebida**.
+
+```csharp
+var resultado = clientes.FullJoin(
+    pedidos,
+    cliente => cliente.Id,
+    pedido => pedido.ClienteId,
+    (cliente, pedido) => new
+    {
+        Cliente = cliente?.Nome,
+        PedidoId = pedido?.Id
+    });
+```
+
+O laboratório `Consultas.ConciliarClientesPedidos` projeta um identificador
+de cliente, nome possivelmente ausente e identificador de pedido possivelmente
+ausente. O teste compara `Join`, `LeftJoin` e `FullJoin`, verificando
+correspondências repetidas, clientes sem pedidos, pedidos órfãos e fontes
+vazias. É uma conciliação **em memória**: para `IQueryable` e EF Core,
+consulte o SQL gerado e as capacidades do provider antes de extrapolar
+o resultado. Chaves duplicadas podem multiplicar as linhas, portanto
+não use `FullJoin` como substituto de deduplicação.
+
+### with(...) informa parâmetros do construtor da coleção
+
+O C# 15 aceita `with(...)` **como primeiro elemento** de uma expressão
+de coleção. Assim, o código pode declarar explicitamente um comparador
+ou uma reserva de capacidade:
+
+```csharp
+HashSet<string> categorias =
+    [with(StringComparer.OrdinalIgnoreCase), "API", "api", "Dados"];
+
+List<string> etapas =
+    [with(capacity: 6), "validar", "persistir"];
+```
+
+O `HashSet` contém duas categorias, pois a igualdade ignora diferenças
+de maiúsculas/minúsculas. Já a capacidade informa espaço inicial da
+`List`, sem mudar a contagem lógica de elementos. Os exemplos
+`CriarEtiquetasSemDuplicidade` e `CriarLoteComCapacidade` testam essas
+propriedades e preservam o comportamento dos demais métodos. O comparador
+é parte da **semântica de igualdade**, não uma otimização universal;
+reservar capacidade pode evitar realocações quando a demanda é conhecida,
+mas não comprova ganho sem medir o caso real.
+
+Referências: [LINQ no .NET 11](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-11/libraries#linq-join-improvements)
+e [expressões de coleção no C#](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/collection-expressions#collection-expression-arguments).
 
 ## Armadilhas comuns
 

@@ -173,6 +173,50 @@ mais locais que middleware, evitam que uma regra de um endpoint afete tráfego
 não relacionado. Regras de domínio continuam no serviço de aplicação, não no
 filter.
 
+### Falhas de vinculação de parâmetros no ASP.NET Core 11
+
+No .NET 11, um endpoint filter pode executar mesmo quando a conversão de um
+parâmetro de rota, query string ou header falha. Com
+`RouteHandlerOptions.ThrowOnBadRequest=false`, o framework informa HTTP 400
+antes do filtro, sem garantir que os demais argumentos estejam vinculados.
+O filtro deve inspecionar `HttpContext.Response.StatusCode` **antes** de
+acessar `context.Arguments` ou chamar `next`:
+
+```csharp
+public async ValueTask<object?> InvokeAsync(
+    EndpointFilterInvocationContext context,
+    EndpointFilterDelegate next)
+{
+    var status = context.HttpContext.Response.StatusCode;
+    if (status >= StatusCodes.Status400BadRequest)
+        return Results.Problem(statusCode: status,
+            title: "Parâmetros inválidos.");
+
+    return await next(context);
+}
+```
+
+O laboratório associa o `ValidarBindingPaginacaoFilter` a
+`GET /produtos`. Valores como `pagina=abc` e a ausência de parâmetros
+obrigatórios geram HTTP 400 com Problem Details. Valores válidos continuam
+passando pelo handler, e as regras de faixa de página/tamanho seguem separadas
+da conversão sintática.
+
+**Limite importante:** falhas de *leitura* do corpo JSON (JSON malformado,
+tipo incompatível e mídia não suportada) são tratadas antes do endpoint filter.
+Já a ausência de corpo obrigatório ou o literal JSON `null` podem representar
+falhas de vinculação para as quais o filtro é executado. No
+`ValidarProdutoFilter`, verificamos o status da resposta primeiro e usamos
+`SingleOrDefault()` seguido de uma resposta 400 se o DTO não existir, em vez
+de deixar `Single()` lançar uma exceção e gerar HTTP 500.
+
+Os testes HTTP verificam 400 ou 415, conforme o erro. No ambiente
+`Development`, `ThrowOnBadRequest` é verdadeiro por padrão; configure-o como
+`false` quando desejar que o filtro observe a falha de binding.
+A alteração deve ser testada nas configurações de execução pertinentes.
+
+Referência: [Filtros e falhas de binding no ASP.NET Core](https://learn.microsoft.com/aspnet/core/fundamentals/minimal-apis/min-api-filters#filters-and-parameter-binding-failures).
+
 No MVC, authorization filters vêm primeiro; resource filters envolvem model
 binding; action filters cercam a action; exception filters observam parte das
 falhas; result filters cercam a execução do resultado. Dentro de uma categoria,
@@ -197,7 +241,14 @@ middleware que chama esses handlers.
 
 Uma resposta de erro deve expor contrato, não detalhes internos. Inclua status,
 título, tipo estável, erros de validação e um identificador de correlação. Não
-retorne stack trace, SQL, caminhos locais ou segredo. Exceções esperadas podem
+retorne stack trace, SQL, caminhos locais ou segredo.
+
+Em ASP.NET Core 11, falhas de binding de JSON podem gerar
+`BadHttpRequestException`. Um `IExceptionHandler` personalizado precisa
+preservar `exception.StatusCode` (por exemplo, 400 ou 415); mapear qualquer
+exceção diferente de "recurso ausente" para 500 é incorreto. O laboratório
+centraliza esse mapeamento sem expor conteúdo interno da falha, e os testes
+verificam que a API não mascara entradas inválidas como problemas do servidor. Exceções esperadas podem
 virar `404`, `409` ou outro status definido; falhas inesperadas permanecem `500`
 e são registradas uma vez na fronteira.
 

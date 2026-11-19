@@ -98,6 +98,32 @@ public sealed record ProdutoId
     public override string ToString() => Valor;
 }
 
+
+// Apenas o assembly declara descendentes diretos; casos selados permitem switch exaustivo.
+public closed record class EtapaSeparacao;
+public sealed record class AguardandoSeparacao : EtapaSeparacao;
+public sealed record class Separando(int ItensConcluidos) : EtapaSeparacao;
+public sealed record class SeparacaoConcluida : EtapaSeparacao;
+
+public static class FluxoSeparacao
+{
+    public static string Descrever(EtapaSeparacao etapa) => etapa switch
+    {
+        AguardandoSeparacao => "Aguardando separacao",
+        Separando(var itens) => $"Separando: {itens} itens",
+        SeparacaoConcluida => "Separacao concluida"
+    };
+
+    public static EtapaSeparacao Concluir(EtapaSeparacao etapa) => etapa switch
+    {
+        AguardandoSeparacao => throw new RegraDeNegocioException(
+            "Nao e possivel concluir antes de iniciar a separacao."),
+        Separando => new SeparacaoConcluida(),
+        SeparacaoConcluida => throw new RegraDeNegocioException(
+            "A separacao ja foi concluida.")
+    };
+}
+
 public enum EstadoPedido { Rascunho, Confirmado, Cancelado }
 
 public sealed class ItemPedido
