@@ -1,0 +1,69 @@
+name: "Erro em exemplo executável"
+description: "Relate uma falha reproduzível em um laboratório, teste, script ou exemplo .NET."
+title: "[Exemplo]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Este repositório reúne exemplos didáticos. Relate o comportamento observável e informe a versão do SDK quando relevante.
+        Não inclua segredos, tokens, dados privados ou detalhes de vulnerabilidades exploráveis. Para falhas de segurança, utilize o canal privado indicado na política de segurança do repositório.
+  - type: checkboxes
+    id: verificacoes
+    attributes:
+      label: "Antes de enviar"
+      options:
+        - label: "Verifiquei se já existe uma issue para o mesmo comportamento."
+          required: true
+        - label: "Removi credenciais e informações sensíveis dos exemplos e registros."
+          required: true
+  - type: input
+    id: local
+    attributes:
+      label: "Arquivo ou laboratório afetado"
+      description: "Informe um caminho dentro de exemplos/ ou scripts/."
+      placeholder: "exemplos/c05-assincronismo-concorrencia/..."
+    validations:
+      required: true
+  - type: textarea
+    id: comportamento
+    attributes:
+      label: "Comportamento observado"
+      description: "Descreva o erro, a saída inesperada ou o teste que falha."
+    validations:
+      required: true
+  - type: textarea
+    id: esperado
+    attributes:
+      label: "Comportamento esperado"
+      description: "Explique o que deveria acontecer segundo o objetivo didático do exemplo."
+    validations:
+      required: true
+  - type: textarea
+    id: reproducao
+    attributes:
+      label: "Passos para reproduzir"
+      description: "Forneça os comandos e as condições mínimas necessárias."
+      placeholder: |
+        1. Execute ...
+        2. Observe ...
+        3. Compare com ...
+    validations:
+      required: true
+  - type: textarea
+    id: ambiente
+    attributes:
+      label: "Ambiente"
+      description: "Informe SDK (dotnet --info), sistema operacional e dependências externas, quando relevantes."
+      placeholder: |
+        SDK .NET:
+        Sistema operacional:
+        Dependências externas:
+    validations:
+      required: false
+  - type: textarea
+    id: evidencias
+    attributes:
+      label: "Registros e evidências"
+      description: "Inclua logs sanitizados, mensagens de erro, saídas ou screenshots, sem dados sensíveis."
+    validations:
+      required: false
