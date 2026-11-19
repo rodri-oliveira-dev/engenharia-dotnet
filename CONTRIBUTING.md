@@ -122,6 +122,25 @@ Agentes compatíveis podem carregar essas skills conforme a tarefa.
 Não pressuponha que todas sejam carregadas automaticamente durante
 um review no GitHub. Instruções de IA não substituem CI nem revisão humana.
 
+## Modelos de pull request
+
+O GitHub carrega automaticamente o
+[modelo padrão](.github/PULL_REQUEST_TEMPLATE.md) ao criar um PR.
+Para mudanças com necessidades específicas, estão disponíveis os modelos
+de [conteúdo técnico](.github/PULL_REQUEST_TEMPLATE/conteudo-tecnico.md),
+[exemplos .NET](.github/PULL_REQUEST_TEMPLATE/exemplos-dotnet.md) e
+[automações e CI](.github/PULL_REQUEST_TEMPLATE/automacoes-ci.md).
+
+Para escolher um modelo específico, adicione o parâmetro
+`?template=conteudo-tecnico.md`, `?template=exemplos-dotnet.md` ou
+`?template=automacoes-ci.md` à URL de criação do pull request.
+Se a URL já contiver `?`, use `&template=...`.
+O GitHub não apresenta uma seleção automática desses modelos por tipo de alteração.
+
+Em qualquer modelo, descreva a motivação, o escopo, os riscos e as
+validações realmente executadas. Deixe sem marcar os itens não realizados
+e explique o motivo. Os modelos não substituem o CI nem a revisão humana.
+
 ## Qualidade e consistência
 
 Antes de abrir o pull request:
