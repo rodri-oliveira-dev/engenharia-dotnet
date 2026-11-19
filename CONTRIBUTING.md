@@ -104,6 +104,24 @@ a governança, o risco e as aprovações da organização, sem simplesmente
 ignorar os achados. Veja o [estudo de caso C35](docs/estudos-de-caso/c35-pipeline-dependencia-vulneravel.md)
 e a [avaliação do .NET 11](docs/planejamento/avaliacao-dotnet-11-csharp-15.md).
 
+## Agentes e skills de revisão
+
+O [AGENTS.md](AGENTS.md) fornece as regras persistentes para agentes,
+incluindo a seção `Code Review Rules` usada pelo Codex no GitHub.
+
+Três skills locais aprofundam procedimentos específicos:
+
+- [Revisão de PRs](.agents/skills/revisar-pr-dotnet/SKILL.md):
+  falhas, contratos, segurança e testes.
+- [Validação de C#](.agents/skills/validar-exemplos-csharp/SKILL.md):
+  compilação, comportamento e resultados esperados.
+- [Revisão editorial técnica](.agents/skills/revisar-conteudo-tecnico/SKILL.md):
+  conceitos, fontes, questões e gabaritos.
+
+Agentes compatíveis podem carregar essas skills conforme a tarefa.
+Não pressuponha que todas sejam carregadas automaticamente durante
+um review no GitHub. Instruções de IA não substituem CI nem revisão humana.
+
 ## Qualidade e consistência
 
 Antes de abrir o pull request:
