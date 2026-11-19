@@ -163,7 +163,8 @@ desenho separa melhor essas situações?
 ### Questão 9
 
 Considere o trecho abaixo, em que `cancellationToken` é o token recebido do
-chamador. Qual é a função do filtro `when`?
+chamador e o repositório também pode ser interrompido por um timeout interno.
+Qual afirmação descreve corretamente o efeito do filtro `when`?
 
 ```csharp
 try
@@ -174,14 +175,19 @@ catch (OperationCanceledException) when (cancellationToken.IsCancellationRequest
 {
     throw;
 }
+catch (OperationCanceledException ex)
+{
+    throw new TimeoutException("O salvamento excedeu o tempo limite.", ex);
+}
 ```
 
 - A. Desfazer automaticamente as alterações que já tinham sido confirmadas no
   banco antes do cancelamento.
 - B. Converter qualquer timeout em cancelamento solicitado pelo chamador.
-- C. Distinguir o cancelamento solicitado pelo token do chamador de outras
-  interrupções, como um timeout ou token interno, que podem exigir outra
-  política.
+- C. O primeiro `catch` só é executado quando o token do chamador já está
+  cancelado; uma `OperationCanceledException` que ocorra com esse token ainda
+  ativo, como a de um timeout interno, segue para o segundo `catch` e recebe
+  outra política.
 - D. Impedir que a exceção chegue à fronteira, transformando o cancelamento em
   sucesso.
 
@@ -271,10 +277,14 @@ num caso frequente; argumentos inválidos continuam sendo exceção. Veja
 
 ### Questão 9
 
-**Resposta: C.** O filtro só captura a exceção quando o token esperado foi de
-fato cancelado; nesse caso, `throw;` preserva o stack trace e a semântica de
-cancelamento. Cancelamento não desfaz efeitos já confirmados e não deve ser
-registrado indiscriminadamente como erro interno. Veja
+**Resposta: C.** O filtro avalia o estado do token do chamador no momento da
+exceção: se ele está cancelado, o primeiro `catch` relança com `throw;`,
+preservando o stack trace e a semântica de cancelamento; caso contrário, a
+exceção segue para o segundo `catch`, que a traduz em timeout. O filtro não
+prova a origem da exceção: se um token interno disparar no mesmo momento em
+que o chamador cancelar, o primeiro `catch` também a aceita. Distinguir as
+causas com precisão exige um contrato explícito entre os tokens. Cancelamento
+também não desfaz efeitos já confirmados. Veja
 [Ausência, falha esperada e exceção](../linguagem-e-runtime/c02-nulabilidade-falhas-excecoes.md#ausência-falha-esperada-e-exceção).
 
 ### Questão 10
