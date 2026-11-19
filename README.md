@@ -1,5 +1,11 @@
 # Engenharia .NET
 
+[![CI](https://github.com/rodri-oliveira-dev/engenharia-dotnet/actions/workflows/validar-documentacao.yml/badge.svg?branch=main)](https://github.com/rodri-oliveira-dev/engenharia-dotnet/actions/workflows/validar-documentacao.yml)
+![.NET 11](https://img.shields.io/badge/.NET-11.0-512BD4?logo=dotnet&logoColor=white)
+![C# 15](https://img.shields.io/badge/C%23-15-239120)
+![Português](https://img.shields.io/badge/idioma-pt--BR-blue)
+[![Licença MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-green)](LICENSE)
+
 Trabalho com C# e .NET há bastante tempo e sei que algumas dúvidas merecem mais do que uma resposta rápida. Criei este espaço para reunir explicações sobre a linguagem, o runtime e as decisões de engenharia que aparecem quando desenvolvemos, evoluímos e mantemos sistemas.
 
 A ideia não é decorar padrões ou acumular respostas prontas para entrevistas. É entender o que acontece por trás do código, quais alternativas existem, onde cada escolha pode falhar e o que vale a pena testar ou medir.
