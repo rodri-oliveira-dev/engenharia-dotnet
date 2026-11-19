@@ -8,6 +8,7 @@ on:
       - "**/*.csproj"
       - "**/*.props"
       - "**/*.ps1"
+      - "**/*.py"
       - "**/*.slnx"
       - "**/*.tf"
       - "exemplos/c20-iac/ansible/requirements.txt"
@@ -28,6 +29,7 @@ on:
       - "**/*.csproj"
       - "**/*.props"
       - "**/*.ps1"
+      - "**/*.py"
       - "**/*.slnx"
       - "**/*.tf"
       - "exemplos/c20-iac/ansible/requirements.txt"
@@ -101,11 +103,21 @@ jobs:
         with:
           global-json-file: global.json
 
-      - name: Restaurar dependências
-        run: dotnet restore exemplos/EngenhariaDotnet.slnx
+      - name: Configurar Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.13"
 
-      - name: Relatar pacotes vulneráveis
-        run: dotnet package list --project exemplos/EngenhariaDotnet.slnx --vulnerable --include-transitive --no-restore
+      - name: Testar verificador de vulnerabilidades
+        run: python -m unittest discover -s scripts/tests -p "test_verificar_vulnerabilidades_nuget.py" -v
+
+      - name: Restaurar dependências com auditoria
+        run: dotnet restore exemplos/EngenhariaDotnet.slnx -p:NuGetAudit=true -p:NuGetAuditMode=all -p:NuGetAuditLevel=low
+
+      - name: Reprovar pacotes vulneráveis diretos ou transitivos
+        run: |
+          dotnet package list --project exemplos/EngenhariaDotnet.slnx --vulnerable --include-transitive --no-restore --format json --output-version 1 > "$RUNNER_TEMP/nuget-audit.json"
+          python scripts/verificar-vulnerabilidades-nuget.py "$RUNNER_TEMP/nuget-audit.json"
 
   exemplos-iac:
     name: Validar exemplos de IaC
