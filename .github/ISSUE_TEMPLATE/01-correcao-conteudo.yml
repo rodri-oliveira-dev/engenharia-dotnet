@@ -1,0 +1,59 @@
+name: "Correção de conteúdo técnico"
+description: "Relate um erro conceitual, uma informação desatualizada ou um problema de documentação."
+title: "[Conteúdo]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por ajudar a manter a base de conhecimento precisa.
+        Consulte o [guia de estilo](https://github.com/rodri-oliveira-dev/engenharia-dotnet/blob/main/docs/guia-de-estilo.md) e, quando possível, cite documentação oficial ou outra fonte primária.
+        Não publique credenciais, dados pessoais ou detalhes de vulnerabilidades exploráveis nesta issue.
+  - type: checkboxes
+    id: verificacoes
+    attributes:
+      label: "Antes de enviar"
+      options:
+        - label: "Pesquisei issues existentes e verifiquei se o problema já foi relatado."
+          required: true
+  - type: input
+    id: local
+    attributes:
+      label: "Capítulo, seção ou arquivo"
+      description: "Informe o caminho do arquivo, o ID do capítulo (CXX) ou um link direto para o trecho."
+      placeholder: "docs/linguagem-e-runtime/c01-tipos-identidade-modelagem.md"
+    validations:
+      required: true
+  - type: dropdown
+    id: tipo
+    attributes:
+      label: "Tipo de correção"
+      options:
+        - "Erro conceitual ou técnico"
+        - "Informação desatualizada"
+        - "Código ou comando incorreto na documentação"
+        - "Link, referência ou pré-requisito inválido"
+        - "Clareza ou organização do conteúdo"
+    validations:
+      required: true
+  - type: textarea
+    id: problema
+    attributes:
+      label: "O que precisa ser corrigido?"
+      description: "Descreva o trecho ou a afirmação e explique por que pode induzir a erro."
+    validations:
+      required: true
+  - type: textarea
+    id: correcao
+    attributes:
+      label: "Correção sugerida"
+      description: "Explique o comportamento correto, a redação proposta ou o resultado esperado."
+    validations:
+      required: false
+  - type: textarea
+    id: evidencias
+    attributes:
+      label: "Referências e evidências"
+      description: "Inclua fontes primárias, especificações, versões afetadas ou exemplos mínimos, se disponíveis."
+      placeholder: "Links para documentação oficial, especificações ou trechos de código."
+    validations:
+      required: false
