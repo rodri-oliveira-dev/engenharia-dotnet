@@ -1,0 +1,59 @@
+name: "Proposta de melhoria"
+description: "Sugira melhorias na navegação, nos exemplos, nos testes ou na manutenção do repositório."
+title: "[Melhoria]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Descreva a necessidade antes de propor uma solução.
+        Para novos capítulos, utilize o formulário **Sugestão de capítulo ou tema**; para erros conhecidos, escolha o formulário de correção ou de exemplo.
+        Consulte também o [guia de contribuição](https://github.com/rodri-oliveira-dev/engenharia-dotnet/blob/main/CONTRIBUTING.md).
+  - type: checkboxes
+    id: verificacoes
+    attributes:
+      label: "Antes de enviar"
+      options:
+        - label: "Pesquisei propostas semelhantes nas issues e nos pull requests."
+          required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: "Área afetada"
+      options:
+        - "Experiência de leitura e navegação"
+        - "Organização ou manutenção da documentação"
+        - "Exemplos e laboratórios .NET"
+        - "Testes e validações"
+        - "Automação e integração contínua"
+        - "Segurança e dependências"
+        - "Outra"
+    validations:
+      required: true
+  - type: textarea
+    id: necessidade
+    attributes:
+      label: "Problema ou necessidade"
+      description: "Explique a limitação atual e quem seria beneficiado pela melhoria."
+    validations:
+      required: true
+  - type: textarea
+    id: proposta
+    attributes:
+      label: "Melhoria sugerida"
+      description: "Descreva uma mudança possível e o resultado esperado."
+    validations:
+      required: true
+  - type: textarea
+    id: alternativas
+    attributes:
+      label: "Alternativas e trade-offs"
+      description: "Mencione caminhos mais simples, custos ou riscos, quando pertinentes."
+    validations:
+      required: false
+  - type: textarea
+    id: contexto
+    attributes:
+      label: "Contexto adicional"
+      description: "Adicione arquivos, capítulos, links ou exemplos relacionados."
+    validations:
+      required: false
