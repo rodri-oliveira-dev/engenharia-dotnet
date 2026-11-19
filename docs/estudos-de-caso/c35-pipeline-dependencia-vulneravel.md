@@ -114,6 +114,32 @@ O advisory pode evoluir. Controles compensatórios podem ser removidos. A versã
 corrigida pode trazer outra vulnerabilidade ou regressão. Imagens e ambientes
 antigos podem continuar contendo o pacote mesmo após corrigir a branch.
 
+## Exemplo de gate executável neste repositório
+
+Este estudo de caso é fictício. Para praticar especificamente o **controle
+automático de dependências NuGet**, este repositório contém um exemplo real
+de pipeline, separado das decisões de risco do cenário:
+
+- [Workflow de validação](../../.github/workflows/validar-documentacao.yml),
+  job `Analisar dependências`: restore com auditoria e listagem JSON de
+  vulnerabilidades diretas e transitivas.
+- [Verificador de vulnerabilidades](../../scripts/verificar-vulnerabilidades-nuget.py):
+  converte o relatório de auditoria em uma decisão de CI. Retorna 0 para
+  relatório válido sem achados, 1 quando há vulnerabilidades e 2 quando
+  a auditoria é inconclusiva ou inválida.
+- [Testes do gate](../../scripts/tests/test_verificar_vulnerabilidades_nuget.py):
+  verificam casos limpos, dependência direta vulnerável, transitiva
+  vulnerável e falhas de formato, sem instalar pacotes inseguros.
+
+O gate reprova **qualquer severidade** reportada pelas fontes NuGet.
+Essa é uma política conservadora deliberada para o repositório didático,
+não substitui a avaliação de explorabilidade, impacto e compensações
+organizacionais discutida neste capítulo. Um resultado sem achados
+também não garante que todas as fontes ou vetores de risco foram cobertos.
+
+Para os comandos completos de reprodução local, consulte
+[Como contribuir](../../CONTRIBUTING.md#validar-dependências-e-executar-o-ci-localmente).
+
 ## Aprendizados
 
 SCA inicia uma investigação; política transforma resultado em resposta

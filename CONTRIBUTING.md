@@ -61,6 +61,49 @@ Confirme especialmente:
 - Resuma com suas palavras e respeite licenças e direitos autorais.
 - Não use a planilha de pauta como autoridade sobre comportamento técnico.
 
+## Validar dependências e executar o CI localmente
+
+Os laboratórios usam o SDK definido em [`global.json`](global.json)
+(.NET 11) e o target `net11.0`. Antes de contribuir, instale o SDK
+correspondente e execute na raiz do repositório:
+
+```sh
+dotnet restore exemplos/EngenhariaDotnet.slnx
+dotnet build exemplos/EngenhariaDotnet.slnx --configuration Release --no-restore
+dotnet test exemplos/EngenhariaDotnet.slnx --configuration Release --no-build
+```
+
+O job **Analisar dependências**, no workflow
+[`validar-documentacao.yml`](.github/workflows/validar-documentacao.yml),
+executa auditoria NuGet para dependências diretas e transitivas. O comando
+de listagem pode retornar sucesso mesmo quando há achados; por isso,
+o relatório JSON é analisado por um verificador que decide o status do CI.
+
+Para reproduzir localmente a verificação de segurança:
+
+```sh
+dotnet restore exemplos/EngenhariaDotnet.slnx -p:NuGetAudit=true -p:NuGetAuditMode=all -p:NuGetAuditLevel=low
+dotnet package list --project exemplos/EngenhariaDotnet.slnx --vulnerable --include-transitive --no-restore --format json --output-version 1 > nuget-audit.json
+python scripts/verificar-vulnerabilidades-nuget.py nuget-audit.json
+python -m unittest discover -s scripts/tests -p "test_verificar_vulnerabilidades_nuget.py" -v
+```
+
+Use Python 3 para o verificador e remova o `nuget-audit.json` gerado
+após a conferência; ele não deve fazer parte do commit.
+
+A interpretação é explícita: **0** significa relatório válido sem achados,
+**1** indica uma ou mais vulnerabilidades de qualquer severidade e **2**
+indica relatório inválido, ausente ou inconclusivo. Os oito testes simulam
+esses resultados sem adicionar dependências vulneráveis ao repositório.
+Verifique também a disponibilidade das fontes de auditoria: resultado
+limpo não demonstra cobertura completa quando uma fonte está indisponível.
+
+Este é o bloqueio conservador definido **para este repositório educacional**.
+Em um sistema corporativo, o tratamento de exceções de segurança deve seguir
+a governança, o risco e as aprovações da organização, sem simplesmente
+ignorar os achados. Veja o [estudo de caso C35](docs/estudos-de-caso/c35-pipeline-dependencia-vulneravel.md)
+e a [avaliação do .NET 11](docs/planejamento/avaliacao-dotnet-11-csharp-15.md).
+
 ## Qualidade e consistência
 
 Antes de abrir o pull request:

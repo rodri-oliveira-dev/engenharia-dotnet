@@ -100,6 +100,11 @@ Quando o código ajuda a explicar um conceito, uso exemplos pequenos em C#, com 
 Nem tudo cabe em um trecho de Markdown. Quando o assunto exige compilação, testes, benchmarks ou infraestrutura, a ideia é ter um laboratório separado e reproduzível. Os exemplos são adicionados conforme a necessidade dos capítulos, não apenas para aumentar a quantidade de projetos.
 
 Os detalhes estão na [estratégia para exemplos compiláveis](docs/exemplos-compilaveis.md).
+Os exemplos deste repositório usam **.NET 11 / C# 15** e são validados por
+build, testes e auditoria de dependências no GitHub Actions. O
+[guia de contribuição](CONTRIBUTING.md#validar-dependências-e-executar-o-ci-localmente)
+explica como executar os mesmos comandos localmente e interpretar o gate de
+vulnerabilidades.
 
 ## Testes
 
