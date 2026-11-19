@@ -1,0 +1,8 @@
+# Managed by rodri-oliveira-dev/.github.
+# The review rules are centrally maintained as YAML.
+# Do not add other top-level keys: remote_config replaces this file.
+# Selected via coderabbit-templates/repositories.json in the central repository.
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+
+remote_config:
+  url: "https://raw.githubusercontent.com/rodri-oliveira-dev/.github/main/coderabbit-templates/dotnet-educacional.yaml"
