@@ -52,12 +52,18 @@ public sealed class TratadorGlobalDeExcecoes(
         CancellationToken cancellationToken)
     {
         var conhecido = exception is RecursoNaoEncontradoException;
-        var status = conhecido
-            ? StatusCodes.Status404NotFound
-            : StatusCodes.Status500InternalServerError;
+        var status = exception switch
+        {
+            RecursoNaoEncontradoException => StatusCodes.Status404NotFound,
+            // Falha de binding/leitura do corpo é erro do cliente, não erro do servidor.
+            BadHttpRequestException invalidRequest => invalidRequest.StatusCode,
+            _ => StatusCodes.Status500InternalServerError
+        };
 
         if (conhecido)
             logger.LogInformation("Recurso solicitado não existe: {Message}", exception.Message);
+        else if (exception is BadHttpRequestException)
+            logger.LogInformation("Requisição HTTP inválida: status {StatusCode}", status);
         else
             logger.LogError(exception, "Falha não tratada no pipeline HTTP");
 
@@ -68,11 +74,15 @@ public sealed class TratadorGlobalDeExcecoes(
             ProblemDetails = new ProblemDetails
             {
                 Status = status,
-                Title = conhecido ? "Recurso não encontrado" : "Erro interno",
+                Title = status switch
+                {
+                    StatusCodes.Status404NotFound => "Recurso não encontrado",
+                    StatusCodes.Status400BadRequest => "Requisição inválida",
+                    StatusCodes.Status415UnsupportedMediaType => "Tipo de mídia não suportado",
+                    _ => "Erro interno"
+                },
                 Detail = conhecido ? exception.Message : null,
-                Type = conhecido
-                    ? "https://httpstatuses.com/404"
-                    : "https://httpstatuses.com/500"
+                Type = $"https://httpstatuses.com/{status}"
             },
             Exception = exception
         });

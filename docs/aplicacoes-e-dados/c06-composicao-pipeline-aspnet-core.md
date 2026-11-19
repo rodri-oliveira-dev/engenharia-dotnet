@@ -236,7 +236,14 @@ middleware que chama esses handlers.
 
 Uma resposta de erro deve expor contrato, não detalhes internos. Inclua status,
 título, tipo estável, erros de validação e um identificador de correlação. Não
-retorne stack trace, SQL, caminhos locais ou segredo. Exceções esperadas podem
+retorne stack trace, SQL, caminhos locais ou segredo.
+
+Em ASP.NET Core 11, falhas de binding de JSON podem gerar
+`BadHttpRequestException`. Um `IExceptionHandler` personalizado precisa
+preservar `exception.StatusCode` (por exemplo, 400 ou 415); mapear qualquer
+exceção diferente de "recurso ausente" para 500 é incorreto. O laboratório
+centraliza esse mapeamento sem expor conteúdo interno da falha, e os testes
+verificam que a API não mascara entradas inválidas como problemas do servidor. Exceções esperadas podem
 virar `404`, `409` ou outro status definido; falhas inesperadas permanecem `500`
 e são registradas uma vez na fronteira.
 

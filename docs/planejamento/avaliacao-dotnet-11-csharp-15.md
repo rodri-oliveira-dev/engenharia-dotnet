@@ -66,8 +66,11 @@ C06/C07 agora responde com Problem Details preservando o HTTP 400.
 A hipótese inicial sobre `ValidarProdutoFilter` precisa de uma distinção:
 falhas de **leitura do body** não executam endpoint filters. Os testes
 de `POST /produtos` cobrem JSON malformado, tipo incompatível, body ausente
-e mídia não suportada, preservando os códigos HTTP apropriados sem modificar
-a validação de campos do produto. A implementação demonstra o comportamento
+e mídia não suportada. Os primeiros testes detectaram um defeito real:
+o `TratadorGlobalDeExcecoes` mapeava `BadHttpRequestException` para HTTP 500.
+O tratamento foi ajustado para preservar `StatusCode` e devolver Problem
+Details sem expor detalhes internos. A validação de campos do produto
+permaneceu intacta. A implementação também demonstra o comportamento
 documentado em `GET /produtos` sem alterar contratos de domínio.
 
 ### P1: exemplos pequenos em vez de migração cosmética
