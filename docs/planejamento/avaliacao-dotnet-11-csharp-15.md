@@ -27,18 +27,19 @@ de implementação com testes e explicação, não apenas da alteração de cód
 - Versões do ASP.NET Core e do EF Core usadas nos exemplos foram alinhadas
   à linha 11. A configuração de NuGet permanece centralizada em
   `exemplos/Directory.Packages.props`.
-- A execução [44425625140](https://github.com/rodri-oliveira-dev/engenharia-dotnet/actions/runs/44425625140)
-  aprovou 117 testes em 15 projetos, sem falhas ou testes ignorados, com
-  zero avisos e erros de compilação. O ajuste de precisão dos testes de frete
-  consta do próprio PR.
-- Resultado dos testes não substitui testes direcionados a mudanças de
-  comportamento introduzidas pelo framework.
+- A execução [44429396050](https://github.com/rodri-oliveira-dev/engenharia-dotnet/actions/runs/44429396050)
+  aprovou 138 testes em 15 projetos, sem falhas ou testes ignorados, com
+  zero avisos e erros de compilação. Inclui os testes adicionados para a
+  mudança de binding do ASP.NET Core 11 e os quatro exemplos P1.
+- As checagens de Markdown/links internos, segredos, dependências e IaC
+  passaram no GitHub Actions. Esse resultado não substitui testes
+  direcionados às mudanças de comportamento não cobertas por esses casos.
 
 ## Matriz de aplicabilidade
 
 | Tema e novidade | Ponto existente no repositório | Ganho e teste proposto | Prioridade | Complexidade |
 |---|---|---|---|---|
-| **ASP.NET Core 11: filtros após falha de binding** | `Pipeline.cs` e `AplicacaoTests.cs` (C06/C07) | **Implementado:** filtro de paginação observa status 400 antes de acessar argumentos; testes HTTP cobrem query inválida/ausente e leitura de JSON inválida (que não executa filtros). | **P0** | Baixa/média |
+| **ASP.NET Core 11: filtros após falha de binding** | `Pipeline.cs` e `AplicacaoTests.cs` (C06/C07) | **Implementado:** filtros preservam HTTP 400 em falhas de binding; testes distinguem JSON malformado, body ausente, literal `null`, mídia incompatível e query inválida. O tratador global preserva `BadHttpRequestException.StatusCode`. | **P0** | Baixa/média |
 | **C# 15: tipos de união** | C02, `Cadastro.cs` e `CadastroTests.cs` | **Implementado:** `ResultadoRegistro` distingue cadastro criado e e-mail já cadastrado, com switch exaustivo e round-trip JSON por classificador estrutural. Entrada inválida mantém exceção; nenhum contrato HTTP foi alterado. | **P1** | Média |
 | **C# 15: hierarquias fechadas (`closed`)** | C11, `DominioPedidos.cs` e `DominioPedidosTests.cs` | **Implementado:** etapas de separação fechadas, descendentes selados, `switch` exaustivo e testes de transição, sem modificar o agregado existente. | **P1** | Média |
 | **LINQ .NET 11: `FullJoin`** | C03, `ColecoesLinq.cs` e testes | **Implementado:** conciliação em memória com clientes/pedidos órfãos, duplicatas, comparação com `Join` e `LeftJoin` e fontes vazias. Não afirma tradução SQL. | **P1** | Baixa/média |
@@ -146,6 +147,39 @@ continuará com `TreatWarningsAsErrors=true`.
 - A referência ao laboratório externo de observabilidade no `README.md`
   descreve corretamente aquele projeto como .NET 10; ele não faz parte
   deste PR e não deve ser atualizado por associação.
+
+## Revisão pré-merge do PR #9
+
+A revisão do commit que implementou os P1 confirmou:
+
+- **Escopo:** migração de SDK/TFM, pacotes da linha ASP.NET Core/EF Core 11,
+  correções P0 e quatro exercícios P1. Os P2/P3 são oportunidades de pesquisa
+  posteriores, não critérios de aceite desta migração.
+- **Compatibilidade:** o SDK fica fixado em \`11.0.100\` com
+  \`rollForward: latestPatch\`, e os projetos usam \`net11.0\`. Desenvolvedores
+  e ambientes de build precisam instalar SDK/runtime compatíveis.
+- **Suporte:** .NET 11 é STS, com suporte previsto até novembro de 2028;
+  .NET 10 é LTS, também com suporte até novembro de 2028. Para um repositório
+  de estudos de recursos recentes, a escolha por 11 é deliberada. Não é uma
+  recomendação de migração automática para aplicações de produção.
+- **CI:** a execução
+  [44429396050](https://github.com/rodri-oliveira-dev/engenharia-dotnet/actions/runs/44429396050)
+  comprovou 138/138 testes, build Release sem warnings e quatro jobs aprovados.
+  A análise de pacotes não reportou vulnerabilidades nas fontes disponíveis.
+- **Limites da cobertura:** o CI executa em \`ubuntu-latest\`, sem matriz Windows,
+  macOS, arquiteturas alternativas ou benchmarks comparativos. O job de
+  vulnerabilidades é informativo; não foi demonstrado que falharia caso
+  encontrasse um pacote vulnerável.
+- **Revisão:** não havia reviews humanos registrados na consulta do PR; a
+  consulta automatizada às regras de proteção da \`main\` retornou 403.
+  A ausência de problemas na validação técnica não substitui políticas de
+  aprovação/revisão aplicáveis ao repositório.
+
+Apenas o registro técnico e a descrição do PR foram normalizados nesta
+revisão final. Este relatório não declara novos testes de compatibilidade
+multiplataforma nem substitui a avaliação dos P2.
+
+Referência: [ciclo de suporte do .NET](https://learn.microsoft.com/en-us/dotnet/core/releases-and-support).
 
 ## Referências oficiais
 
