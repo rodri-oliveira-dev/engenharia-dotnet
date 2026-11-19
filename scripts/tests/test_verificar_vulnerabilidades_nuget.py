@@ -1,6 +1,8 @@
 """Testes da política de segurança com relatórios simulados."""
 
 import importlib.util
+import io
+from contextlib import redirect_stderr, redirect_stdout
 import json
 import tempfile
 import unittest
@@ -33,7 +35,9 @@ class VerificadorNuGetTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as pasta:
             caminho = Path(pasta) / "audit.json"
             caminho.write_text(json.dumps(dados), encoding="utf-8")
-            return verificador.executar(caminho)
+            # Casos de falha são intencionais: não gerar ::error:: no job verde.
+            with redirect_stderr(io.StringIO()), redirect_stdout(io.StringIO()):
+                return verificador.executar(caminho)
 
     def test_relatorio_limpo_aprova(self):
         self.assertEqual(0, self.executar(relatorio()))
@@ -68,7 +72,8 @@ class VerificadorNuGetTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as pasta:
             caminho = Path(pasta) / "audit.json"
             caminho.write_text("{", encoding="utf-8")
-            self.assertEqual(2, verificador.executar(caminho))
+            with redirect_stderr(io.StringIO()), redirect_stdout(io.StringIO()):
+                self.assertEqual(2, verificador.executar(caminho))
 
 
 if __name__ == "__main__":
