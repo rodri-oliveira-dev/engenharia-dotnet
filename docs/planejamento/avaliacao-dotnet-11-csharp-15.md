@@ -155,8 +155,8 @@ A revisão do commit que implementou os P1 confirmou:
 - **Escopo:** migração de SDK/TFM, pacotes da linha ASP.NET Core/EF Core 11,
   correções P0 e quatro exercícios P1. Os P2/P3 são oportunidades de pesquisa
   posteriores, não critérios de aceite desta migração.
-- **Compatibilidade:** o SDK fica fixado em \`11.0.100\` com
-  \`rollForward: latestPatch\`, e os projetos usam \`net11.0\`. Desenvolvedores
+- **Compatibilidade:** o SDK fica fixado em `11.0.100` com
+  `rollForward: latestPatch`, e os projetos usam `net11.0`. Desenvolvedores
   e ambientes de build precisam instalar SDK/runtime compatíveis.
 - **Suporte:** .NET 11 é STS, com suporte previsto até novembro de 2028;
   .NET 10 é LTS, também com suporte até novembro de 2028. Para um repositório
@@ -166,12 +166,13 @@ A revisão do commit que implementou os P1 confirmou:
   [44429396050](https://github.com/rodri-oliveira-dev/engenharia-dotnet/actions/runs/44429396050)
   comprovou 138/138 testes, build Release sem warnings e quatro jobs aprovados.
   A análise de pacotes não reportou vulnerabilidades nas fontes disponíveis.
-- **Limites da cobertura:** o CI executa em \`ubuntu-latest\`, sem matriz Windows,
+- **Limites da cobertura:** o CI executa em `ubuntu-latest`, sem matriz Windows,
   macOS, arquiteturas alternativas ou benchmarks comparativos. O job de
-  vulnerabilidades é informativo; não foi demonstrado que falharia caso
-  encontrasse um pacote vulnerável.
+  auditoria agora **reprova** dependências vulneráveis diretas ou transitivas,
+  inclusive de severidade baixa. Testes simulados validam a política de
+  reprovação; o resultado real depende das fontes NuGet consultadas.
 - **Revisão:** não havia reviews humanos registrados na consulta do PR; a
-  consulta automatizada às regras de proteção da \`main\` retornou 403.
+  consulta automatizada às regras de proteção da `main` retornou 403.
   A ausência de problemas na validação técnica não substitui políticas de
   aprovação/revisão aplicáveis ao repositório.
 
@@ -180,6 +181,22 @@ revisão final. Este relatório não declara novos testes de compatibilidade
 multiplataforma nem substitui a avaliação dos P2.
 
 Referência: [ciclo de suporte do .NET](https://learn.microsoft.com/en-us/dotnet/core/releases-and-support).
+
+### Auditoria NuGet bloqueante
+
+O job `Analisar dependências` realiza o restore com `NuGetAudit=true`,
+`NuGetAuditMode=all` e `NuGetAuditLevel=low`. Em seguida, executa
+`dotnet package list --vulnerable --include-transitive --format json --output-version 1`
+e passa o relatório ao `scripts/verificar-vulnerabilidades-nuget.py`.
+
+O verificador reprova pacotes vulneráveis **diretos ou transitivos**
+(código 1). Relatório ausente, inválido ou sem projetos também reprova
+(código 2). O job executa testes com relatórios simulados que cobrem
+achados diretos, transitivos, em outro framework e dados inválidos,
+sem instalar pacotes intencionalmente vulneráveis.
+
+Referências: [auditoria NuGet](https://learn.microsoft.com/en-us/nuget/concepts/auditing-packages)
+e [relatório JSON da CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-package-list).
 
 ## Referências oficiais
 
