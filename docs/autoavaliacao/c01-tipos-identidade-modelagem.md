@@ -34,18 +34,18 @@ Console.WriteLine($"{pedido.Status} {ponto.X}");
 Qual será a saída do código a seguir?
 
 ```csharp
-public struct Lote
-{
-    public int Numero;
-    public List<string> Etiquetas;
-}
-
 var primeiro = new Lote { Numero = 1, Etiquetas = ["urgente"] };
 var segundo = primeiro;
 segundo.Numero = 2;
 segundo.Etiquetas.Add("revisar");
 
 Console.WriteLine($"{primeiro.Numero} {primeiro.Etiquetas.Count}");
+
+public struct Lote
+{
+    public int Numero;
+    public List<string> Etiquetas;
+}
 ```
 
 - A. `2 2`
@@ -112,12 +112,12 @@ Console.WriteLine(ReferenceEquals(dinheiro1, dinheiro2));
 Qual será o resultado da comparação abaixo?
 
 ```csharp
-public sealed record Pedido(string Codigo, List<string> Itens);
-
 var a = new Pedido("P1", ["caderno"]);
 var b = new Pedido("P1", ["caderno"]);
 
 Console.WriteLine(a == b);
+
+public sealed record Pedido(string Codigo, List<string> Itens);
 ```
 
 - A. `False`, porque a igualdade gerada compara cada componente com a
