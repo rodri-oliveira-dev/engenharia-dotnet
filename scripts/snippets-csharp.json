@@ -3,6 +3,99 @@
   "target_framework": "net11.0",
   "language_version": "15.0",
   "snippets": {
+    "aval-c01-q01": {
+      "output_type": "Exe",
+      "execution": {
+        "classification": "deterministic-safe",
+        "expected_stdout": "Pago 1\n",
+        "timeout_seconds": 5
+      }
+    },
+    "aval-c01-q02": {
+      "output_type": "Exe",
+      "execution": {
+        "classification": "deterministic-safe",
+        "expected_stdout": "1 2\n",
+        "timeout_seconds": 5
+      }
+    },
+    "aval-c01-q04": {
+      "output_type": "Exe",
+      "prefix": "var pontos = new List<Ponto> { new() { X = 1 } };\n",
+      "suffix": "Console.WriteLine(pontos[0].X);\n",
+      "auxiliary_sources": [
+        {
+          "file": "Ponto.cs",
+          "content": "public struct Ponto\n{\n    public int X { get; set; }\n}\n"
+        }
+      ],
+      "execution": {
+        "classification": "deterministic-safe",
+        "expected_stdout": "1\n",
+        "timeout_seconds": 5
+      }
+    },
+    "aval-c01-q05": {
+      "output_type": "Exe",
+      "execution": {
+        "classification": "deterministic-safe",
+        "expected_stdout": "False\nTrue\nFalse\n",
+        "timeout_seconds": 5
+      }
+    },
+    "aval-c01-q06": {
+      "output_type": "Exe",
+      "execution": {
+        "classification": "deterministic-safe",
+        "expected_stdout": "False\n",
+        "timeout_seconds": 5
+      }
+    },
+    "aval-c01-q10": {
+      "output_type": "Exe",
+      "prefix": "try\n{\n",
+      "suffix": "}\ncatch (Exception exception)\n{\n    Console.Error.WriteLine(\"__SNIPPET_EXCEPTION_TYPE__:\" + exception.GetType().FullName);\n    Environment.ExitCode = 1;\n}\n",
+      "execution": {
+        "classification": "deterministic-safe",
+        "expected_exception": "System.InvalidCastException",
+        "timeout_seconds": 5
+      }
+    },
+    "aval-c02-q01": {
+      "output_type": "Library",
+      "prefix": "public static class Titulos\n{\n",
+      "suffix": "}\n"
+    },
+    "aval-c02-q02": {
+      "output_type": "Exe",
+      "prefix": "try\n{\n",
+      "suffix": "}\ncatch (Exception exception)\n{\n    Console.Error.WriteLine(\"__SNIPPET_EXCEPTION_TYPE__:\" + exception.GetType().FullName);\n    Environment.ExitCode = 1;\n}\n",
+      "execution": {
+        "classification": "deterministic-safe",
+        "expected_exception": "System.NullReferenceException",
+        "timeout_seconds": 5
+      }
+    },
+    "aval-c02-q03": {
+      "output_type": "Exe",
+      "suffix": "Console.WriteLine(Normalizar(\"  Ada  \"));\n",
+      "execution": {
+        "classification": "deterministic-safe",
+        "expected_stdout": "Ada\n",
+        "timeout_seconds": 5
+      }
+    },
+    "aval-c02-q09": {
+      "output_type": "Library",
+      "prefix": "public static class ServicoClientes\n{\n    public static async Task SalvarAsync(\n        IRepositorioClientes repositorio,\n        Cliente cliente,\n        CancellationToken cancellationToken)\n    {\n",
+      "suffix": "    }\n}\n",
+      "auxiliary_sources": [
+        {
+          "file": "Contratos.cs",
+          "content": "public sealed class Cliente\n{\n}\n\npublic interface IRepositorioClientes\n{\n    Task SalvarAsync(Cliente cliente, CancellationToken cancellationToken);\n}\n"
+        }
+      ]
+    },
     "c01-01": {
       "output_type": "Exe",
       "execution": {

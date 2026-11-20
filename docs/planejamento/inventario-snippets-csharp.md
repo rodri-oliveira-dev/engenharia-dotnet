@@ -35,6 +35,8 @@ temporário.
 | `docs/aplicacoes-e-dados/c06-composicao-pipeline-aspnet-core.md` | 6 | 0 | 6 | 0 | 0 |
 | `docs/aplicacoes-e-dados/c08-consultas-ef-core.md` | 8 | 0 | 8 | 0 | 0 |
 | `docs/aplicacoes-e-dados/c09-fronteiras-concorrencia-ef-core.md` | 4 | 0 | 4 | 0 | 0 |
+| `docs/autoavaliacao/c01-tipos-identidade-modelagem.md` | 6 | 5 | 1 | 0 | 0 |
+| `docs/autoavaliacao/c02-nulabilidade-falhas-excecoes.md` | 6 | 1 | 3 | 0 | 2 |
 | `docs/dominio-e-arquitetura/c11-entidades-value-objects-agregados.md` | 5 | 0 | 4 | 1 | 0 |
 | `docs/dominio-e-arquitetura/c12-servicos-dominio-integracao-modelos.md` | 3 | 0 | 2 | 1 | 0 |
 | `docs/dominio-e-arquitetura/c14-cqrs-modelos-orientados-uso.md` | 1 | 0 | 1 | 0 | 0 |
@@ -50,7 +52,7 @@ temporário.
 | `docs/qualidade-e-seguranca/c26-seguranca-fronteiras-aplicacao.md` | 5 | 1 | 4 | 0 | 0 |
 | `docs/sistemas-distribuidos/c16-idempotencia-entrega-confiavel.md` | 2 | 0 | 2 | 0 | 0 |
 | `docs/sistemas-distribuidos/c18-limites-microservicos-evolucao-monolitos.md` | 1 | 0 | 1 | 0 | 0 |
-| **Total** | **95** | **8** | **83** | **4** | **0** |
+| **Total** | **107** | **14** | **87** | **4** | **2** |
 
 ## Critérios de compilação e execução
 
@@ -128,6 +130,18 @@ Destes, `c01-01` valida a saída padrão, `c02-05` valida uma
 `System.NullReferenceException` esperada e `c04-01` valida execução bem-sucedida
 sem saída. Os outros oito são apenas compilados.
 
+As autoavaliações acrescentam dez IDs ao manifesto:
+
+- isolados: `aval-c01-q01`, `aval-c01-q02`, `aval-c01-q05`, `aval-c01-q06`,
+  `aval-c01-q10` e `aval-c02-q02`;
+- com contexto declarado: `aval-c01-q04`, `aval-c02-q01`, `aval-c02-q03` e
+  `aval-c02-q09`.
+
+Oito deles conferem o comportamento que o gabarito afirma: seis pela saída
+padrão e dois pela exceção esperada (`System.InvalidCastException` em
+`aval-c01-q10` e `System.NullReferenceException` em `aval-c02-q02`).
+`aval-c02-q01` e `aval-c02-q09` são apenas compilados.
+
 Ainda não são compilados:
 
 - C01: `c01-02`, `c01-03`, `c01-04`, `c01-07`, `c01-10`, `c01-11`, `c01-12`;
@@ -150,8 +164,10 @@ Ainda não são compilados:
 - C26: `c26-01`, `c26-02`, `c26-03` e `c26-05`;
 - C27: `c27-01`.
 
-Os fragmentos `c11-04`, `c12-02`, `c23-03` e `c23-04` são excluídos. Não há
-snippet classificado como `invalido` no inventário atual. O comando abaixo
+Os fragmentos `c11-04`, `c12-02`, `c23-03` e `c23-04` são excluídos. Os
+snippets `invalido` `aval-c02-q04` (CS8602) e `aval-c02-q06` (CS8603) também
+ficam fora da compilação até o validador conferir diagnósticos esperados. O
+comando abaixo
 recalcula e imprime as três listas a partir do Markdown e do manifesto:
 
 ```sh
@@ -175,6 +191,10 @@ python -m unittest discover -s scripts/tests -p "test_validar_snippets_csharp.py
 - A suíte .NET local aprovou 137 testes sem Docker. A execução integral encontrou
   uma única falha no teste `Category=Docker`, porque não havia daemon disponível;
   portanto, esse teste não foi validado localmente.
-- A ausência atual de snippets `invalido` não remove a categoria do contrato.
+- Os dez snippets das autoavaliações cadastrados no manifesto foram compilados
+  localmente com o SDK 9, `TreatWarningsAsErrors` e `Nullable` habilitado,
+  reproduzindo o invólucro do manifesto, e os oito com `execution` também foram
+  executados. Os dois `invalido` foram compilados à parte só para confirmar que
+  falham com CS8602 e CS8603. A confirmação com o SDK 11.0.100 depende do CI.
 - Metadados em comentários HTML preservam a renderização do GitHub, mas outras
   ferramentas Markdown podem optar por exibi-los ao editar a fonte.
