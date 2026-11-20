@@ -65,7 +65,7 @@ oito agrupamentos definidos no mapa editorial e os 35 capítulos publicados.
 
 ## Trilha de estudo e leitura
 
-- [Roadmap de estudos por maturidade, com 13 livros em português e links para a Amazon Brasil](roadmap-de-estudos.md)
+- [Roadmap de estudos por maturidade, com 14 livros em português, links para Amazon Brasil e Refactoring.Guru](roadmap-de-estudos.md)
 
 ## Documentação do projeto
 
