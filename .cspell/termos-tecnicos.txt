@@ -6,8 +6,8 @@ ADR
 Agentic
 AIA
 Ansible
-Antiforgery
 antiforgery
+Antiforgery
 AOT
 API
 Apigee
@@ -125,6 +125,7 @@ LTS
 Markdown
 MaxBy
 MCP
+mentoria
 Metrics
 Microservice
 Microservices
@@ -183,6 +184,7 @@ Runtime
 SDK
 SDKs
 SemaphoreSlim
+senioridade
 serialização
 Serialization
 ServiceCollection
