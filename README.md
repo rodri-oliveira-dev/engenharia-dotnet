@@ -99,6 +99,17 @@ Cada capítulo indica seu nível e os conhecimentos que ajudam a acompanhá-lo:
 
 Avançado não significa mais padrões ou mais ferramentas. Muitas vezes, a melhor decisão técnica é justamente manter a solução simples.
 
+## Roadmap de estudos e livros em português
+
+O [roadmap de estudos por maturidade](docs/roadmap-de-estudos.md) organiza 13
+livros de C#, qualidade, DDD, arquitetura e sistemas distribuídos em cinco etapas,
+dos fundamentos às decisões arquiteturais mais complexas. Cada obra tem um link
+de busca na Amazon Brasil, indicação dos capítulos relacionados e uma prática
+com critérios para avaliar o aprendizado.
+
+A ordem é uma sugestão de aprofundamento, não um requisito de senioridade. Quem
+já domina um assunto pode começar pela atividade prática da etapa correspondente.
+
 ## Código e exemplos
 
 Quando o código ajuda a explicar um conceito, uso exemplos pequenos em C#, com comportamento verificável e compatíveis com a versão de .NET indicada no repositório.
