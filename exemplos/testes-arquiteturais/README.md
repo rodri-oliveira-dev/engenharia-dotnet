@@ -39,9 +39,10 @@ depende de sufixos como `.Domain`, `.Api` ou `.Tests`.
   pacote de teste em produção, pacote de infraestrutura no núcleo e configuração
   inválida, verificando os identificadores e as mensagens resultantes.
 
-As fixtures são modelos em memória. Elas não entram na solução nem criam
-projetos vazios, mas percorrem o mesmo mecanismo usado para validar os `.csproj`
-reais.
+As fixtures de regras são modelos em memória. Uma regressão adicional cria uma
+solução temporária isolada com projetos homônimos em diretórios diferentes para
+provar que a identidade usa o caminho completo, não apenas o nome do arquivo.
+Nenhuma dessas fixtures entra na solução ou cria projetos permanentes.
 
 ## Relação com os capítulos
 

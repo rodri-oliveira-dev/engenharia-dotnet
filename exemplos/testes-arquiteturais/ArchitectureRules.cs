@@ -56,7 +56,7 @@ internal static class ArchitectureRules
                     violations.Add(new(
                         "layer-dependency-direction",
                         $"{project.Name} ({project.ArchitectureLayer}) não pode depender de "
-                        + $"{reference} ({referencedProject.ArchitectureLayer})."));
+                        + $"{referencedProject.Name} ({referencedProject.ArchitectureLayer})."));
                 }
             }
         }
@@ -70,17 +70,22 @@ internal static class ArchitectureRules
         where !graph.TryGetProject(reference, out _)
         select new ArchitectureViolation(
             "project-reference-outside-solution",
-            $"{project.Name} referencia {reference}, que não está declarado em EngenhariaDotnet.slnx.");
+            $"{project.Name} referencia {DisplayReference(reference)}, que não está declarado em EngenhariaDotnet.slnx.");
 
     private static IEnumerable<ArchitectureViolation> ProductionMustNotReferenceTests(ProjectGraph graph)
     {
-        return from project in graph.Projects
-               where !project.IsTestProject
-               from reference in project.ProjectReferences
-               where graph.TryGetProject(reference, out var referencedProject) && referencedProject.IsTestProject
-               select new ArchitectureViolation(
-                   "production-to-test",
-                   $"{project.Name} não pode depender do projeto de teste {reference}.");
+        foreach (var project in graph.Projects.Where(project => !project.IsTestProject))
+        {
+            foreach (var reference in project.ProjectReferences)
+            {
+                if (graph.TryGetProject(reference, out var referencedProject) && referencedProject.IsTestProject)
+                {
+                    yield return new(
+                        "production-to-test",
+                        $"{project.Name} não pode depender do projeto de teste {referencedProject.Name}.");
+                }
+            }
+        }
     }
 
     private static IEnumerable<ArchitectureViolation> ProductionMustNotUseTestPackages(ProjectGraph graph) =>
@@ -116,9 +121,12 @@ internal static class ArchitectureRules
         {
             foreach (var reference in core.ProjectReferences)
             {
+                var referencedName = graph.TryGetProject(reference, out var referencedProject)
+                    ? referencedProject.Name
+                    : DisplayReference(reference);
                 yield return new(
                     "core-project-reference",
-                    $"{core.Name} deve permanecer autocontido, mas referencia {reference}.");
+                    $"{core.Name} deve permanecer autocontido, mas referencia {referencedName}.");
             }
 
             foreach (var package in core.PackageReferences)
@@ -141,4 +149,6 @@ internal static class ArchitectureRules
         ("INFRASTRUCTURE", "ENTRYPOINT") => true,
         _ => false
     };
+
+    private static string DisplayReference(string reference) => Path.GetFileNameWithoutExtension(reference);
 }

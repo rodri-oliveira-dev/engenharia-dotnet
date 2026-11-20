@@ -105,6 +105,50 @@ public sealed class ArchitectureTests
         Assert.Contains(violations, violation => violation.Rule == "core-infrastructure-package");
     }
 
+    [Fact]
+    public void Loader_nao_confunde_projetos_homonimos_em_diretorios_diferentes()
+    {
+        var fixtureRoot = Path.Combine(Path.GetTempPath(), $"engenharia-dotnet-architecture-{Guid.NewGuid():N}");
+        var solutionDirectory = Path.Combine(fixtureRoot, "solution");
+        var listedDirectory = Path.Combine(solutionDirectory, "listed");
+        var appDirectory = Path.Combine(solutionDirectory, "app");
+        var outsideDirectory = Path.Combine(fixtureRoot, "outside");
+
+        try
+        {
+            Directory.CreateDirectory(listedDirectory);
+            Directory.CreateDirectory(appDirectory);
+            Directory.CreateDirectory(outsideDirectory);
+
+            File.WriteAllText(Path.Combine(listedDirectory, "Shared.csproj"), "<Project />");
+            File.WriteAllText(Path.Combine(outsideDirectory, "Shared.csproj"), "<Project />");
+            File.WriteAllText(
+                Path.Combine(appDirectory, "App.csproj"),
+                "<Project><ItemGroup><ProjectReference Include=\"../../outside/Shared.csproj\" />"
+                + "</ItemGroup></Project>");
+            var solutionPath = Path.Combine(solutionDirectory, "EngenhariaDotnet.slnx");
+            File.WriteAllText(
+                solutionPath,
+                "<Solution><Project Path=\"listed/Shared.csproj\" />"
+                + "<Project Path=\"app/App.csproj\" /></Solution>");
+
+            var graph = ProjectGraph.Load(solutionPath);
+
+            var violations = ArchitectureRules.ValidateSolution(graph);
+
+            var violation = Assert.Single(violations);
+            Assert.Equal("project-reference-outside-solution", violation.Rule);
+            Assert.Contains("Shared", violation.Message, StringComparison.Ordinal);
+        }
+        finally
+        {
+            if (Directory.Exists(fixtureRoot))
+            {
+                Directory.Delete(fixtureRoot, recursive: true);
+            }
+        }
+    }
+
     private static void AssertNoViolations(IReadOnlyCollection<ArchitectureViolation> violations) =>
         Assert.True(
             violations.Count == 0,
@@ -117,6 +161,7 @@ public sealed class ArchitectureTests
         bool isTestProject = false,
         bool isArchitectureTestProject = false,
         string? architectureLayer = null) => new(
+        name,
         name,
         isTestProject,
         isArchitectureTestProject,

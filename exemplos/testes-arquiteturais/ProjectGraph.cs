@@ -3,6 +3,7 @@ using System.Xml.Linq;
 namespace EngenhariaDotnet.Architecture.Tests;
 
 internal sealed record ProjectNode(
+    string Id,
     string Name,
     bool IsTestProject,
     bool IsArchitectureTestProject,
@@ -16,12 +17,12 @@ internal sealed class ProjectGraph
 
     private ProjectGraph(IEnumerable<ProjectNode> projects)
     {
-        this.projects = projects.ToDictionary(project => project.Name, StringComparer.OrdinalIgnoreCase);
+        this.projects = projects.ToDictionary(project => project.Id, StringComparer.OrdinalIgnoreCase);
     }
 
     public IReadOnlyCollection<ProjectNode> Projects => projects.Values.ToArray();
 
-    public bool TryGetProject(string name, out ProjectNode project) => projects.TryGetValue(name, out project!);
+    public bool TryGetProject(string id, out ProjectNode project) => projects.TryGetValue(id, out project!);
 
     public static ProjectGraph Load(string solutionPath)
     {
@@ -59,7 +60,7 @@ internal sealed class ProjectGraph
             .Where(element => element.Name.LocalName == "ProjectReference")
             .Select(element => element.Attribute("Include")?.Value)
             .Where(include => !string.IsNullOrWhiteSpace(include))
-            .Select(include => Path.GetFileNameWithoutExtension(Path.GetFullPath(include!, projectDirectory)))
+            .Select(include => Path.GetFullPath(include!, projectDirectory))
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
         var packages = document
@@ -71,6 +72,7 @@ internal sealed class ProjectGraph
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
         return new ProjectNode(
+            projectPath,
             name,
             ReadBoolean(properties, "IsTestProject"),
             ReadBoolean(properties, "ArchitectureTestProject"),
