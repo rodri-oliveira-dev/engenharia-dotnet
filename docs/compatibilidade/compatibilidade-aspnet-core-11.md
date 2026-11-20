@@ -23,7 +23,7 @@ se deve assumir que toda aplicação usa os componentes afetados.
 | Blazor SSR delega antiforgery ao middleware | comportamento | formulários dependem da configuração do pipeline | POST com token válido, ausente e inválido |
 | Hosting emite tags de convenções semânticas HTTP | comportamento | duplicidade/cardinalidade em dashboards customizados | comparar atributos e volume de telemetria |
 | `OpenApiVersion` adota default 3.2 | comportamento | ferramentas consumidoras podem rejeitar documento | validar consumidor e versão explicitamente |
-| `ResponseCompression` emite `Vary: Accept-Encoding` | comportamento | diferença na política de caches e testes de headers | verificar resposta comprimida e cache intermediário |
+| `ResponseCompression` emite `Vary: Accept-Encoding` mesmo sem comprimir | comportamento | altera a chave de cache também para respostas não comprimidas | testar `Accept-Encoding: gzip` e `identity`, inspecionando `Vary`, `Content-Encoding` e cache intermediário |
 
 As categorias e detalhes devem ser confirmados nas notas completas
 antes de atualizar um serviço que usa endpoints ou middlewares
@@ -67,8 +67,21 @@ app.MapGet("/processamento", () => Results.Ok())
 
 O exemplo **não é uma substituição literal** de todas as políticas
 antigas. Valide semântica da fila, timeout, status de rejeição
-e comportamento sob concorrência. Não aplique rate limiting globalmente
-sem mapear os endpoints críticos.
+e comportamento sob concorrência. A política nomeada associada por
+`RequireRateLimiting("politica")` limita **somente os endpoints marcados**;
+as demais rotas não recebem essa política. Já
+`RateLimiterOptions.GlobalLimiter` aplica a limitação a **todas as
+requisições**. Se a intenção é preservar o alcance global do antigo
+`UseConcurrencyLimiter()`, configure `GlobalLimiter` com parâmetros
+equivalentes e revise os endpoints afetados.
+
+**Ordem do middleware:** no exemplo com hospedagem mínima, mantenha o
+pipeline mostrado. Em aplicações que chamam `UseRouting()` de modo
+explícito, registre `UseRateLimiter()` **depois de `UseRouting()`**
+quando usar políticas por endpoint, como `RequireRateLimiting("politica")`.
+Se houver apenas `GlobalLimiter`, ele pode ser colocado antes do
+roteamento. Verifique também o status HTTP de rejeição e a prioridade
+de outras regras de limitação.
 
 ## Exemplo 2: OpenAPI 3.x
 
@@ -103,7 +116,33 @@ que exercitem HTTP/1.1, HTTP/2 e, quando aplicável, HTTP/3 no
 ambiente onde Kestrel realmente termina a conexão.
 `TestServer` não substitui esses testes de rede.
 
-## Exemplo 4: proteção de formulários
+## Exemplo 4: compactação de respostas e cache HTTP
+
+No ASP.NET Core 10, o middleware `ResponseCompression` acrescentava
+`Vary: Accept-Encoding` apenas quando compactava efetivamente a
+resposta. No ASP.NET Core 11, o cabeçalho também é emitido em
+**respostas não comprimidas** que atravessam o middleware.
+
+Para comparar o comportamento das versões, use o mesmo endpoint
+com conteúdo elegível para compactação e duas requisições:
+
+1. Envie `Accept-Encoding: gzip`. Verifique a presença de
+   `Content-Encoding: gzip` quando a compactação for aplicada e do
+   cabeçalho `Vary: Accept-Encoding`.
+2. Envie `Accept-Encoding: identity`. Verifique que **não** houve
+   compactação (`Content-Encoding` ausente) e que
+   **`Vary: Accept-Encoding` ainda está presente** no .NET 11.
+   Esse segundo cenário é o que distingue o comportamento anterior.
+
+No proxy reverso ou CDN, confirme que as variantes comprimidas e não
+comprimidas não sejam compartilhadas incorretamente e que
+`Accept-Encoding` seja normalizado para evitar multiplicação de
+entradas de cache. Caso o endpoint ou outro middleware já adicione
+`Vary`, verifique que `Accept-Encoding` não seja duplicado.
+O teste deve usar a compressão realmente habilitada, sem assumir que
+`TestServer` reproduz o comportamento de um cache intermediário.
+
+## Exemplo 5: proteção de formulários
 
 Blazor SSR no ASP.NET Core 11 usa o resultado registrado por middleware
 antiforgery, em vez de validar sempre no endpoint.
@@ -126,7 +165,8 @@ o fluxo legítimo do formulário.
 3. Rodar testes reais em Kestrel para protocolo, TLS e proxies.
 4. Testar formulários Blazor e antiforgery conforme o modelo de autenticação.
 5. Comparar esquema OpenAPI e o resultado de SDKs gerados.
-6. Verificar métricas, cabeçalhos e dashboards após a publicação.
+6. Comparar respostas comprimidas e não comprimidas, cabeçalhos e cache HTTP.
+7. Verificar métricas e dashboards após a publicação.
 
 **Evidência no repositório:** testes de binding do ASP.NET Core 11
 já existem em `AplicacaoTests.cs`; esta seção de compatibilidade
@@ -140,5 +180,7 @@ não introduz um servidor de rede ou uma instalação de navegador no CI.
 - [Kestrel mais estrito](https://learn.microsoft.com/en-us/aspnet/core/breaking-changes/11/kestrel-strict-protocol-compliance)
 - [Microsoft.OpenApi 3.x](https://learn.microsoft.com/en-us/aspnet/core/breaking-changes/11/microsoft-openapi-3x)
 - [Blazor SSR e antiforgery](https://learn.microsoft.com/en-us/aspnet/core/breaking-changes/11/blazor-server-side-rendering-deferred-cross-site-request-forgery-protection)
+- [Middleware de rate limiting](https://learn.microsoft.com/en-us/aspnet/core/performance/rate-limit)
+- [ResponseCompression e o cabeçalho Vary no ASP.NET Core 11](https://learn.microsoft.com/en-us/aspnet/core/breaking-changes/11/response-compression-always-vary)
 
 [Voltar à trilha](indice.md).
