@@ -6,6 +6,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="PersistenciaTests.cs" />
+    <Compile Include="NovidadesEfCore11Tests.cs" />
     <ProjectReference Include="C08C09.EfCore.csproj" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
   </ItemGroup>
 </Project>

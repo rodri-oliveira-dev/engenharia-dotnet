@@ -9,6 +9,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AplicacaoTests.cs" />
+    <Compile Include="CompatibilidadeDotnet11Tests.cs" />
     <ProjectReference Include="C06C07.AspNetCore.csproj" />
   </ItemGroup>
 </Project>

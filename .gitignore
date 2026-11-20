@@ -14,3 +14,7 @@ override.tf.json
 *_override.tf.json
 **/c20-iac/terraform/saida/
 **/c20-iac/ansible/.vault-password
+
+# CSpell: dependências e arquivos temporários de verificação.
+node_modules/
+.cspell-mudancas-*/

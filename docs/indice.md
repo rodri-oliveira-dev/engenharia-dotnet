@@ -54,6 +54,19 @@ oito agrupamentos definidos no mapa editorial e os 35 capítulos publicados.
 - [C34 — Migração gradual de monólito](estudos-de-caso/c34-migracao-gradual-monolito.md)
 - [C35 — Pipeline com dependência vulnerável](estudos-de-caso/c35-pipeline-dependencia-vulneravel.md)
 
+## Compatibilidade e evolução de versões
+
+- [Índice de compatibilidade e breaking changes do .NET 11](compatibilidade/indice.md)
+- [ASP.NET Core 11](compatibilidade/compatibilidade-aspnet-core-11.md)
+- [Runtime, BCL e Hosting 11](compatibilidade/compatibilidade-runtime-bcl-11.md)
+- [SDK, build, NuGet e containers 11](compatibilidade/compatibilidade-sdk-build-11.md)
+- [C# 15 e mudanças no compilador](compatibilidade/compatibilidade-csharp-15.md)
+- [EF Core 11](aplicacoes-e-dados/ef-core-11-compatibilidade.md)
+
+## Trilha de estudo e leitura
+
+- [Roadmap de estudos por maturidade, com 14 livros em português, links para Amazon Brasil e Refactoring.Guru](roadmap-de-estudos.md)
+
 ## Documentação do projeto
 
 - [Guia de estilo editorial](guia-de-estilo.md)

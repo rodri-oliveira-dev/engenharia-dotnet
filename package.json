@@ -1,0 +1,17 @@
+{
+  "name": "engenharia-dotnet-ortografia",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Validação ortográfica pt-BR da documentação Markdown.",
+  "scripts": {
+    "ortografia": "cspell lint --config cspell.json --no-progress --no-summary 'docs/**/*.md' README.md CONTRIBUTING.md",
+    "ortografia:pr": "python scripts/validar-portugues-pr.py"
+  },
+  "devDependencies": {
+    "@cspell/dict-pt-br": "2.4.4",
+    "cspell": "10.4.0"
+  },
+  "engines": {
+    "node": ">=22.18.0"
+  }
+}

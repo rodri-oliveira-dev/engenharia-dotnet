@@ -8,7 +8,7 @@
 > **Pré-requisitos:** [C03 — Coleções, LINQ e execução diferida](../linguagem-e-runtime/c03-colecoes-linq-execucao-diferida.md).
 > [C10 — Fundamentos de persistência SQL e NoSQL](c10-fundamentos-persistencia-sql-nosql.md).
 >
-> **Última revisão:** 2026-11-18
+> **Última revisão:** 2026-11-20
 
 Uma expressão LINQ curta pode significar uma consulta seletiva, dezenas de
 round trips ou uma junção que multiplica linhas. O código C# não revela sozinho
@@ -322,9 +322,37 @@ Não recomende `AsNoTracking`, `Include`, `AsSplitQuery` ou compiled queries por
 convenção. Registre o volume, cardinalidade, consistência, quantidade de comandos
 e evidência que justificam a escolha.
 
+## Novidades da versão 11
+
+O [laboratório EF Core 11](../../exemplos/c08-c09-ef-core/README.md) amplia
+os exemplos de consulta sem substituir os fundamentos anteriores:
+
+- **FullJoin relacional:** concilia cadastros de clientes e pedidos externos
+  sem chave estrangeira entre as fontes, preservando registros órfãos de
+  ambos os lados. Diferentemente do exemplo em memória do C03, aqui o
+  provider precisa traduzir a expressão em um `FULL JOIN`.
+- **MaxByAsync/MinByAsync:** selecionam as entidades com maior e menor número
+  de itens, com ordenação/limite executados pelo banco. Sem critério secundário,
+  empates não possuem identidade determinística.
+- **GroupBy com navegação:** agrupa itens pelo status do pedido relacionado;
+  o teste inspeciona `JOIN`, `GROUP BY`, `SUM` e os resultados efetivos.
+- **string.Join com ordenação:** concatena marcadores via `group_concat`
+  ordenado, tradução disponível em SQLite 3.44.0 ou superior.
+- **Split query com referência:** inclui `Categoria` e `Itens` para
+  demonstrar o join de referência no SQL principal e sua remoção na
+  consulta separada da coleção, sem alegar ganho de tempo não medido.
+- **JSON no SQL Server:** verifica a tradução de
+  `EF.Functions.JsonPathExists` para `JSON_PATH_EXISTS` sem conexão;
+  execução requer SQL Server 2022 ou mais recente.
+
+A comparação de SQL é específica do provider. Os resultados do SQLite
+não garantem os mesmos planos, índices e custos no SQL Server. A análise
+das mudanças de compatibilidade está no
+[guia de atualização para EF Core 11](ef-core-11-compatibilidade.md).
+
 ## Laboratório executável
 
-O projeto `exemplos/c08-c09-ef-core/` usa EF Core 10.0.12 e SQLite real em um
+O projeto `exemplos/c08-c09-ef-core/` usa EF Core 11.0.0 e SQLite real em um
 arquivo temporário por teste. Ele cobre:
 
 - **A:** tracking, `AsNoTracking` e identity resolution;
@@ -372,5 +400,5 @@ esse provider e, quando necessário, uma instância efêmera via Testcontainers.
   — cache e compiled queries, acesso em 18 novembro 2026.
 - [Provider SQLite do EF Core](https://learn.microsoft.com/ef/core/providers/sqlite/)
   — limitações e configuração, acesso em 18 novembro 2026.
-- [Microsoft.EntityFrameworkCore.Sqlite 10.0.12](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.Sqlite/10.0.12)
+- [Microsoft.EntityFrameworkCore.Sqlite 11.0.0](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.Sqlite/11.0.0)
   — pacote usado pelo laboratório, acesso em 18 novembro 2026.
