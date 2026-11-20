@@ -10,7 +10,9 @@ técnico de equipes.
 - **C22 · Avançado · Publicado:** [Agentes, orquestração e desenvolvimento
   orientado por especificações](c22-agentes-orquestracao-sdd.md).
 - **C30 · Fundamental · Publicado:** [Decisão, revisão e maturidade
-  técnica](c30-decisao-revisao-maturidade-tecnica.md).
+  técnica](c30-decisao-revisao-maturidade-tecnica.md), incluindo
+  [senioridade, comunicação, autonomia e liderança técnica sem cargo
+  de gestão](c30-decisao-revisao-maturidade-tecnica.md#senioridade-e-liderança-técnica-sem-cargo-de-gestão).
 
 Consulte o [mapa editorial](../planejamento/mapa-editorial.md) para escopo,
 dependências e estratégia de exemplos. Volte ao [índice central](../indice.md).
