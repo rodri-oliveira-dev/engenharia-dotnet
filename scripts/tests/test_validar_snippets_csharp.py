@@ -52,6 +52,37 @@ class SnippetValidatorTests(unittest.TestCase):
         self.assertEqual(5, snippets["teste-01"].code_line)
         self.assertEqual("Console.WriteLine(42);\n", snippets["teste-01"].code)
 
+    def test_extracts_tilde_and_four_backtick_fences(self):
+        root = self.create_root(
+            "<!-- snippet-csharp: id=teste-01; categoria=isolado -->\n"
+            "~~~csharp\nConsole.WriteLine(1);\n~~~\n\n"
+            "<!-- snippet-csharp: id=teste-02; categoria=isolado -->\n"
+            "````cs\nConsole.WriteLine(2);\n````\n"
+        )
+
+        snippets = VALIDATOR.extract_snippets(root)
+
+        self.assertEqual(["teste-01", "teste-02"], list(snippets))
+        self.assertEqual("Console.WriteLine(1);\n", snippets["teste-01"].code)
+        self.assertEqual("Console.WriteLine(2);\n", snippets["teste-02"].code)
+
+    def test_four_backticks_require_matching_closure(self):
+        root = self.create_root(
+            "<!-- snippet-csharp: id=teste-01; categoria=isolado -->\n"
+            "````csharp\n"
+            "Console.WriteLine(1);\n"
+            "```\n"
+            "Console.WriteLine(2);\n"
+            "````\n\n"
+            "<!-- snippet-csharp: id=teste-02; categoria=isolado -->\n"
+            "~~~c#\nConsole.WriteLine(3);\n~~~~\n"
+        )
+
+        snippets = VALIDATOR.extract_snippets(root)
+
+        self.assertIn("```\nConsole.WriteLine(2);", snippets["teste-01"].code)
+        self.assertEqual("Console.WriteLine(3);\n", snippets["teste-02"].code)
+
     def test_ignores_metadata_example_inside_another_fence(self):
         root = self.create_root(
             "```markdown\n"
@@ -64,6 +95,8 @@ class SnippetValidatorTests(unittest.TestCase):
     def test_rejects_missing_or_malformed_metadata(self):
         cases = {
             "ausente": "```csharp\nvar valor = 1;\n```\n",
+            "ausente_til": "~~~csharp\nvar valor = 1;\n~~~\n",
+            "ausente_quatro_crases": "````csharp\nvar valor = 1;\n````\n",
             "malformado": (
                 "<!-- snippet-csharp: id=TESTE; categoria=isolado -->\n"
                 "```csharp\nvar valor = 1;\n```\n"

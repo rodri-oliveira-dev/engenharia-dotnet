@@ -21,9 +21,7 @@ METADATA_RE = re.compile(
     r"<!-- snippet-csharp: id=(?P<id>[a-z][a-z0-9]*(?:-[a-z0-9]+)+); "
     r"categoria=(?P<category>isolado|contexto|fragmento|invalido) -->"
 )
-CSHARP_FENCE_RE = re.compile(r"\s*```(?:csharp|cs|c#)\s*")
-OPENING_FENCE_RE = re.compile(r"\s*```.*")
-CLOSING_FENCE_RE = re.compile(r"\s*```\s*")
+OPENING_FENCE_RE = re.compile(r"^[ \t]{0,3}(?P<marker>`{3,}|~{3,})(?P<info>.*)$")
 ELIGIBLE_CATEGORIES = frozenset({"isolado", "contexto"})
 EXCEPTION_MARKER = "__SNIPPET_EXCEPTION_TYPE__:"
 
@@ -61,6 +59,34 @@ def _relative_path(root: Path, path: Path) -> str:
     return path.relative_to(root).as_posix()
 
 
+def _opening_fence(line: str) -> tuple[str, int, bool] | None:
+    match = OPENING_FENCE_RE.fullmatch(line)
+    if match is None:
+        return None
+    marker = match.group("marker")
+    language = match.group("info").strip().lower()
+    return marker[0], len(marker), language in {"csharp", "cs", "c#"}
+
+
+def _is_closing_fence(line: str, character: str, minimum_length: int) -> bool:
+    match = re.fullmatch(r"[ \t]{0,3}(?P<marker>`+|~+)[ \t]*", line)
+    if match is None:
+        return False
+    marker = match.group("marker")
+    return marker[0] == character and len(marker) >= minimum_length
+
+
+def _closing_fence_index(
+    lines: Sequence[str], opening_index: int, character: str, length: int
+) -> int:
+    index = opening_index + 1
+    while index < len(lines) and not _is_closing_fence(
+        lines[index], character, length
+    ):
+        index += 1
+    return index
+
+
 def extract_snippets(root: Path) -> dict[str, Snippet]:
     """Extrai fences C# e valida metadados, IDs e fechamento dos blocos."""
 
@@ -88,9 +114,12 @@ def extract_snippets(root: Path) -> dict[str, Snippet]:
                     index += 1
                     continue
 
-                if index + 1 >= len(lines) or not CSHARP_FENCE_RE.fullmatch(
-                    lines[index + 1]
-                ):
+                opening = (
+                    _opening_fence(lines[index + 1])
+                    if index + 1 < len(lines)
+                    else None
+                )
+                if opening is None or not opening[2]:
                     errors.append(
                         f"{relative}:{index + 1}: metadado não precede um fence C#"
                     )
@@ -98,11 +127,10 @@ def extract_snippets(root: Path) -> dict[str, Snippet]:
                     continue
 
                 fence_index = index + 1
-                closing_index = fence_index + 1
-                while closing_index < len(lines) and not CLOSING_FENCE_RE.fullmatch(
-                    lines[closing_index]
-                ):
-                    closing_index += 1
+                character, length, _ = opening
+                closing_index = _closing_fence_index(
+                    lines, fence_index, character, length
+                )
 
                 if closing_index == len(lines):
                     errors.append(
@@ -132,15 +160,15 @@ def extract_snippets(root: Path) -> dict[str, Snippet]:
                 index = closing_index + 1
                 continue
 
-            if CSHARP_FENCE_RE.fullmatch(line):
+            opening = _opening_fence(line)
+            if opening is not None and opening[2]:
                 errors.append(f"{relative}:{index + 1}: fence C# sem metadado")
 
-            if OPENING_FENCE_RE.fullmatch(line):
-                closing_index = index + 1
-                while closing_index < len(lines) and not CLOSING_FENCE_RE.fullmatch(
-                    lines[closing_index]
-                ):
-                    closing_index += 1
+            if opening is not None:
+                character, length, _ = opening
+                closing_index = _closing_fence_index(
+                    lines, index, character, length
+                )
                 index = min(closing_index + 1, len(lines))
                 continue
 
