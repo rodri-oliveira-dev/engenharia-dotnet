@@ -33,6 +33,7 @@ e [C27 — Telemetria](../operacao-entrega-e-plataforma/c27-telemetria-diagnosti
 
 **No .NET 11:**
 
+<!-- snippet-csharp: id=compat-bcl11-01; categoria=contexto -->
 ```csharp
 using System.Globalization;
 
@@ -64,6 +65,7 @@ anterior podia prevalecer.
 
 **Agora, .NET 11:**
 
+<!-- snippet-csharp: id=compat-bcl11-02; categoria=contexto -->
 ```csharp
 using Microsoft.Extensions.Configuration;
 
@@ -104,6 +106,7 @@ resultando em código de saída de sucesso.
 `WaitForShutdownAsync` propagam falha; múltiplas falhas podem
 ser agrupadas. Isso permite que orchestrators percebam o erro.
 
+<!-- snippet-csharp: id=compat-bcl11-03; categoria=fragmento -->
 ```csharp
 try
 {

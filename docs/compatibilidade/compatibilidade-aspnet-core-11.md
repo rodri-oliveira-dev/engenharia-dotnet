@@ -33,6 +33,7 @@ específicos.
 
 **Antes, ASP.NET Core até 10:**
 
+<!-- snippet-csharp: id=compat-asp11-01; categoria=fragmento -->
 ```csharp
 builder.Services.AddQueuePolicy(options =>
 {
@@ -45,6 +46,7 @@ app.UseConcurrencyLimiter();
 
 **Depois, ASP.NET Core 11:**
 
+<!-- snippet-csharp: id=compat-asp11-02; categoria=contexto -->
 ```csharp
 using System.Threading.RateLimiting;
 

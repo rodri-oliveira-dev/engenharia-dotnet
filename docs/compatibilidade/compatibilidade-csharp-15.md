@@ -35,6 +35,7 @@ de C# 15.**
 **Antes (C# 14):** `with(x, y)` dentro da coleção podia
 invocar uma função com esse nome.
 
+<!-- snippet-csharp: id=compat-cs15-01; categoria=contexto -->
 ```csharp
 int with(int a, int b) => a + b;
 
@@ -46,6 +47,7 @@ int[] valores = [@with(2, 3), 10];
 expressão de coleção representa parâmetros de construção;
 a chamada literal do método requer `@with(...)`.
 
+<!-- snippet-csharp: id=compat-cs15-02; categoria=contexto -->
 ```csharp
 HashSet<string> nomes =
     [with(StringComparer.OrdinalIgnoreCase), "Ana", "ANA"];
@@ -62,6 +64,7 @@ em posições que agora são interpretadas como declarações.
 
 **Depois:**
 
+<!-- snippet-csharp: id=compat-cs15-03; categoria=contexto -->
 ```csharp
 class @closed { }
 class @union { }
@@ -90,6 +93,7 @@ escopo inseguro em termos das regras da linguagem.
 quando a retenção fora do bloco é legítima, use array
 com tempo de vida explícito:
 
+<!-- snippet-csharp: id=compat-cs15-04; categoria=contexto -->
 ```csharp
 int[] dados = [1, 2, 3];
 ReadOnlySpan<int> leitura = dados;
