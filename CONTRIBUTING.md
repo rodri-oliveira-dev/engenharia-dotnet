@@ -14,6 +14,15 @@ consistente no GitHub.
 4. Para mudanças grandes de escopo, abra uma issue antes de escrever para alinhar
    lacuna, área, dependências e sobreposições.
 
+## Ortografia em português
+
+Os PRs com documentação passam pelo [guia de validação pt-BR](docs/ortografia.md).
+Antes de enviar o PR, execute `npm install` e
+`python scripts/validar-portugues-pr.py --base main --head HEAD`.
+Para uma revisão geral, execute `npm run ortografia`. Termos técnicos
+necessários devem entrar em `.cspell/termos-tecnicos.txt` após revisão;
+não adicione grafias incorretas apenas para silenciar o job.
+
 ## Novos capítulos
 
 - Escolha um capítulo já aprovado no mapa editorial ou justifique a nova lacuna.

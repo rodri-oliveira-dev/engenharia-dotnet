@@ -14,5 +14,9 @@ infraestrutura.
 - **C20 · Intermediário · Publicado:** [Infraestrutura como código e controle de
   drift](c20-infraestrutura-como-codigo-drift.md).
 
+## Compatibilidade de build e publicação
+
+- [SDK, NuGet, containers e NativeAOT no .NET 11](../compatibilidade/compatibilidade-sdk-build-11.md).
+
 Consulte o [mapa editorial](../planejamento/mapa-editorial.md) para escopo,
 dependências e estratégia de exemplos. Volte ao [índice central](../indice.md).

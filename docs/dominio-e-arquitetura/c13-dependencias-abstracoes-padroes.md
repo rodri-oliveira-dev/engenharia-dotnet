@@ -273,7 +273,12 @@ Observer, além dos padrões dos capítulos C14–C17:
 dotnet test exemplos/c13-c17-arquitetura/C13C17.Arquitetura.Tests.csproj
 ```
 
-Usa .NET 10 e SQLite em memória. O exemplo reduz infraestrutura para tornar
+Os [testes arquiteturais](../../exemplos/testes-arquiteturais/README.md)
+complementam o laboratório ao validar o grafo real de projetos, o isolamento do
+núcleo DDD e a direção de camadas declaradas explicitamente. Fixtures positivas
+e negativas mostram quais mudanças são aceitas e quais reprovam o gate.
+
+Usa .NET 11 e SQLite em memória. O exemplo reduz infraestrutura para tornar
 decisões observáveis; não é um template de solução nem mede performance.
 
 ## Relação com outros capítulos

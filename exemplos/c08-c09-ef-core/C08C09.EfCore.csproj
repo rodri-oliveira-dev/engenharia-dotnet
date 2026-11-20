@@ -8,5 +8,6 @@
   <ItemGroup>
     <Compile Include="Modelo.cs" />
     <Compile Include="Consultas.cs" />
+    <Compile Include="NovidadesEfCore11.cs" />
   </ItemGroup>
 </Project>

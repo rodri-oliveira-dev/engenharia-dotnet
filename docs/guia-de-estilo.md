@@ -106,5 +106,6 @@ Confirme que o texto:
 - não duplica conteúdo canônico sem justificativa;
 - possui exemplos compiláveis e testes aprovados quando aplicável;
 - considera riscos de segurança e operação;
-- está integralmente revisado em português;
+- está integralmente revisado em português e, quando houver alterações,
+  passa pelo [verificador ortográfico pt-BR](ortografia.md);
 - passa pela validação automatizada de Markdown e links internos.

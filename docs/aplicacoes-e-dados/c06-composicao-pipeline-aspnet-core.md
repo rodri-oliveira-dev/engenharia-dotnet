@@ -369,6 +369,14 @@ Use os mecanismos quando seu alcance coincide com o problema. Evite criar uma
 camada, filter ou interface para cada função pequena: composição simples e
 testável é preferível a indireção sem política ou substituição real.
 
+## Compatibilidade de versões
+
+A [trilha de breaking changes do .NET 11](../compatibilidade/indice.md)
+complementa este capítulo com alterações em OpenAPI, Kestrel,
+configuração encadeada, serviços em segundo plano e SDK. Para
+migrações de HTTP, veja o
+[guia específico do ASP.NET Core 11](../compatibilidade/compatibilidade-aspnet-core-11.md).
+
 ## Relação com outros capítulos
 
 - **Pré-requisito:** [C02](../linguagem-e-runtime/c02-nulabilidade-falhas-excecoes.md)

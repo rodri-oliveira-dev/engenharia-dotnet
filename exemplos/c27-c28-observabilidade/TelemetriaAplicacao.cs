@@ -41,6 +41,12 @@ public static class Eventos
     public static readonly EventId ConsultaIniciada = new(2701, nameof(ConsultaIniciada));
     public static readonly EventId ConsultaConcluida = new(2702, nameof(ConsultaConcluida));
     public static readonly EventId DependenciaIndisponivel = new(2703, nameof(DependenciaIndisponivel));
+    public static readonly EventId DependenciaTimeout = new(2704, nameof(DependenciaTimeout));
+    public static readonly EventId EncerramentoSolicitado = new(2710, nameof(EncerramentoSolicitado));
+    public static readonly EventId EncerramentoConcluido = new(2711, nameof(EncerramentoConcluido));
+    public static readonly EventId OperacaoIniciada = new(2720, nameof(OperacaoIniciada));
+    public static readonly EventId OperacaoConcluida = new(2721, nameof(OperacaoConcluida));
+    public static readonly EventId OperacaoCancelada = new(2722, nameof(OperacaoCancelada));
     public static readonly EventId FalhaNaoTratada = new(2799, nameof(FalhaNaoTratada));
 }
 
@@ -52,14 +58,28 @@ public static class Configuracao
         IHostEnvironment environment)
     {
         services.AddSingleton<TelemetriaAplicacao>();
+        services.AddSingleton<EstadoOperacional>();
+        services.AddSingleton<ProcessamentoOperacional>();
+        services.AddHostedService<CicloVidaObservavel>();
+        services.Configure<HostOptions>(configuration.GetSection("HostOptions"));
+
+        var catalogoTimeout = configuration.GetValue(
+            "Dependencias:CatalogoTimeout",
+            TimeSpan.FromSeconds(3));
+        if (catalogoTimeout <= TimeSpan.Zero)
+        {
+            throw new InvalidOperationException("Dependencias:CatalogoTimeout deve ser maior que zero.");
+        }
+
         services.AddHttpClient<CatalogoClient>(client =>
         {
             client.BaseAddress = new Uri(configuration["Dependencias:Catalogo"] ?? "http://localhost:5080");
-            client.Timeout = TimeSpan.FromSeconds(3);
+            client.Timeout = catalogoTimeout;
         });
 
         services.AddHealthChecks()
             .AddCheck("processo", () => HealthCheckResult.Healthy(), tags: ["live"])
+            .AddCheck<ProntidaoEncerramentoHealthCheck>("encerramento", tags: ["ready"])
             .AddCheck<CatalogoHealthCheck>("catalogo-simulado", tags: ["ready"]);
 
         var serviceName = configuration["OTEL_SERVICE_NAME"] ?? "engenharia-dotnet-observabilidade";

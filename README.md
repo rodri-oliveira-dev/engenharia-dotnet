@@ -99,6 +99,17 @@ Cada capítulo indica seu nível e os conhecimentos que ajudam a acompanhá-lo:
 
 Avançado não significa mais padrões ou mais ferramentas. Muitas vezes, a melhor decisão técnica é justamente manter a solução simples.
 
+## Roadmap de estudos e livros em português
+
+O [roadmap de estudos por maturidade](docs/roadmap-de-estudos.md) organiza 14
+livros de C#, qualidade, DDD, arquitetura e sistemas distribuídos em cinco etapas,
+dos fundamentos às decisões arquiteturais mais complexas. Cada obra tem um link de busca na Amazon Brasil ou para o site oficial do
+Refactoring.Guru, indicação dos capítulos relacionados e uma prática
+com critérios para avaliar o aprendizado.
+
+A ordem é uma sugestão de aprofundamento, não um requisito de senioridade. Quem
+já domina um assunto pode começar pela atividade prática da etapa correspondente.
+
 ## Código e exemplos
 
 Quando o código ajuda a explicar um conceito, uso exemplos pequenos em C#, com comportamento verificável e compatíveis com a versão de .NET indicada no repositório.
@@ -111,6 +122,31 @@ build, testes e auditoria de dependências no GitHub Actions. O
 [guia de contribuição](CONTRIBUTING.md#validar-dependências-e-executar-o-ci-localmente)
 explica como executar os mesmos comandos localmente e interpretar o gate de
 vulnerabilidades.
+
+## Qualidade editorial e ortografia
+
+O pipeline possui uma etapa de [validação ortográfica em pt-BR](docs/ortografia.md)
+com CSpell, dicionário brasileiro e [vocabulário técnico](.cspell/termos-tecnicos.txt).
+Nos PRs, são verificadas somente as linhas novas de prosa Markdown, sem
+bloquear mudanças por erros anteriores. A checagem não substitui revisão
+gramatical nem valida exemplos de código.
+
+## Compatibilidade e evolução do .NET 11
+
+Além dos capítulos de fundamentos, o [guia de compatibilidade e breaking changes](docs/compatibilidade/indice.md)
+reúne as mudanças do ASP.NET Core 11, runtime/BCL/Hosting, SDK/NuGet/containers,
+C# 15 e EF Core 11. Cada trilha diferencia incompatibilidades de código-fonte,
+binárias e comportamentais e apresenta testes e critérios de migração.
+
+## Entity Framework Core 11
+
+Os capítulos [Consultas eficientes com EF Core](docs/aplicacoes-e-dados/c08-consultas-ef-core.md)
+e [Fronteiras e concorrência](docs/aplicacoes-e-dados/c09-fronteiras-concorrencia-ef-core.md)
+têm exemplos compiláveis de EF Core 11: `FullJoin` relacional,
+`MaxByAsync`/`MinByAsync`, `GroupBy` com navegação, `group_concat`
+ordenado e split queries. O laboratório valida SQLite real e a tradução
+SQL Server de `JsonPathExists`. Os riscos de atualização constam do
+[guia de compatibilidade do EF Core 11](docs/aplicacoes-e-dados/ef-core-11-compatibilidade.md).
 
 ## Testes
 

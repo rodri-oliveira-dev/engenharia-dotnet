@@ -192,7 +192,7 @@ python -m unittest discover -s scripts/tests -p "test_validar_snippets_csharp.py
   uma única falha no teste `Category=Docker`, porque não havia daemon disponível;
   portanto, esse teste não foi validado localmente.
 - Os dez snippets das autoavaliações cadastrados no manifesto foram compilados
-  localmente com o SDK 9, `TreatWarningsAsErrors` e nullable habilitado,
+  localmente com o SDK 9, `TreatWarningsAsErrors` e `Nullable` habilitado,
   reproduzindo o invólucro do manifesto, e os oito com `execution` também foram
   executados. Os dois `invalido` foram compilados à parte só para confirmar que
   falham com CS8602 e CS8603. A confirmação com o SDK 11.0.100 depende do CI.

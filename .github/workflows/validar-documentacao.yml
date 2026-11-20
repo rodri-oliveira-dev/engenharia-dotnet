@@ -8,6 +8,8 @@ on:
       - "**/*.csproj"
       - "**/*.props"
       - "**/*.ps1"
+      - "**/Dockerfile"
+      - ".dockerignore"
       - "**/*.py"
       - "scripts/snippets-csharp.json"
       - "**/*.slnx"
@@ -18,6 +20,9 @@ on:
       - "**/*.ini"
       - "**/*.j2"
       - ".markdownlint-cli2.yaml"
+      - "cspell.json"
+      - "package.json"
+      - ".cspell/**"
       - ".github/workflows/validar-documentacao.yml"
       - "global.json"
       - "NuGet.Config"
@@ -30,6 +35,8 @@ on:
       - "**/*.csproj"
       - "**/*.props"
       - "**/*.ps1"
+      - "**/Dockerfile"
+      - ".dockerignore"
       - "**/*.py"
       - "scripts/snippets-csharp.json"
       - "**/*.slnx"
@@ -40,6 +47,9 @@ on:
       - "**/*.ini"
       - "**/*.j2"
       - ".markdownlint-cli2.yaml"
+      - "cspell.json"
+      - "package.json"
+      - ".cspell/**"
       - ".github/workflows/validar-documentacao.yml"
       - "global.json"
       - "NuGet.Config"
@@ -70,6 +80,48 @@ jobs:
         shell: pwsh
         run: ./scripts/verificar-segredos.ps1
 
+  ortografia-pt-br:
+    name: Validar português (pt-BR)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Obter histórico para comparar apenas texto novo
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "22"
+
+      - name: Instalar CSpell e dicionário pt-BR
+        run: npm install --ignore-scripts --no-audit --no-fund --no-package-lock
+
+      - name: Configurar Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.13"
+
+      - name: Testar seleção de linhas Markdown
+        run: python -m unittest discover -s scripts/tests -p "test_validar_portugues_pr.py" -v
+
+      - name: Verificar que erros conhecidos são encontrados
+        shell: bash
+        run: |
+          printf 'A arquitetura de software.\n' | ./node_modules/.bin/cspell lint --config cspell.json --no-progress --no-summary stdin://teste.md
+          if printf 'A arquitetturra de software.\n' | ./node_modules/.bin/cspell lint --config cspell.json --no-progress --no-summary stdin://teste.md; then
+            echo "ERRO: CSpell não identificou o erro ortográfico do smoke test."
+            exit 1
+          fi
+
+      - name: Verificar ortografia de texto novo
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: python scripts/validar-portugues-pr.py --base "$BASE_SHA" --head HEAD
+
   exemplos-dotnet:
     name: Compilar e testar exemplos .NET
     runs-on: ubuntu-latest
@@ -91,6 +143,20 @@ jobs:
 
       - name: Executar testes em Release
         run: dotnet test exemplos/EngenhariaDotnet.slnx --configuration Release --no-build
+
+  laboratorio-docker:
+    name: Validar laboratório Docker
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Obter repositório
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Construir imagem e executar smoke tests
+        shell: pwsh
+        run: ./scripts/testar-container-observabilidade.ps1
 
   snippets-csharp:
     name: Compilar snippets C#

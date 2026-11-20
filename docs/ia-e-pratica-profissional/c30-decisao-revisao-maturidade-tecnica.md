@@ -3,18 +3,107 @@
 > **Nível:** Fundamental
 >
 > **Objetivo:** conduzir decisões e revisões proporcionais ao risco, colaborar
-> em discordâncias e tornar dívida técnica e compromissos de qualidade visíveis.
+> em discordâncias, comunicar escolhas e riscos, exercer autonomia com limites
+> claros e tornar dívida técnica e compromissos de qualidade visíveis.
 >
 > **Pré-requisitos:** [C19 — Documentação arquitetural viva](../dominio-e-arquitetura/c19-documentacao-arquitetural-viva.md)
 > e [C23 — Testes orientados a comportamento e risco](../qualidade-e-seguranca/c23-testes-comportamento-risco.md).
 >
-> **Última revisão:** 2026-11-18
+> **Última revisão:** 2026-11-20
 
 Engenharia madura não elimina incerteza nem discordância. Ela torna problema,
 evidências, restrições, decisão e consequências examináveis. Isso exige técnica
 e colaboração: uma solução correta que ninguém consegue operar ou questionar
 não é uma boa decisão de equipe. Este capítulo apresenta um processo adaptável,
 não um ritual obrigatório nem uma definição de senioridade.
+
+## Senioridade e liderança técnica sem cargo de gestão
+
+Senioridade não exige ser gestor de pessoas nem arquiteto de software.
+Liderança técnica também se manifesta pela influência positiva, pela autonomia e pela capacidade de ajudar a equipe a entregar soluções melhores.
+
+Essa influência não depende de autoridade hierárquica. Ela aparece quando alguém
+expõe riscos com clareza, compartilha critérios de decisão, melhora o trabalho
+coletivo e assume a parte da entrega que está sob sua responsabilidade.
+Não significa decidir por outras pessoas, centralizar aprovações ou responder
+sozinho por todo o sistema. A autoridade e a responsabilidade precisam ser
+compatíveis com o papel, a equipe e o contexto.
+
+Competências comportamentais devem ser observadas em ações e resultados,
+não em traços de personalidade, tempo de carreira ou quantidade de reuniões.
+
+| Competência | Comportamento observável | Evidência possível |
+| --- | --- | --- |
+| Comunicação técnica e com o negócio | explica impacto, alternativas e limites sem esconder incerteza | decisão registrada e entendimento confirmado com os envolvidos |
+| Descoberta de requisitos | identifica regras ambíguas, dependências e exceções antes de implementar | exemplos de entrada, saída e critérios de aceite acordados |
+| Negociação de escopo e prazo | apresenta opções e explicita risco residual e custo de atraso | escopo ajustado com riscos e responsáveis registrados |
+| Autonomia na entrega | conduz a solução com validação, alinhamento e acompanhamento proporcionais | mudança observada após publicação e impedimentos sinalizados |
+| Feedback e gestão de conflitos | discute consequências do código, ouve objeções e busca critérios comuns | revisão concluída com justificativa e sem ataques pessoais |
+| Mentoria e colaboração | distribui contexto e aumenta a autonomia de outras pessoas | colega consegue executar ou manter um fluxo sem dependência constante |
+| Comunicação em incidentes | diferencia fato, hipótese, impacto e próximo passo | atualização útil para decisão, sem causa raiz inventada |
+
+A tabela não é uma pontuação automática para promoção. As evidências são
+exemplos, e a expectativa precisa considerar oportunidades, apoio disponível,
+complexidade das demandas e acordos de cada equipe.
+
+### Traduzir problemas para públicos diferentes
+
+Considere uma API que começou a apresentar respostas lentas depois de uma
+publicação. A mensagem deve preservar os mesmos fatos, mas mudar o foco:
+
+- **Para desenvolvedores:** qual endpoint piorou, quais métricas mudaram,
+  hipótese em análise, experimento proposto e risco de reversão.
+- **Para produto e negócio:** qual jornada foi afetada, impacto observado,
+  alternativas de mitigação e decisões que precisam de participação.
+- **Para operação e suporte:** sinais para monitorar, medida de contenção,
+  condições de escalonamento e onde consultar o estado atual.
+
+Não prometa prazo de recuperação sem evidência. Confirme com o interlocutor
+se a mensagem permitiu compreender o risco e tomar a decisão necessária.
+
+### Descobrir requisitos antes de transformar pedidos em código
+
+Um pedido como "a consulta precisa ser rápida" não basta para escolher cache,
+índice ou novo serviço. A pessoa responsável pela análise pode esclarecer:
+
+1. Quem realiza a consulta e qual decisão depende da resposta?
+2. Que volumes e condições de pico são conhecidos ou apenas estimados?
+3. Quais dados devem estar atualizados e qual atraso é aceitável?
+4. Como serão tratados acesso indevido, falha da dependência e ausência de dados?
+5. Qual indicador e cenário de teste demonstram que o resultado foi alcançado?
+
+Registre exemplos de sucesso e falha, critérios verificáveis e dúvidas ainda
+abertas. Investigar não dá a uma pessoa licença para criar regras de negócio
+sem validação com quem responde por elas.
+
+### Negociar alcance, prazo e risco com transparência
+
+Quando a data é rígida, apresente opções que permitam uma escolha consciente:
+reduzir o escopo, entregar por etapas ou adiar uma funcionalidade. Indique
+o que permanece protegido (por exemplo, autorização e integridade de dados),
+o que não será entregue, quais verificações serão executadas e como recuperar
+o serviço se a mudança falhar.
+
+Autonomia não é executar silenciosamente uma escolha de alto risco.
+O profissional sênior sinaliza cedo um bloqueio, recomenda uma alternativa
+e leva a decisão para quem tem autoridade quando o impacto excede sua alçada.
+Depois, acompanha o resultado e comunica desvios, mesmo que a implementação
+esteja tecnicamente concluída.
+
+### Colaborar e comunicar incidentes sem buscar culpados
+
+Durante uma falha, informe primeiro o que foi observado, quem foi afetado,
+quais medidas foram tomadas e qual é a próxima verificação. Separe hipóteses
+de causas confirmadas. Em retrospectiva, identifique mudanças no sistema,
+na documentação e no processo que possam reduzir recorrência, em vez de
+avaliar a competência individual de quem participou do incidente.
+
+As seções de [code review](#code-review-é-gestão-compartilhada-de-risco),
+[colaboração em decisões difíceis](#colaboração-em-decisões-difíceis)
+e [mentoria](#mentoria-e-conhecimento-compartilhado) aprofundam como
+dar feedback, lidar com discordâncias e distribuir conhecimento. O
+[C28 — Confiabilidade e resposta a incidentes](../operacao-entrega-e-plataforma/c28-confiabilidade-resposta-incidentes.md)
+descreve a resposta operacional.
 
 ## Começar pelo problema
 

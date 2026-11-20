@@ -44,8 +44,8 @@ de implementação com testes e explicação, não apenas da alteração de cód
 | **C# 15: hierarquias fechadas (`closed`)** | C11, `DominioPedidos.cs` e `DominioPedidosTests.cs` | **Implementado:** etapas de separação fechadas, descendentes selados, `switch` exaustivo e testes de transição, sem modificar o agregado existente. | **P1** | Média |
 | **LINQ .NET 11: `FullJoin`** | C03, `ColecoesLinq.cs` e testes | **Implementado:** conciliação em memória com clientes/pedidos órfãos, duplicatas, comparação com `Join` e `LeftJoin` e fontes vazias. Não afirma tradução SQL. | **P1** | Baixa/média |
 | **C# 15: argumentos em expressões de coleção (`with(...)`)** | C03, `ColecoesLinq.cs` e testes | **Implementado:** comparador OrdinalIgnoreCase no `HashSet` e capacidade inicial da `List`, com testes de igualdade, reserva e ordem, sem alegar performance não medida. | **P1** | Baixa |
-| **EF Core 11: SQL mais enxuto e melhorias em `GroupBy`** | C08, `Consultas.cs` e `PersistenciaTests.cs` | **Diagnóstico:** comparar SQL gerado para cenários de inclusão, referência e agrupamento. Usar `ToQueryString()` e medir quando relevante; nem toda otimização da documentação se manifesta no modelo atual. | **P2** | Média |
-| **EF Core 11 + SQLite: ordenação em `group_concat`** | C08, contexto SQLite dos testes | **Tradução SQL:** criar caso com `string.Join` e `OrderBy` em coleção relacionada, validar SQL e sequência resultante. Requer SQLite **3.44+** e teste do provider usado no CI. | **P2** | Média |
+| **EF Core 11: SQL mais enxuto e melhorias em `GroupBy`** | C08, `NovidadesEfCore11.cs` e testes | **Implementado no laboratório:** agrupamento por navegação, SQL inspecionado e split query com referência sem join redundante na consulta da coleção. Não há benchmark de ganho de desempenho. | **P2** | Média |
+| **EF Core 11 + SQLite: ordenação em `group_concat`** | C08, `NovidadesEfCore11.cs` e testes | **Implementado no laboratório:** `string.Join` com `OrderBy` sobre marcadores agrupados por `PedidoId`, a partir de `context.Marcadores` (sem navegar por `Pedido.Marcadores`), com asserções de SQL/ordem. Requer SQLite **3.44+**. | **P2** | Média |
 | **.NET 11: validação assíncrona em DataAnnotations/Minimal APIs** | C06/C07, `Aplicacao.cs`, validação de opções e requisições | **I/O não bloqueante:** exemplo de validação de unicidade ou regra externa com cancelamento. Separar validação estrutural de política de negócio; evitar I/O remoto real nos testes. | **P2** | Média/alta |
 | **.NET 11: runtime async, JIT e melhorias de alocação** | C04 e C05, benchmarks de parsing e fluxos com `Task`/`ValueTask` | **Observabilidade de performance:** estabelecer baseline .NET 10 vs. 11 em mesmo hardware e configuração, medir alocação, throughput, latência e warm-up. Melhorias automáticas não autorizam refatorações sem perfil. | **P2** | Alta |
 | **ASP.NET Core 11: CSRF automático** | C06 e C26 | **Segurança:** verificar endpoints que aceitam formulário, cookies e origem. O `MapPost` JSON atual não recebe a mesma mudança de comportamento; documentar sem habilitar/desabilitar proteção indiscriminadamente. | **P2** | Média |
@@ -110,8 +110,9 @@ ganhos de memória ou tempo de CPU continuam condicionados a medição.
 
 ### P2: experimentar com prova, não pressupor ganhos
 
-EF Core 11 introduz otimizações de tradução SQL, mas os benefícios
-dependem do modelo e da consulta. O capítulo C08 já testa `AsSplitQuery`,
+EF Core 11 introduz otimizações de tradução SQL; o laboratório agora
+inclui exemplos direcionados, mas os benefícios de performance continuam
+dependendo do modelo e da consulta. O capítulo C08 já testa `AsSplitQuery`,
 N+1 e compiled queries. Antes de modificar `Consultas.cs`, capturar SQL,
 verificar plano e número de comandos. Para `group_concat` ordenado, fixar
 ou verificar a versão de SQLite antes de afirmar suporte.
@@ -119,6 +120,24 @@ ou verificar a versão de SQLite antes de afirmar suporte.
 No runtime, comparar benchmarks com SDK/runtime 10 e 11 separadamente,
 incluindo aquecimento, número de iterações, ambiente e desvio. O projeto
 continuará com `TreatWarningsAsErrors=true`.
+
+### Extensão didática de EF Core 11
+
+Um laboratório adicional cobre `FullJoin` relacional, `MaxByAsync`,
+`MinByAsync`, `GroupBy` com navegação, agregação ordenada do SQLite,
+split queries sem join redundante e `JSON_PATH_EXISTS` (somente SQL
+gerado). O teste de `MigrateAsync` sem migrations documenta uma
+quebra de comportamento. Para migração de sistemas existentes, veja
+[compatibilidade EF Core 11](../aplicacoes-e-dados/ef-core-11-compatibilidade.md).
+
+## Guias complementares de compatibilidade
+
+A trilha [Compatibilidade e evolução do .NET](../compatibilidade/indice.md)
+organiza os breaking changes de ASP.NET Core 11, runtime/BCL/Hosting,
+SDK/NuGet/containers e C# 15. Os guias diferenciam o que é verificável
+por testes automatizados no repositório do que requer infraestrutura
+real ou comparação de versões. Os documentos oficiais permanecem
+a referência primária; a lista de mudanças do .NET 11 não é exaustiva.
 
 ## Critérios de aceite para a fase de implementação
 

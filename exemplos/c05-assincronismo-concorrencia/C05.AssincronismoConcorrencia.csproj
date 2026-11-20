@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
     <Compile Remove="AssincronismoConcorrenciaTests.cs" />
+    <Compile Remove="CompatibilidadeRuntime11Tests.cs" />
   </ItemGroup>
 </Project>

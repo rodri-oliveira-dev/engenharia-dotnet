@@ -233,8 +233,8 @@ deve validar o argumento quando `null` vindo de fora for um risco real. Veja
 
 **Resposta: D.** O operador null-forgiving apenas informa ao compilador que a
 expressão deve ser tratada como não nula. Ele não executa verificação nem
-altera o valor: o warning some, mas a desreferência continua acontecendo sobre
-`null`. Use-o somente quando houver uma prova que a análise não consegue
+altera o valor: o warning some, mas o acesso a `Length` continua acontecendo
+sobre `null`. Use-o somente quando houver uma prova que a análise não consegue
 representar. Veja
 [Anotações e operadores no contexto correto](../linguagem-e-runtime/c02-nulabilidade-falhas-excecoes.md#anotações-e-operadores-no-contexto-correto).
 
