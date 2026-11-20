@@ -1,4 +1,4 @@
-# Termos técnicos e siglas aceitos na documentação em português.
+# Termos técnicos, siglas e nomes próprios aceitos na documentação em português.
 # Uma palavra por linha. Não adicionar erros de grafia como exceção.
 acoplamento
 acoplamentos
@@ -63,6 +63,7 @@ Database
 DateOnly
 DbContext
 DbSet
+Dehghani
 Deploy
 desnormalização
 desserialização
@@ -98,6 +99,8 @@ Handlers
 Healthcheck
 Healthchecks
 Helm
+Henning
+Hofer
 Hosting
 HTTP
 HttpClient
@@ -144,6 +147,7 @@ NativeAOT
 NET
 NoSQL
 NuGet
+nulabilidade
 Nullable
 OAuth
 observabilidade
@@ -160,6 +164,7 @@ Pipelines
 Polly
 PostgreSQL
 PR
+Pramod
 Precompile
 Provider
 Providers
@@ -181,6 +186,8 @@ Retry
 Rollback
 Roundtrip
 Runtime
+Sadalage
+Schwentner
 SDK
 SDKs
 SemaphoreSlim
@@ -199,6 +206,7 @@ SQL
 SQLite
 SQLServer
 SSRF
+Stellman
 StringBuilder
 STS
 Subquery
@@ -235,4 +243,5 @@ Workflows
 XML
 XUnit
 YAML
+Zhamak
 Zip
