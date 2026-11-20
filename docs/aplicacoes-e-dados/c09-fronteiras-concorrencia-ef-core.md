@@ -268,9 +268,27 @@ serão tratados no capítulo de entrega. A estratégia de concorrência faz part
 do schema: alterar token ou trigger precisa ser versionado e testado junto com
 a aplicação.
 
+## Compatibilidade de migração para EF Core 11
+
+Além da concorrência otimista de `SaveChangesAsync`, o EF Core 11 passou
+a lançar `DbQueryConcurrencyException` quando uma split query não consegue
+correlacionar resultados após alterações concorrentes entre suas consultas.
+Isso não equivale a uma garantia automática de snapshot: decida entre
+reexecutar a operação idempotente ou usar transação com isolamento
+adequado ao banco e ao fluxo. O laboratório verifica a otimização do SQL
+de split queries, mas **não simula essa corrida concorrente**.
+
+O EF Core 11 também passa a falhar quando `MigrateAsync` é chamado sem
+migrations configuradas, situação exercitada por um teste no laboratório.
+O banco SQLite dos testes é criado com `EnsureCreatedAsync`; não
+transforme isso em um procedimento de evolução de schema em produção.
+
+Para mudanças de SQL Server, SQLite, Cosmos DB e checklist de atualização,
+consulte [compatibilidade EF Core 11](ef-core-11-compatibilidade.md).
+
 ## Laboratório executável
 
-O mesmo laboratório do C08 usa EF Core 10.0.12 e SQLite em arquivos temporários.
+O mesmo laboratório do C08 usa EF Core 11.0.0 e SQLite em arquivos temporários.
 O exemplo **E** abre dois contextos, provoca um conflito real, captura
 `DbUpdateConcurrencyException` e faz merge preservando uma mudança concorrente.
 Outros testes validam identity map e ausência de tracking.

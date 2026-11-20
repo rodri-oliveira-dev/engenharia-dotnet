@@ -112,6 +112,16 @@ build, testes e auditoria de dependências no GitHub Actions. O
 explica como executar os mesmos comandos localmente e interpretar o gate de
 vulnerabilidades.
 
+## Entity Framework Core 11
+
+Os capítulos [Consultas eficientes com EF Core](docs/aplicacoes-e-dados/c08-consultas-ef-core.md)
+e [Fronteiras e concorrência](docs/aplicacoes-e-dados/c09-fronteiras-concorrencia-ef-core.md)
+têm exemplos compiláveis de EF Core 11: `FullJoin` relacional,
+`MaxByAsync`/`MinByAsync`, `GroupBy` com navegação, `group_concat`
+ordenado e split queries. O laboratório valida SQLite real e a tradução
+SQL Server de `JsonPathExists`. Os riscos de atualização constam do
+[guia de compatibilidade do EF Core 11](docs/aplicacoes-e-dados/ef-core-11-compatibilidade.md).
+
 ## Testes
 
 Os capítulos de [Qualidade e segurança](docs/qualidade-e-seguranca/indice.md) abordam estratégia de testes, integração e cobertura. Para explorar esses conceitos em um projeto executável, consulte o laboratório [Pirâmide de testes e cobertura em .NET](https://github.com/rodri-oliveira-dev/dotnet-code-coverage).

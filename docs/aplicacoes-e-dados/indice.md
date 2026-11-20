@@ -16,5 +16,9 @@ dados.
 - **C09 · Intermediário · Publicado:**
   [Fronteiras e concorrência no EF Core](c09-fronteiras-concorrencia-ef-core.md).
 
+## Atualização para EF Core 11
+
+- [Novidades, testes e compatibilidade do EF Core 11](ef-core-11-compatibilidade.md).
+
 Consulte o [mapa editorial](../planejamento/mapa-editorial.md) para escopo,
 dependências e estratégia de exemplos. Volte ao [índice central](../indice.md).
