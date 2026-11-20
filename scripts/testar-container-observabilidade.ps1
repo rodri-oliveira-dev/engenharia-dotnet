@@ -49,16 +49,21 @@ function Start-SmokeContainer {
 function Get-HttpStatus {
     param([Parameter(Mandatory)][string]$Uri)
 
+    $timeout = [System.Threading.CancellationTokenSource]::new([TimeSpan]::FromSeconds(3))
     try {
-        $response = Invoke-WebRequest -Uri $Uri -TimeoutSec 3 -UseBasicParsing
-        return [int]$response.StatusCode
+        $response = $script:httpClient.GetAsync($Uri, $timeout.Token).GetAwaiter().GetResult()
+        try {
+            return [int]$response.StatusCode
+        }
+        finally {
+            $response.Dispose()
+        }
     }
     catch {
-        if ($null -ne $_.Exception.Response -and $null -ne $_.Exception.Response.StatusCode) {
-            return [int]$_.Exception.Response.StatusCode
-        }
-
         return 0
+    }
+    finally {
+        $timeout.Dispose()
     }
 }
 
@@ -119,6 +124,11 @@ function Wait-LogEvent {
 try {
     Invoke-Docker @("info", "--format", "{{.ServerVersion}}") | Out-Null
 
+    if (-not ("System.Net.Http.HttpClient" -as [type])) {
+        Add-Type -AssemblyName System.Net.Http
+    }
+    $httpClient = [System.Net.Http.HttpClient]::new()
+
     if (-not $SkipBuild) {
         Write-Host "Construindo $Image..."
         Invoke-Docker @("build", "--file", $dockerfile, "--tag", $Image, $repoRoot)
@@ -166,10 +176,6 @@ try {
     $shutdownBaseUri = "http://127.0.0.1:$shutdownPort"
     Wait-HttpStatus "$shutdownBaseUri/health/live" 200
 
-    if (-not ("System.Net.Http.HttpClient" -as [type])) {
-        Add-Type -AssemblyName System.Net.Http
-    }
-    $httpClient = [System.Net.Http.HttpClient]::new()
     $requestTask = $httpClient.GetAsync("$shutdownBaseUri/operacoes/demorada?duracaoMs=30000")
     Wait-LogEvent $shutdownName 2720
 
