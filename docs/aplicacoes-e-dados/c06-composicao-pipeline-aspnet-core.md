@@ -57,6 +57,7 @@ não precisa localizar serviços e testes podem fornecer implementações explí
 Agrupe registros por responsabilidade em métodos de extensão quando o
 `Program.cs` perder a função de mapa da aplicação.
 
+<!-- snippet-csharp: id=c06-01; categoria=contexto -->
 ```csharp
 builder.Services.AddTransient<OperacaoTransient>();
 builder.Services.AddScoped<ContextoDaRequisicao>();
@@ -80,6 +81,7 @@ Uma captive dependency ocorre quando um objeto de vida longa captura outro de
 vida curta. O caso clássico é um singleton recebendo um serviço scoped no
 construtor:
 
+<!-- snippet-csharp: id=c06-02; categoria=contexto -->
 ```csharp
 builder.Services.AddScoped<ContextoDaRequisicao>();
 builder.Services.AddSingleton<ServicoGlobalInvalido>();
@@ -97,6 +99,7 @@ ser scoped. Se um singleton ou `BackgroundService` precisa executar uma unidade
 de trabalho independente, injete `IServiceScopeFactory`, crie e descarte um
 escopo por operação e não deixe objetos resolvidos escaparem:
 
+<!-- snippet-csharp: id=c06-03; categoria=contexto -->
 ```csharp
 public sealed class Executor(IServiceScopeFactory scopeFactory)
 {
@@ -120,6 +123,7 @@ scoped em singleton. `ValidateOnBuild` tenta construir os grafos registrados
 quando o provider é criado, encontrando dependências ausentes e parte dos ciclos
 antes da primeira requisição.
 
+<!-- snippet-csharp: id=c06-04; categoria=contexto -->
 ```csharp
 builder.Host.UseDefaultServiceProvider(options =>
 {
@@ -182,6 +186,7 @@ antes do filtro, sem garantir que os demais argumentos estejam vinculados.
 O filtro deve inspecionar `HttpContext.Response.StatusCode` **antes** de
 acessar `context.Arguments` ou chamar `next`:
 
+<!-- snippet-csharp: id=c06-05; categoria=contexto -->
 ```csharp
 public async ValueTask<object?> InvokeAsync(
     EndpointFilterInvocationContext context,
@@ -287,6 +292,7 @@ declaradas.
 de configuração não garante que conexões, clientes e outros recursos já criados
 sejam reconstruídos de forma atômica.
 
+<!-- snippet-csharp: id=c06-06; categoria=contexto -->
 ```csharp
 builder.Services.AddOptions<IntegracaoOptions>()
     .Bind(builder.Configuration.GetSection("Integracao"))

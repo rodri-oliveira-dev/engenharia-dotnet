@@ -489,6 +489,7 @@ compiláveis:
 
 O contrato de publicação permanece pequeno:
 
+<!-- snippet-csharp: id=c18-01; categoria=contexto -->
 ```csharp
 public interface IPublicadorEventos
 {

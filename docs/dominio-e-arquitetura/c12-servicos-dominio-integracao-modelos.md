@@ -43,6 +43,7 @@ o agregado pode proteger.
 
 O laboratório implementa `ServicoDePedidos`:
 
+<!-- snippet-csharp: id=c12-01; categoria=contexto -->
 ```csharp
 public async Task ConfirmarAsync(Guid pedidoId, CancellationToken cancellationToken)
 {
@@ -72,6 +73,7 @@ alçada comercial que determina quem aprova desconto é política do negócio.
 
 Este código duplicaria e fragilizaria o agregado:
 
+<!-- snippet-csharp: id=c12-02; categoria=fragmento -->
 ```csharp
 // Evite: outro caso de uso pode esquecer uma dessas condições.
 if (pedido.Estado == EstadoPedido.Rascunho && pedido.Itens.Count > 0)
@@ -166,6 +168,7 @@ identidades, erros e pressupostos.
 No cadastro legado do laboratório, os flags `Inativo` e `Bloqueado` precisam ser
 interpretados para formar o conceito local positivo `ClienteElegivel`:
 
+<!-- snippet-csharp: id=c12-03; categoria=contexto -->
 ```csharp
 public sealed record CadastroClienteLegado(
     string Codigo,

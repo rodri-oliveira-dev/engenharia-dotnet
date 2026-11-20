@@ -9,6 +9,7 @@ on:
       - "**/*.props"
       - "**/*.ps1"
       - "**/*.py"
+      - "scripts/snippets-csharp.json"
       - "**/*.slnx"
       - "**/*.tf"
       - "exemplos/c20-iac/ansible/requirements.txt"
@@ -30,6 +31,7 @@ on:
       - "**/*.props"
       - "**/*.ps1"
       - "**/*.py"
+      - "scripts/snippets-csharp.json"
       - "**/*.slnx"
       - "**/*.tf"
       - "exemplos/c20-iac/ansible/requirements.txt"
@@ -89,6 +91,30 @@ jobs:
 
       - name: Executar testes em Release
         run: dotnet test exemplos/EngenhariaDotnet.slnx --configuration Release --no-build
+
+  snippets-csharp:
+    name: Compilar snippets C#
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Obter repositório
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Configurar SDK .NET
+        uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+        with:
+          global-json-file: global.json
+
+      - name: Configurar Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.13"
+
+      - name: Testar validador de snippets
+        run: python -m unittest discover -s scripts/tests -p "test_validar_snippets_csharp.py" -v
+
+      - name: Compilar e validar comportamento dos snippets
+        run: python scripts/validar-snippets-csharp.py
 
   dependencias:
     name: Analisar dependências

@@ -61,6 +61,7 @@ oito agrupamentos definidos no mapa editorial e os 35 capítulos publicados.
 - [Checklist de code review](templates/checklist-code-review.md)
 - [Modelo de decisão técnica](templates/registro-decisao-tecnica.md)
 - [Estratégia para exemplos compiláveis](exemplos-compilaveis.md)
+- [Inventário de snippets C#](planejamento/inventario-snippets-csharp.md)
 - [Avaliação técnica do .NET 11 e C# 15](planejamento/avaliacao-dotnet-11-csharp-15.md)
 - [Inventário de temas](planejamento/inventario.md)
 - [Mapa editorial](planejamento/mapa-editorial.md)

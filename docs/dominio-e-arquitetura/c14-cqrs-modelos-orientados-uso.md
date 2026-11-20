@@ -55,6 +55,7 @@ tratado separadamente para não surpreender retry e cache.
 
 O laboratório usa EF Core:
 
+<!-- snippet-csharp: id=c14-01; categoria=contexto -->
 ```csharp
 public Task<PedidoResumo?> PorIdAsync(Guid id, CancellationToken ct) =>
     db.Pedidos.AsNoTracking()

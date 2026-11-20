@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "target_framework": "net11.0",
+  "language_version": "15.0",
+  "snippets": {
+    "c01-01": {
+      "output_type": "Exe",
+      "execution": {
+        "classification": "deterministic-safe",
+        "expected_stdout": "Pago\n1\n",
+        "timeout_seconds": 5
+      }
+    },
+    "c01-05": {
+      "output_type": "Library"
+    },
+    "c01-06": {
+      "output_type": "Library"
+    },
+    "c01-08": {
+      "output_type": "Library"
+    },
+    "c01-09": {
+      "output_type": "Library"
+    },
+    "c02-01": {
+      "output_type": "Library",
+      "prefix": "public interface IRepositorioClientes\n{\n",
+      "suffix": "}\n",
+      "auxiliary_sources": [
+        {
+          "file": "Cliente.cs",
+          "content": "public sealed class Cliente\n{\n}\n"
+        }
+      ]
+    },
+    "c02-05": {
+      "output_type": "Exe",
+      "prefix": "try\n{\n",
+      "suffix": "}\ncatch (Exception exception)\n{\n    Console.Error.WriteLine(exception.GetType().FullName);\n    Environment.ExitCode = 1;\n}\n",
+      "execution": {
+        "classification": "deterministic-safe",
+        "expected_exception": "System.NullReferenceException",
+        "timeout_seconds": 5
+      }
+    },
+    "c02-10": {
+      "output_type": "Library"
+    },
+    "c04-01": {
+      "output_type": "Exe",
+      "imports": [
+        "System.Globalization"
+      ],
+      "suffix": "GC.KeepAlive(sensorId);\n",
+      "execution": {
+        "classification": "deterministic-safe",
+        "expected_stdout": "",
+        "timeout_seconds": 5
+      }
+    },
+    "c11-03": {
+      "output_type": "Library",
+      "auxiliary_sources": [
+        {
+          "file": "RegraDeNegocioException.cs",
+          "content": "public sealed class RegraDeNegocioException(string message) : Exception(message);\n"
+        }
+      ]
+    },
+    "c26-04": {
+      "output_type": "Library"
+    }
+  }
+}

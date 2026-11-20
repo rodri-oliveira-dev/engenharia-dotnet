@@ -98,6 +98,7 @@ prometem internals. O nome deve ajudar a entender a regressão sem abrir o corpo
 O laboratório em `exemplos/c23-c25-testes/` contém os exemplos A e C. A regra é
 pura e o teste verifica a decisão de negócio:
 
+<!-- snippet-csharp: id=c23-01; categoria=contexto -->
 ```csharp
 [Fact]
 public void ClienteFidelidade_ComTotalElegivel_RecebeDezPorCento()
@@ -113,6 +114,7 @@ public void ClienteFidelidade_ComTotalElegivel_RecebeDezPorCento()
 
 A teoria cobre partições e limites sem duplicar estrutura:
 
+<!-- snippet-csharp: id=c23-02; categoria=contexto -->
 ```csharp
 [Theory]
 [InlineData(199.99, CategoriaCliente.Fidelidade, 0)]
@@ -162,6 +164,7 @@ do manipulador, sem `sleep` arbitrário.
 NSubstitute foi usado no exemplo B porque torna explícitos `Received`, `Arg.Any<T>`
 e `Arg.Is<T>`. Ele é uma dependência de teste; não entra no código de produção.
 
+<!-- snippet-csharp: id=c23-03; categoria=fragmento -->
 ```csharp
 await sender.Received(1).EnviarAsync(
     Arg.Any<string>(),
@@ -176,6 +179,7 @@ prova apenas uma interação permissiva, não a intenção de negócio.
 
 A correção valida o argumento significativo:
 
+<!-- snippet-csharp: id=c23-04; categoria=fragmento -->
 ```csharp
 await sender.Received(1).EnviarAsync(
     Arg.Is<string>(email => email == "cliente@exemplo.test"),

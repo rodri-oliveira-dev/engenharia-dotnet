@@ -64,6 +64,7 @@ precisa de capacidade, health, atualização e proteção de rede.
 Um log estruturado mantém mensagem e propriedades separadas. Com `ILogger<T>`, o
 template é constante e os valores viram campos consultáveis:
 
+<!-- snippet-csharp: id=c27-01; categoria=contexto -->
 ```csharp
 logger.LogInformation(
     new EventId(2702, "ConsultaConcluida"),

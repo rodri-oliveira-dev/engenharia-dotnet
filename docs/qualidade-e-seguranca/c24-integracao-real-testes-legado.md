@@ -93,6 +93,7 @@ e `CHECK`, persiste e relê um pedido. Ele valida ADO.NET, parâmetros e mapping
 não afirma equivalência com PostgreSQL. O exemplo E repete o princípio no engine
 de produção e prova a constraint específica.
 
+<!-- snippet-csharp: id=c24-01; categoria=contexto -->
 ```csharp
 await using var connection = new SqliteConnection("Data Source=:memory:");
 await connection.OpenAsync();
@@ -114,6 +115,7 @@ O laboratório usa `Testcontainers.PostgreSql` porque o módulo encapsula conex�
 prontidão do PostgreSQL. A imagem está fixada em `postgres:17.6-alpine`; atualizar
 a versão é uma mudança deliberada, validada no CI.
 
+<!-- snippet-csharp: id=c24-02; categoria=contexto -->
 ```csharp
 public sealed class PostgreSqlFixture : IAsyncLifetime
 {
@@ -157,6 +159,7 @@ pode ser legal/técnicamente containerizada. Não use container por estética.
 O exemplo F usa `WebApplicationFactory<Program>`. A requisição atravessa host de
 teste, roteamento, binding do enum, endpoint e serialização JSON:
 
+<!-- snippet-csharp: id=c24-03; categoria=contexto -->
 ```csharp
 var response = await client.GetAsync(
     "/descontos/250?categoria=Fidelidade");
@@ -204,6 +207,7 @@ O exemplo H fixa dois detalhes de `CalculadoraFreteLegada`: comparação sensív
 maiúsculas e arredondamento para longe de zero. Isso cria uma rede de proteção
 para refatorar sem mudar resultados acidentalmente.
 
+<!-- snippet-csharp: id=c24-04; categoria=contexto -->
 ```csharp
 [Theory]
 [InlineData(0, "SUL", 7.01)]
