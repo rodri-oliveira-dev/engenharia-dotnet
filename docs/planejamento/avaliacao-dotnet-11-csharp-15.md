@@ -130,6 +130,15 @@ gerado). O teste de `MigrateAsync` sem migrations documenta uma
 quebra de comportamento. Para migração de sistemas existentes, veja
 [compatibilidade EF Core 11](../aplicacoes-e-dados/ef-core-11-compatibilidade.md).
 
+## Guias complementares de compatibilidade
+
+A trilha [Compatibilidade e evolução do .NET](../compatibilidade/indice.md)
+organiza os breaking changes de ASP.NET Core 11, runtime/BCL/Hosting,
+SDK/NuGet/containers e C# 15. Os guias diferenciam o que é verificável
+por testes automatizados no repositório do que requer infraestrutura
+real ou comparação de versões. Os documentos oficiais permanecem
+a referência primária; a lista de mudanças do .NET 11 não é exaustiva.
+
 ## Critérios de aceite para a fase de implementação
 
 1. Resolver ou descartar **com evidência** a hipótese P0 dos filtros HTTP.

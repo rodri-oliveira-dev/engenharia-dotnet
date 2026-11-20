@@ -112,6 +112,13 @@ build, testes e auditoria de dependências no GitHub Actions. O
 explica como executar os mesmos comandos localmente e interpretar o gate de
 vulnerabilidades.
 
+## Compatibilidade e evolução do .NET 11
+
+Além dos capítulos de fundamentos, o [guia de compatibilidade e breaking changes](docs/compatibilidade/indice.md)
+reúne as mudanças do ASP.NET Core 11, runtime/BCL/Hosting, SDK/NuGet/containers,
+C# 15 e EF Core 11. Cada trilha diferencia incompatibilidades de código-fonte,
+binárias e comportamentais e apresenta testes e critérios de migração.
+
 ## Entity Framework Core 11
 
 Os capítulos [Consultas eficientes com EF Core](docs/aplicacoes-e-dados/c08-consultas-ef-core.md)

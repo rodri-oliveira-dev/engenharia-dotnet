@@ -6,6 +6,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AssincronismoConcorrenciaTests.cs" />
+    <Compile Include="CompatibilidadeRuntime11Tests.cs" />
     <ProjectReference Include="C05.AssincronismoConcorrencia.csproj" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
   </ItemGroup>
 </Project>

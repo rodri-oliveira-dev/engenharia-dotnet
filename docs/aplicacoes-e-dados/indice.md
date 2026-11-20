@@ -16,6 +16,10 @@ dados.
 - **C09 · Intermediário · Publicado:**
   [Fronteiras e concorrência no EF Core](c09-fronteiras-concorrencia-ef-core.md).
 
+## Compatibilidade do ASP.NET Core
+
+- [Atualização e breaking changes do ASP.NET Core 11](../compatibilidade/compatibilidade-aspnet-core-11.md).
+
 ## Atualização para EF Core 11
 
 - [Novidades, testes e compatibilidade do EF Core 11](ef-core-11-compatibilidade.md).
