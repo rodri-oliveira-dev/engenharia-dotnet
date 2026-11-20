@@ -11,7 +11,7 @@ No PR, o job **Validar português (pt-BR)** compara o commit de destino
 com o commit da branch e analisa apenas as **linhas novas ou alteradas**
 de arquivos `.md`. O script mantém os números originais das linhas
 para facilitar a identificação de avisos. Trechos entre crases,
-blocos de código, URLs, HTML de metadados e caminhos são ignorados,
+blocos de código, URLs, nomes de arquivos em links, HTML de metadados e caminhos são ignorados,
 mas textos visíveis de links são revisados.
 
 Ao executar em `main`, usa-se o commit anterior ao push como base.

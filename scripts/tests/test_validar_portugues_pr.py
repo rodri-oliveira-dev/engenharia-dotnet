@@ -58,6 +58,14 @@ class SelecionarProsaTests(unittest.TestCase):
         self.assertIn("arquitettura", text)
         self.assertNotIn("site.dev", text)
 
+    def test_link_com_nome_de_arquivo_e_ignorado(self):
+        text, count = module.prose_lines(
+            "[validar-documentacao.yml](../../.github/workflows/validar-documentacao.yml)\\n",
+            {1},
+        )
+        self.assertEqual(count, 0)
+        self.assertNotIn("documentacao", text)
+
     def test_comentario_html_nao_conta_como_texto(self):
         text, count = module.prose_lines("<!-- snippet-csharp: id=x; categoria=fragmento -->\n", {1})
         self.assertEqual(count, 0)

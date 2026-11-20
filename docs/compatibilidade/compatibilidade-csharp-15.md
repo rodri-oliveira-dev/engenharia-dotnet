@@ -23,7 +23,7 @@ e [C11](../dominio-e-arquitetura/c11-entidades-value-objects-agregados.md).
 | `union` contextual em declaração de tipo | fonte | tipo chamado `union` | renomear ou usar `@union` |
 | Contexto seguro de expressão de coleção `Span<T>`/`ReadOnlySpan<T>` ajustado | fonte | `Span` pode escapar de escopo anteriormente aceito | ajustar escopo ou converter via array |
 | `ref readonly` e delegates sintetizados exigem `InAttribute` | fonte | targets de referência customizados podem ter CS0518 | garantir assembly com `InAttribute` |
-| Interfaces com operadores lógicos e `dynamic` | fonte | lógica antes compilava mas falhava em runtime | tipar concretamente ou revisar a sobrecarga |
+| Interfaces com operadores lógicos e `dynamic` | fonte | lógica antes compilava mas falhava em runtime | usar tipagem explícita ou revisar a sobrecarga |
 
 As notas oficiais do compilador incluem entradas de outras
 versões do C# e múltiplos SDKs. **Não classifique entradas

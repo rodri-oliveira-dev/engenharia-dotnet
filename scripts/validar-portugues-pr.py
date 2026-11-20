@@ -83,7 +83,12 @@ def prose_lines(markdown: str, changed_lines: set[int]) -> tuple[str, int]:
         line = "".join(cleaned)
         line = INLINE_CODE.sub(" ", line)
         line = AUTO_LINK.sub(" ", line)
-        line = LINK.sub(r"\1", line)
+        line = LINK.sub(
+            lambda match: " " if match.group(1).lower().endswith(
+                (".md", ".cs", ".yml", ".yaml", ".json", ".py", ".csproj", ".slnx")
+            ) else match.group(1),
+            line,
+        )
         line = REF_LINK.sub(r"\1", line)
         line = URL.sub(" ", line)
         line = HTML_TAG.sub(" ", line)
