@@ -63,6 +63,10 @@ oito agrupamentos definidos no mapa editorial e os 35 capítulos publicados.
 - [C# 15 e mudanças no compilador](compatibilidade/compatibilidade-csharp-15.md)
 - [EF Core 11](aplicacoes-e-dados/ef-core-11-compatibilidade.md)
 
+## Trilha de estudo e leitura
+
+- [Roadmap de estudos por maturidade, com 13 livros em português e links para a Amazon Brasil](roadmap-de-estudos.md)
+
 ## Documentação do projeto
 
 - [Guia de estilo editorial](guia-de-estilo.md)
