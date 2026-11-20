@@ -24,6 +24,7 @@ as anotações de nulabilidade a validação, resultados esperados e exceções.
 
 Considere uma busca de cliente. Três contratos diferentes são plausíveis:
 
+<!-- snippet-csharp: id=c02-01; categoria=contexto -->
 ```csharp
 Cliente Obter(Guid id);             // promete um cliente ou não retorna normalmente
 Cliente? Encontrar(Guid id);        // ausência é um resultado previsto
@@ -52,6 +53,7 @@ quando atribuições ou desreferências contradizem o contrato.
 </PropertyGroup>
 ```
 
+<!-- snippet-csharp: id=c02-02; categoria=contexto -->
 ```csharp
 static int Tamanho(string texto) => texto.Length;
 static int TamanhoOpcional(string? texto) => texto?.Length ?? 0;
@@ -85,6 +87,7 @@ e transfere tratamento para todos os consumidores.
 O operador condicional nulo interrompe a cadeia e produz `null` se o receptor
 for nulo:
 
+<!-- snippet-csharp: id=c02-03; categoria=contexto -->
 ```csharp
 int? quantidade = pedido?.Itens?.Count;
 ```
@@ -98,6 +101,7 @@ corrigir a origem é mais informativo.
 O operador de coalescência escolhe o operando direito quando o esquerdo é nulo.
 O operador `??=` atribui um fallback somente nessa condição.
 
+<!-- snippet-csharp: id=c02-04; categoria=contexto -->
 ```csharp
 var nomeDeExibicao = apelido?.Trim() is { Length: > 0 } valor
     ? valor
@@ -115,6 +119,7 @@ ser o contrato correto.
 O operador null-forgiving informa ao compilador que a expressão deve ser
 tratada como não nula. Ele não executa verificação e não altera o valor:
 
+<!-- snippet-csharp: id=c02-05; categoria=isolado -->
 ```csharp
 string? entrada = null;
 Console.WriteLine(entrada!.Length); // compila; falha em runtime
@@ -130,6 +135,7 @@ análise e desloca falhas para produção.
 
 O compilador refina o estado depois de verificações reconhecidas:
 
+<!-- snippet-csharp: id=c02-06; categoria=contexto -->
 ```csharp
 static string Normalizar(string? texto)
 {
@@ -148,6 +154,7 @@ compilador não conhece podem impedir o refinamento.
 Evite contornar isso lendo repetidamente uma propriedade mutável. Capture uma
 vez e valide a variável local:
 
+<!-- snippet-csharp: id=c02-07; categoria=contexto -->
 ```csharp
 var endereco = pedido.EnderecoDeEntrega;
 if (endereco is null)
@@ -169,6 +176,7 @@ expressa a relação entre entrada, saída e retorno:
 - `[MemberNotNull]` informa quais membros foram inicializados por um método;
 - `[DoesNotReturn]` descreve um método que nunca retorna normalmente.
 
+<!-- snippet-csharp: id=c02-08; categoria=contexto -->
 ```csharp
 using System.Diagnostics.CodeAnalysis;
 
@@ -193,6 +201,7 @@ uma promessa falsa.
 Um membro não anulável deve estar inicializado quando a construção termina.
 Prefira construtores, parâmetros posicionais ou propriedades `required`:
 
+<!-- snippet-csharp: id=c02-09; categoria=contexto -->
 ```csharp
 public sealed class ServicoEmail
 {
@@ -240,6 +249,7 @@ Nulabilidade representa ausência, não todo tipo de falha. Separe três situaç
 - **operação que não pode cumprir o contrato:** exceção comunica que o caminho
   normal não produziu resultado.
 
+<!-- snippet-csharp: id=c02-10; categoria=isolado -->
 ```csharp
 public abstract record ResultadoCadastro
 {
@@ -259,6 +269,7 @@ O C# 15 permite declarar uma união de casos existentes. Em vez de aceitar
 `Cadastro?` como se ausência e e-mail duplicado fossem a mesma coisa, um
 registro pode devolver explicitamente sucesso ou recusa:
 
+<!-- snippet-csharp: id=c02-11; categoria=contexto -->
 ```csharp
 public sealed record CadastroRegistrado(Cadastro Cadastro);
 public sealed record EmailEmUso(string Email);
@@ -297,6 +308,7 @@ Capture onde for possível acrescentar contexto, recuperar ou traduzir na
 fronteira. Se precisar relançar a mesma exceção, use `throw;`, que preserva o
 stack trace; `throw ex;` redefine sua origem observável.
 
+<!-- snippet-csharp: id=c02-12; categoria=contexto -->
 ```csharp
 try
 {
@@ -337,6 +349,7 @@ ser diferente. Cancelamento não desfaz efeitos já confirmados.
 O laboratório recebe dados anuláveis, pois simula uma fronteira externa, e cria
 um record com propriedades não anuláveis somente depois da validação:
 
+<!-- snippet-csharp: id=c02-13; categoria=contexto -->
 ```csharp
 public sealed record Cadastro(string Nome, string Email);
 

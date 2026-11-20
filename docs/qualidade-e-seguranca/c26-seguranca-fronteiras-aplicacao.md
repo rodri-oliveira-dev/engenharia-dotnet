@@ -134,6 +134,7 @@ aceito possa criar.
 Use deny by default. No laboratório, uma fallback policy exige usuário autenticado
 em todo endpoint, e uma policy nomeada requer permissão:
 
+<!-- snippet-csharp: id=c26-01; categoria=contexto -->
 ```csharp
 builder.Services.AddAuthorizationBuilder()
     .SetFallbackPolicy(new AuthorizationPolicyBuilder()
@@ -178,6 +179,7 @@ Validação local precisa verificar em conjunto:
 5. tipo/finalidade e claims exigidas pelo perfil adotado;
 6. policy e autorização do objeto depois de autenticar.
 
+<!-- snippet-csharp: id=c26-02; categoria=contexto -->
 ```csharp
 options.MapInboundClaims = false;
 options.TokenValidationParameters = new TokenValidationParameters
@@ -227,6 +229,7 @@ O fluxo defensivo do laboratório é:
 5. projetar um DTO de saída mínimo;
 6. retornar `404` para recurso ausente ou invisível.
 
+<!-- snippet-csharp: id=c26-03; categoria=contexto -->
 ```csharp
 var documento = await repositorio.ObterAsync(tenantId, id, cancellationToken);
 if (documento is null)
@@ -265,6 +268,7 @@ precisam de escopo, justificativa, auditoria e, para ações críticas, aprovaç
 Validação sintática não substitui autorização nem invariantes. Faça binding em DTO
 de caso de uso, não na entidade persistida:
 
+<!-- snippet-csharp: id=c26-04; categoria=isolado -->
 ```csharp
 public sealed record AtualizarDocumentoRequest(string Titulo);
 ```
@@ -328,6 +332,7 @@ no [C16 — Idempotência e entrega confiável](../sistemas-distribuidos/c16-ide
 
 Valores nunca devem virar sintaxe SQL:
 
+<!-- snippet-csharp: id=c26-05; categoria=contexto -->
 ```csharp
 await using var command = connection.CreateCommand();
 command.CommandText = """

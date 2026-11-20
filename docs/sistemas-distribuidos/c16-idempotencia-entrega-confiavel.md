@@ -89,6 +89,7 @@ aplica a projeção e grava o identificador antes do commit. A chave primária e
 `MessageId` protege corridas; em produção, trate violação única concorrente como
 duplicata segura.
 
+<!-- snippet-csharp: id=c16-01; categoria=contexto -->
 ```csharp
 await using var tx = await db.Database.BeginTransactionAsync(ct);
 if (await db.MensagensProcessadas.AnyAsync(x => x.MensagemId == mensagemId, ct))
@@ -135,6 +136,7 @@ stateDiagram-v2
 O pacote atual `Microsoft.Extensions.Http.Resilience`, já compilado no laboratório
 C06–C07, configura retry, circuit breaker e timeouts no handler padrão:
 
+<!-- snippet-csharp: id=c16-02; categoria=contexto -->
 ```csharp
 clientBuilder.AddStandardResilienceHandler(options =>
 {

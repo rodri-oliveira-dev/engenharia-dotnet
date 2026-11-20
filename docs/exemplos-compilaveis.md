@@ -93,3 +93,16 @@ devem duplicar a infraestrutura de medição.
 O código faz parte da documentação: uma mudança conceitual exige atualizar o
 laboratório e seus testes no mesmo pull request. O CI restaura, compila e testa a
 solução, além de validar os exemplos de Terraform e a sintaxe do playbook Ansible.
+
+## Snippets em Markdown
+
+Os blocos C# publicados nos documentos usam metadados explícitos para separar
+código isolado, código dependente de contexto, fragmentos ilustrativos e erros
+deliberados. O formato, os critérios de compilação e execução, o inventário e as
+limitações estão no
+[inventário de snippets C#](planejamento/inventario-snippets-csharp.md).
+
+O CI verifica a cobertura e a consistência dos metadados, compila a seleção
+declarada no manifesto e executa somente os exemplos classificados
+explicitamente como determinísticos e seguros. Essa verificação não substitui
+os testes dos laboratórios.

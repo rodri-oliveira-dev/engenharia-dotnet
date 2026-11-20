@@ -48,6 +48,7 @@ Uma variável de tipo por referência contém uma referência para um objeto.
 Copiar a variável copia a referência: ambas podem alcançar o mesmo objeto.
 `class`, `record class`, arrays, delegates e `string` são tipos por referência.
 
+<!-- snippet-csharp: id=c01-01; categoria=isolado -->
 ```csharp
 var origem = new EstadoDaEntrega { Status = "Criado" };
 var alias = origem;
@@ -82,6 +83,7 @@ Copiar um struct copia cada campo. Se um campo for uma referência, a referênci
 é copiada, não o objeto referenciado. As duas cópias continuam vendo a mesma
 lista, array ou outro objeto mutável.
 
+<!-- snippet-csharp: id=c01-02; categoria=contexto -->
 ```csharp
 public struct Lote
 {
@@ -108,6 +110,7 @@ O padrão é passagem por valor tanto para classes quanto para structs. O que mu
 segundo. `ref`, `in` e `out` alteram essa regra e devem comunicar uma necessidade
 real, pois tornam aliasing e mutação menos locais.
 
+<!-- snippet-csharp: id=c01-03; categoria=contexto -->
 ```csharp
 static void IncrementarCopia(Contador contador) => contador.Incrementar();
 static void IncrementarOriginal(ref Contador contador) => contador.Incrementar();
@@ -159,6 +162,7 @@ grande, precisa ser compartilhado ou participa de polimorfismo por herança.
 valor, `GetHashCode`, representação textual, suporte a desconstrução em records
 posicionais e cópia não destrutiva com `with`.
 
+<!-- snippet-csharp: id=c01-04; categoria=contexto -->
 ```csharp
 public sealed class Cliente
 {
@@ -184,6 +188,7 @@ Igualdade gerada é feita a partir dos membros relevantes, usando a igualdade de
 cada componente. Um array, por exemplo, continua usando igualdade por referência
 por padrão. Um record também pode declarar propriedades mutáveis:
 
+<!-- snippet-csharp: id=c01-05; categoria=isolado -->
 ```csharp
 public record Preferencias
 {
@@ -213,6 +218,7 @@ resultado de profiling importam mais do que uma regra numérica isolada.
 `readonly struct` impede a mutação dos campos de instância depois da construção
 e ajuda o compilador a evitar cópias defensivas em alguns contextos:
 
+<!-- snippet-csharp: id=c01-06; categoria=isolado -->
 ```csharp
 public readonly struct Percentual
 {
@@ -234,6 +240,7 @@ public readonly struct Percentual
 gerados de record. Um record struct posicional é mutável por padrão;
 `readonly record struct` expressa imutabilidade do próprio valor.
 
+<!-- snippet-csharp: id=c01-07; categoria=contexto -->
 ```csharp
 public readonly record struct Coordenada(decimal Latitude, decimal Longitude);
 
@@ -276,6 +283,7 @@ casos”, e sim tornar mutação explícita e preservar invariantes.
 Uma classe `sealed` não pode ser usada como classe base. Um membro
 `sealed override` encerra apenas aquele ponto de sobrescrita na hierarquia.
 
+<!-- snippet-csharp: id=c01-08; categoria=isolado -->
 ```csharp
 public abstract class PoliticaDeFrete
 {
@@ -296,6 +304,7 @@ detalhes internos com menor risco de quebrar subclasses externas.
 
 Composição costuma oferecer um ponto de variação mais explícito:
 
+<!-- snippet-csharp: id=c01-09; categoria=isolado -->
 ```csharp
 public interface IPoliticaDeDesconto
 {
@@ -328,6 +337,7 @@ por ele. O runtime cria um objeto no heap gerenciado e copia o valor para esse
 objeto. Unboxing verifica se o objeto contém exatamente o tipo esperado e copia
 o valor para uma variável daquele tipo.
 
+<!-- snippet-csharp: id=c01-10; categoria=contexto -->
 ```csharp
 int quantidade = 42;
 object caixa = quantidade;      // boxing e alocação
@@ -340,6 +350,7 @@ short valido = (short)(int)caixa;
 
 Converter um struct para uma interface também pode fazer boxing:
 
+<!-- snippet-csharp: id=c01-11; categoria=contexto -->
 ```csharp
 public interface IComCodigo { int Codigo { get; } }
 public readonly record struct Item(int Codigo) : IComCodigo;
@@ -350,6 +361,7 @@ IComCodigo contrato = item; // boxing
 
 Generics preservam o tipo concreto e frequentemente evitam boxing:
 
+<!-- snippet-csharp: id=c01-12; categoria=contexto -->
 ```csharp
 static bool MesmoValor<T>(T esquerda, T direita) =>
     EqualityComparer<T>.Default.Equals(esquerda, direita);

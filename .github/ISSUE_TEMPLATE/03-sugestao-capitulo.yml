@@ -1,0 +1,79 @@
+name: "Sugestão de capítulo ou tema"
+description: "Proponha um novo assunto ou aprofundamento para a base de conhecimento."
+title: "[Tema]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        O Engenharia .NET organiza o conhecimento por trilhas, capítulos canônicos e pré-requisitos, não por perguntas de entrevista.
+        Antes de propor um tema, consulte o [mapa editorial](https://github.com/rodri-oliveira-dev/engenharia-dotnet/blob/main/docs/planejamento/mapa-editorial.md) e o [índice](https://github.com/rodri-oliveira-dev/engenharia-dotnet/blob/main/docs/indice.md).
+  - type: checkboxes
+    id: verificacoes
+    attributes:
+      label: "Antes de enviar"
+      options:
+        - label: "Consultei o índice, o mapa editorial e as issues existentes para evitar duplicações."
+          required: true
+  - type: input
+    id: titulo
+    attributes:
+      label: "Título sugerido"
+      description: "Use um título descritivo, orientado ao conceito de engenharia."
+      placeholder: "Ex.: Cancelamento e propagação de falhas assíncronas"
+    validations:
+      required: true
+  - type: dropdown
+    id: trilha
+    attributes:
+      label: "Trilha de conhecimento"
+      options:
+        - "Linguagem e runtime"
+        - "Aplicações e dados"
+        - "Domínio e arquitetura"
+        - "Sistemas distribuídos"
+        - "Qualidade e segurança"
+        - "Operação, entrega e plataforma"
+        - "IA e prática profissional"
+        - "Estudos de caso"
+        - "A definir"
+    validations:
+      required: true
+  - type: textarea
+    id: problema
+    attributes:
+      label: "Problema de engenharia que o tema ajuda a compreender"
+      description: "Descreva a situação prática e por que o conteúdo seria útil."
+    validations:
+      required: true
+  - type: textarea
+    id: escopo
+    attributes:
+      label: "Escopo proposto e limites"
+      description: "O que deve ser explicado? O que deveria ficar fora deste capítulo?"
+    validations:
+      required: true
+  - type: textarea
+    id: relacoes
+    attributes:
+      label: "Relação com capítulos existentes"
+      description: "Indique capítulos relacionados, possíveis pré-requisitos e se a proposta amplia um capítulo canônico."
+    validations:
+      required: false
+  - type: dropdown
+    id: exemplo
+    attributes:
+      label: "Necessidade de exemplo executável"
+      options:
+        - "Sim, laboratório .NET com teste"
+        - "Parcial, trecho de código ou diagrama"
+        - "Não, explicação ou decisão arquitetural"
+        - "Ainda não definido"
+    validations:
+      required: false
+  - type: textarea
+    id: referencias
+    attributes:
+      label: "Referências iniciais"
+      description: "Inclua links para documentação oficial, especificações ou materiais de referência, se houver."
+    validations:
+      required: false
