@@ -1,6 +1,6 @@
 # Roadmap de estudos: livros e maturidade em engenharia .NET
 
-Uma trilha complementar aos [35 capítulos do repositório](indice.md), organizada pela **complexidade das decisões** que cada etapa ajuda a enfrentar. Os 13 livros têm edições em português; os links levam a **buscas na Amazon Brasil**, pois ofertas, formatos e disponibilidade podem mudar.
+Uma trilha complementar aos [35 capítulos do repositório](indice.md), organizada pela **complexidade das decisões** que cada etapa ajuda a enfrentar. Os 14 livros estão disponíveis em português: 13 têm links de **busca na Amazon Brasil** e um direciona para o **site oficial do Refactoring.Guru**. Ofertas, formatos e disponibilidade podem mudar.
 
 > **Como usar:** siga a ordem proposta como referência, não como regra de senioridade, cargo ou prazo. Quem já domina uma etapa pode ir diretamente ao desafio de conclusão. Ler um livro não comprova competência: aplique e revise as decisões em código, documentação e conversas técnicas.
 
@@ -10,7 +10,7 @@ Uma trilha complementar aos [35 capítulos do repositório](indice.md), organiza
 | --- | --- | --- | --- |
 | 1 | Fundamental | Fundamentos de C# e autonomia no desenvolvimento | 2 |
 | 2 | Fundamental → intermediário | Qualidade, testes e responsabilidade profissional | 4 |
-| 3 | Intermediário | Desenho de aplicações e modelagem do domínio | 3 |
+| 3 | Intermediário | Desenho de aplicações e modelagem do domínio | 4 |
 | 4 | Intermediário → avançado | Arquitetura e evolução de sistemas | 3 |
 | 5 | Avançado | Decisões complexas e influência técnica | 1 |
 
@@ -51,10 +51,11 @@ Uma trilha complementar aos [35 capítulos do repositório](indice.md), organiza
 | Ordem | Livro e compra | Aplicação do estudo | Conexão com o repositório |
 | --- | --- | --- | --- |
 | 7 | **Arquitetura Limpa** — Robert C. Martin. [Buscar na Amazon Brasil](https://www.amazon.com.br/s?k=Arquitetura%20Limpa%20Robert%20C.%20Martin) | Avaliar separação de responsabilidades, inversão de dependências e acoplamento. | [C13](dominio-e-arquitetura/c13-dependencias-abstracoes-padroes.md) |
-| 8 | **Storytelling de Domínio** — Stefan Hofer e Henning Schwentner. [Buscar na Amazon Brasil](https://www.amazon.com.br/s?k=Storytelling%20de%20Dom%C3%ADnio%20Stefan%20Hofer%20e%20Henning%20Schwentner) | Descobrir fluxos e vocabulário com pessoas do negócio antes de escolher a estrutura técnica. | [C11](dominio-e-arquitetura/c11-entidades-value-objects-agregados.md) e [C12](dominio-e-arquitetura/c12-servicos-dominio-integracao-modelos.md) |
-| 9 | **Implementando Domain-Driven Design** — Vaughn Vernon. [Buscar na Amazon Brasil](https://www.amazon.com.br/s?k=Implementando%20Domain-Driven%20Design%20Vaughn%20Vernon) | Aplicar agregados, eventos, serviços de domínio e contextos delimitados com critérios claros. | [C11](dominio-e-arquitetura/c11-entidades-value-objects-agregados.md), [C12](dominio-e-arquitetura/c12-servicos-dominio-integracao-modelos.md) e [C14](dominio-e-arquitetura/c14-cqrs-modelos-orientados-uso.md) |
+| 8 | **Mergulho nos Padrões de Projeto** — Alexander Shvets. [Consultar no Refactoring.Guru](https://refactoring.guru/pt-br/design-patterns/book) | Estudar a intenção, a aplicação e os custos de padrões de projeto; reconhecer quando uma solução direta é suficiente. | [C13](dominio-e-arquitetura/c13-dependencias-abstracoes-padroes.md) e [C30](ia-e-pratica-profissional/c30-decisao-revisao-maturidade-tecnica.md) |
+| 9 | **Storytelling de Domínio** — Stefan Hofer e Henning Schwentner. [Buscar na Amazon Brasil](https://www.amazon.com.br/s?k=Storytelling%20de%20Dom%C3%ADnio%20Stefan%20Hofer%20e%20Henning%20Schwentner) | Descobrir fluxos e vocabulário com pessoas do negócio antes de escolher a estrutura técnica. | [C11](dominio-e-arquitetura/c11-entidades-value-objects-agregados.md) e [C12](dominio-e-arquitetura/c12-servicos-dominio-integracao-modelos.md) |
+| 10 | **Implementando Domain-Driven Design** — Vaughn Vernon. [Buscar na Amazon Brasil](https://www.amazon.com.br/s?k=Implementando%20Domain-Driven%20Design%20Vaughn%20Vernon) | Aplicar agregados, eventos, serviços de domínio e contextos delimitados com critérios claros. | [C11](dominio-e-arquitetura/c11-entidades-value-objects-agregados.md), [C12](dominio-e-arquitetura/c12-servicos-dominio-integracao-modelos.md) e [C14](dominio-e-arquitetura/c14-cqrs-modelos-orientados-uso.md) |
 
-**Prática sugerida:** Modele um fluxo real com participantes e decisões, delimite dois contextos, proponha agregados e explique quais regras devem ser consistentes na mesma transação. Considere também a opção de manter um monólito modular.
+**Prática sugerida:** Modele um fluxo real com participantes e decisões, delimite dois contextos, proponha agregados e explique quais regras devem ser consistentes na mesma transação. Para uma regra do fluxo, compare uma implementação simples com uma alternativa que empregue um padrão de projeto, avaliando benefícios e custos. Considere também a opção de manter um monólito modular.
 
 **Critério para avançar:** Consegue defender as fronteiras do domínio e explicar onde a abstração agrega valor ou apenas complexidade.
 
@@ -64,9 +65,9 @@ Uma trilha complementar aos [35 capítulos do repositório](indice.md), organiza
 
 | Ordem | Livro e compra | Aplicação do estudo | Conexão com o repositório |
 | --- | --- | --- | --- |
-| 10 | **Fundamentos da Arquitetura de Software, 2ª edição** — Mark Richards e Neal Ford. [Buscar na Amazon Brasil](https://www.amazon.com.br/s?k=Fundamentos%20da%20Arquitetura%20de%20Software%2C%202%C2%AA%20edi%C3%A7%C3%A3o%20Mark%20Richards%20e%20Neal%20Ford) | Relacionar características de qualidade, estilos, decisões e governança. | [C19](dominio-e-arquitetura/c19-documentacao-arquitetural-viva.md), [C27](operacao-entrega-e-plataforma/c27-telemetria-diagnostico-distribuido.md) e [C29](operacao-entrega-e-plataforma/c29-entrega-compativel-risco-pipeline.md) |
-| 11 | **Criando Microsserviços, 2ª edição** — Sam Newman. [Buscar na Amazon Brasil](https://www.amazon.com.br/s?k=Criando%20Microsservi%C3%A7os%2C%202%C2%AA%20edi%C3%A7%C3%A3o%20Sam%20Newman) | Avaliar limites de serviços, integração, implantação e custo operacional da distribuição. | [C15](sistemas-distribuidos/c15-comunicacao-mensageria-resiliente.md), [C16](sistemas-distribuidos/c16-idempotencia-entrega-confiavel.md) e [C18](sistemas-distribuidos/c18-limites-microservicos-evolucao-monolitos.md) |
-| 12 | **Migrando Sistemas Monolíticos para Microsserviços** — Sam Newman. [Buscar na Amazon Brasil](https://www.amazon.com.br/s?k=Migrando%20Sistemas%20Monol%C3%ADticos%20para%20Microsservi%C3%A7os%20Sam%20Newman) | Planejar migração incremental, convivência entre modelos e reversibilidade. | [C18](sistemas-distribuidos/c18-limites-microservicos-evolucao-monolitos.md) e [C34](estudos-de-caso/c34-migracao-gradual-monolito.md) |
+| 11 | **Fundamentos da Arquitetura de Software, 2ª edição** — Mark Richards e Neal Ford. [Buscar na Amazon Brasil](https://www.amazon.com.br/s?k=Fundamentos%20da%20Arquitetura%20de%20Software%2C%202%C2%AA%20edi%C3%A7%C3%A3o%20Mark%20Richards%20e%20Neal%20Ford) | Relacionar características de qualidade, estilos, decisões e governança. | [C19](dominio-e-arquitetura/c19-documentacao-arquitetural-viva.md), [C27](operacao-entrega-e-plataforma/c27-telemetria-diagnostico-distribuido.md) e [C29](operacao-entrega-e-plataforma/c29-entrega-compativel-risco-pipeline.md) |
+| 12 | **Criando Microsserviços, 2ª edição** — Sam Newman. [Buscar na Amazon Brasil](https://www.amazon.com.br/s?k=Criando%20Microsservi%C3%A7os%2C%202%C2%AA%20edi%C3%A7%C3%A3o%20Sam%20Newman) | Avaliar limites de serviços, integração, implantação e custo operacional da distribuição. | [C15](sistemas-distribuidos/c15-comunicacao-mensageria-resiliente.md), [C16](sistemas-distribuidos/c16-idempotencia-entrega-confiavel.md) e [C18](sistemas-distribuidos/c18-limites-microservicos-evolucao-monolitos.md) |
+| 13 | **Migrando Sistemas Monolíticos para Microsserviços** — Sam Newman. [Buscar na Amazon Brasil](https://www.amazon.com.br/s?k=Migrando%20Sistemas%20Monol%C3%ADticos%20para%20Microsservi%C3%A7os%20Sam%20Newman) | Planejar migração incremental, convivência entre modelos e reversibilidade. | [C18](sistemas-distribuidos/c18-limites-microservicos-evolucao-monolitos.md) e [C34](estudos-de-caso/c34-migracao-gradual-monolito.md) |
 
 **Prática sugerida:** Compare monólito modular, arquitetura baseada em serviços e microsserviços para um mesmo sistema. Registre uma decisão técnica com requisitos, riscos operacionais, estratégia incremental e critérios de reversão.
 
@@ -78,7 +79,7 @@ Uma trilha complementar aos [35 capítulos do repositório](indice.md), organiza
 
 | Ordem | Livro e compra | Aplicação do estudo | Conexão com o repositório |
 | --- | --- | --- | --- |
-| 13 | **Arquitetura de Software: As Partes Difíceis** — Neal Ford, Mark Richards, Pramod Sadalage e Zhamak Dehghani. [Buscar na Amazon Brasil](https://www.amazon.com.br/s?k=Arquitetura%20de%20Software%3A%20As%20Partes%20Dif%C3%ADceis%20Neal%20Ford%2C%20Mark%20Richards%2C%20Pramod%20Sadalage%20e%20Zhamak%20Dehghani) | Analisar trade-offs de granularidade, decomposição, consistência de dados e transações distribuídas. | [C17](sistemas-distribuidos/c17-consistencia-eventual-sagas.md), [C18](sistemas-distribuidos/c18-limites-microservicos-evolucao-monolitos.md), [C19](dominio-e-arquitetura/c19-documentacao-arquitetural-viva.md) e [C30](ia-e-pratica-profissional/c30-decisao-revisao-maturidade-tecnica.md) |
+| 14 | **Arquitetura de Software: As Partes Difíceis** — Neal Ford, Mark Richards, Pramod Sadalage e Zhamak Dehghani. [Buscar na Amazon Brasil](https://www.amazon.com.br/s?k=Arquitetura%20de%20Software%3A%20As%20Partes%20Dif%C3%ADceis%20Neal%20Ford%2C%20Mark%20Richards%2C%20Pramod%20Sadalage%20e%20Zhamak%20Dehghani) | Analisar trade-offs de granularidade, decomposição, consistência de dados e transações distribuídas. | [C17](sistemas-distribuidos/c17-consistencia-eventual-sagas.md), [C18](sistemas-distribuidos/c18-limites-microservicos-evolucao-monolitos.md), [C19](dominio-e-arquitetura/c19-documentacao-arquitetural-viva.md) e [C30](ia-e-pratica-profissional/c30-decisao-revisao-maturidade-tecnica.md) |
 
 **Prática sugerida:** Simule uma mudança que atravessa serviços e exige consistência entre operações. Compare transação local, compensação e consistência eventual. Documente hipóteses, modos de falha e sinais para reavaliar a decisão; conduza uma revisão com o time.
 
@@ -101,7 +102,7 @@ Para cada etapa, registre **problema, alternativas, decisão, evidência e o que
 - Os livros são material conceitual e prático; exemplos de edições anteriores podem não usar os recursos atuais de C# e .NET.
 - Para comportamento específico do .NET 11, C# 15, ASP.NET Core 11 e EF Core 11, consulte os [guias de compatibilidade](compatibilidade/indice.md) e a documentação oficial vinculada a eles.
 - Alguns exemplos dos livros usam linguagens diferentes de C#. O objetivo é transferir critérios de engenharia, não copiar sintaxe sem adaptação.
-- As buscas da Amazon **não confirmam estoque, preço, idioma ou edição do anúncio**. Antes de comprar, confirme a edição em português e os dados do produto.
+- As buscas da Amazon **não confirmam estoque, preço, idioma ou edição do anúncio**. Antes de comprar, confirme a edição em português e os dados do produto. O livro do Refactoring.Guru tem um link direto para a página oficial da editora, fora da Amazon.
 - Os livros selecionados não cobrem com a mesma profundidade todos os temas do repositório, como segurança, infraestrutura como código, observabilidade e IA. Para esses assuntos, use os capítulos específicos e suas referências primárias.
 
 **Última revisão:** 20 de novembro de 2026.
