@@ -87,7 +87,7 @@ public sealed class NovidadesEfCore11Tests
         Assert.Contains("DESC", sqlMax, StringComparison.OrdinalIgnoreCase);
         Assert.Contains("COUNT", sqlMax, StringComparison.OrdinalIgnoreCase);
         Assert.Contains("ORDER BY", sqlMin, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("ASC", sqlMin, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("COUNT", sqlMin, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]

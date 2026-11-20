@@ -37,38 +37,38 @@ explica como executar.
 
 ### FullJoin, extremos e agrupamento
 
-O operador LINQ \`FullJoin\` do .NET 11 pode ser traduzido pelo EF Core 11
-para \`FULL JOIN\` no banco. O exemplo concilia duas fontes independentes
+O operador LINQ `FullJoin` do .NET 11 pode ser traduzido pelo EF Core 11
+para `FULL JOIN` no banco. O exemplo concilia duas fontes independentes
 sem FK para expor a diferença entre um par completo e os órfãos de
-cada lado. Não confundir com \`FullJoin\` em memória do capítulo C03.
+cada lado. Não confundir com `FullJoin` em memória do capítulo C03.
 
-\`MaxByAsync\` e \`MinByAsync\` selecionam a **entidade** com valor
+`MaxByAsync` e `MinByAsync` selecionam a **entidade** com valor
 extremo de uma chave. Em consultas relacionais, o provider ordena a
-chave no SQL e limita a quantidade de linhas. Um \`Max()\` tradicional
+chave no SQL e limita a quantidade de linhas. Um `Max()` tradicional
 seleciona apenas o maior escalar, o que é uma operação diferente.
 Empates devem ser tratados com uma ordenação determinística quando
 a identidade do vencedor afeta o negócio.
 
-\`GroupBy\` com navegações ganhou traduções e correções na versão 11.
+`GroupBy` com navegações ganhou traduções e correções na versão 11.
 O exemplo conta e soma itens agrupados pelo status do pedido,
-usando a navegação \`ItemPedido.Pedido\`. Testar SQL e resultado é
-mais confiável do que afirmar que qualquer \`GroupBy\` ficou mais rápido.
+usando a navegação `ItemPedido.Pedido`. Testar SQL e resultado é
+mais confiável do que afirmar que qualquer `GroupBy` ficou mais rápido.
 
 ### group_concat e ordenação
 
-No provider SQLite, \`string.Join\` com \`OrderBy\` sobre uma coleção
-relacionada é traduzido para \`group_concat\` com ordenação dentro da
+No provider SQLite, `string.Join` com `OrderBy` sobre uma coleção
+relacionada é traduzido para `group_concat` com ordenação dentro da
 agregação. Isso depende da biblioteca SQLite 3.44.0 ou superior. A
-ordem não é garantida por um \`OrderBy\` externo sobre o resultado.
+ordem não é garantida por um `OrderBy` externo sobre o resultado.
 Confirme a versão nativa efetivamente carregada no ambiente de CI
 antes de atribuir divergências ao LINQ.
 
 ### Joins de referência em split queries
 
-Com \`AsSplitQuery()\`, o EF11 elimina joins redundantes de
+Com `AsSplitQuery()`, o EF11 elimina joins redundantes de
 navegações de referência nas consultas separadas de coleções.
-O laboratório usa \`Pedido.Categoria\` como referência e
-\`Pedido.Itens\` como coleção: a primeira instrução consulta Categoria,
+O laboratório usa `Pedido.Categoria` como referência e
+`Pedido.Itens` como coleção: a primeira instrução consulta Categoria,
 a segunda consulta os Itens sem incluir novamente Categoria.
 
 A melhora de SQL **não garante** melhora universal de latência.
@@ -78,8 +78,8 @@ presença de modificações concorrentes.
 
 ### JSON_PATH_EXISTS no SQL Server
 
-\`EF.Functions.JsonPathExists\` traduz para \`JSON_PATH_EXISTS\`
-no SQL Server 2022 ou superior. O teste usa \`ToQueryString()\`:
+`EF.Functions.JsonPathExists` traduz para `JSON_PATH_EXISTS`
+no SQL Server 2022 ou superior. O teste usa `ToQueryString()`:
 não abre conexão e não comprova execução no servidor. Para um
 serviço real, validar a versão e o nível de compatibilidade, dados JSON
 válidos, índices, nulos e plano de execução.
@@ -88,12 +88,12 @@ válidos, índices, nulos e plano de execução.
 
 | Mudança | Risco | Conduta de atualização |
 | --- | --- | --- |
-| \`UseSqlServer\` passa a usar nível 160 por padrão | SQL gerado incompatível com SQL Server 2019 ou bases com nível menor | identificar versão/compatibilidade real; se necessário, configurar \`UseCompatibilityLevel(150)\` |
-| \`Microsoft.Data.SqlClient\` 7.0 separa dependências Entra ID | falha de autenticação em cenários Active Directory | adicionar \`Microsoft.Data.SqlClient.Extensions.Azure\` quando a autenticação utilizada exigir |
-| \`MigrateAsync\` sem migrations agora falha | inicialização/deploy antes silencioso passa a abortar | verificar assembly e pipeline de migrations; não silenciar sem justificativa |
-| Split queries detectam correlação impossível após alteração concorrente | \`DbQueryConcurrencyException\` chega à aplicação | retry com limite e idempotência ou isolamento transacional apropriado |
-| \`Property\` não configura mais coleções primitivas da mesma maneira | erro/configuração do modelo | migrar configuração explícita para \`PrimitiveCollection\` |
-| \`EFOptimizeContext\` removida | geração não ocorre no pipeline esperado | avaliar \`EFScaffoldModelStage\` e \`EFPrecompileQueriesStage\` |
+| `UseSqlServer` passa a usar nível 160 por padrão | SQL gerado incompatível com SQL Server 2019 ou bases com nível menor | identificar versão/compatibilidade real; se necessário, configurar `UseCompatibilityLevel(150)` |
+| `Microsoft.Data.SqlClient` 7.0 separa dependências Entra ID | falha de autenticação em cenários Active Directory | adicionar `Microsoft.Data.SqlClient.Extensions.Azure` quando a autenticação utilizada exigir |
+| `MigrateAsync` sem migrations agora falha | inicialização/deploy antes silencioso passa a abortar | verificar assembly e pipeline de migrations; não silenciar sem justificativa |
+| Split queries detectam correlação impossível após alteração concorrente | `DbQueryConcurrencyException` chega à aplicação | retry com limite e idempotência ou isolamento transacional apropriado |
+| `Property` não configura mais coleções primitivas da mesma maneira | erro/configuração do modelo | migrar configuração explícita para `PrimitiveCollection` |
+| `EFOptimizeContext` removida | geração não ocorre no pipeline esperado | avaliar `EFScaffoldModelStage` e `EFPrecompileQueriesStage` |
 | Cosmos deixa de preservar propriedades JSON não mapeadas | perda de dados no round-trip de documentos | mapear campos necessários ou usar SDK diretamente |
 | Cosmos remove I/O síncrono | falhas ao chamar APIs síncronas | migrar chamadas para APIs assíncronas |
 | SQLite 11 deixa de suportar .NET Framework | projetos legados não podem atualizar provider | migrar para .NET compatível ou permanecer temporariamente em linha anterior |
@@ -109,9 +109,9 @@ lista não substitui o inventário completo das notas oficiais.
 2. Levantar versão do banco, compatibilidade, tipos JSON, índices e
    autenticação. Em SQL Server, não presumir nível de compatibilidade 160.
 3. Gerar e revisar SQL para as consultas críticas, principalmente as que
-   usam \`Include\`, \`AsSplitQuery\`, agregações, ordenação e filtros JSON.
+   usam `Include`, `AsSplitQuery`, agregações, ordenação e filtros JSON.
 4. Revisar migrations em código e em banco, conferir schema e ensaiar
-   rollback. \`EnsureCreated\` não é substituto de migrations.
+   rollback. `EnsureCreated` não é substituto de migrations.
 5. Rodar testes de integração no **mesmo provider de produção**,
    com dados de fronteira, concorrência, cancelamento e falhas.
 6. Observar planos, métricas, regressões de latência e diagnósticos antes
