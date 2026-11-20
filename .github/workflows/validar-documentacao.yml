@@ -8,6 +8,8 @@ on:
       - "**/*.csproj"
       - "**/*.props"
       - "**/*.ps1"
+      - "**/Dockerfile"
+      - ".dockerignore"
       - "**/*.py"
       - "scripts/snippets-csharp.json"
       - "**/*.slnx"
@@ -30,6 +32,8 @@ on:
       - "**/*.csproj"
       - "**/*.props"
       - "**/*.ps1"
+      - "**/Dockerfile"
+      - ".dockerignore"
       - "**/*.py"
       - "scripts/snippets-csharp.json"
       - "**/*.slnx"
@@ -91,6 +95,20 @@ jobs:
 
       - name: Executar testes em Release
         run: dotnet test exemplos/EngenhariaDotnet.slnx --configuration Release --no-build
+
+  laboratorio-docker:
+    name: Validar laboratório Docker
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Obter repositório
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Construir imagem e executar smoke tests
+        shell: pwsh
+        run: ./scripts/testar-container-observabilidade.ps1
 
   snippets-csharp:
     name: Compilar snippets C#
