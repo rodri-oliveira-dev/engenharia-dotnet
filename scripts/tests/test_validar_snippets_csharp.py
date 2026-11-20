@@ -296,7 +296,7 @@ class SnippetValidatorTests(unittest.TestCase):
             "classification": "deterministic-safe",
             "expected_exception": "System.InvalidOperationException",
         }
-        stderr = "Unhandled exception. System.InvalidOperationException: falha\n"
+        stderr = "__SNIPPET_EXCEPTION_TYPE__:System.InvalidOperationException\n"
 
         result, calls = self.compile_executable(
             execution,
@@ -305,6 +305,24 @@ class SnippetValidatorTests(unittest.TestCase):
 
         self.assertTrue(result.succeeded)
         self.assertEqual(2, len(calls))
+
+    def test_rejects_expected_name_printed_by_wrong_exception(self):
+        execution = {
+            "classification": "deterministic-safe",
+            "expected_exception": "System.NullReferenceException",
+        }
+        stderr = "__SNIPPET_EXCEPTION_TYPE__:System.InvalidOperationException\n"
+
+        result, _ = self.compile_executable(
+            execution,
+            [
+                (1, "System.NullReferenceException\n", stderr),
+                (1, "System.NullReferenceException\n", stderr),
+            ],
+        )
+
+        self.assertFalse(result.succeeded)
+        self.assertIn("System.InvalidOperationException", result.diagnostics)
 
     def test_reports_execution_timeout(self):
         execution = {

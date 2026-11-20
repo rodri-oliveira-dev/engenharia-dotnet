@@ -37,7 +37,7 @@
     "c02-05": {
       "output_type": "Exe",
       "prefix": "try\n{\n",
-      "suffix": "}\ncatch (Exception exception)\n{\n    Console.Error.WriteLine(exception.GetType().FullName);\n    Environment.ExitCode = 1;\n}\n",
+      "suffix": "}\ncatch (Exception exception)\n{\n    Console.Error.WriteLine(\"__SNIPPET_EXCEPTION_TYPE__:\" + exception.GetType().FullName);\n    Environment.ExitCode = 1;\n}\n",
       "execution": {
         "classification": "deterministic-safe",
         "expected_exception": "System.NullReferenceException",

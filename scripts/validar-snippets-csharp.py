@@ -25,6 +25,7 @@ CSHARP_FENCE_RE = re.compile(r"\s*```(?:csharp|cs|c#)\s*")
 OPENING_FENCE_RE = re.compile(r"\s*```.*")
 CLOSING_FENCE_RE = re.compile(r"\s*```\s*")
 ELIGIBLE_CATEGORIES = frozenset({"isolado", "contexto"})
+EXCEPTION_MARKER = "__SNIPPET_EXCEPTION_TYPE__:"
 
 
 class ValidationError(Exception):
@@ -504,7 +505,6 @@ def _validate_execution(
         return ExecutionResult(succeeded=True, diagnostics="")
 
     expected_exception = expectation["expected_exception"]
-    combined_output = standard_output + standard_error
     if return_code == 0:
         return ExecutionResult(
             succeeded=False,
@@ -513,12 +513,17 @@ def _validate_execution(
                 f"exceção {expected_exception}, mas o processo terminou com sucesso"
             ),
         )
-    if expected_exception not in combined_output:
+    reported_exceptions = [
+        line.removeprefix(EXCEPTION_MARKER)
+        for line in standard_error.splitlines()
+        if line.startswith(EXCEPTION_MARKER)
+    ]
+    if reported_exceptions != [expected_exception]:
         return ExecutionResult(
             succeeded=False,
             diagnostics=(
                 f"{snippet.relative_path}:{snippet.code_line}: exceção esperada "
-                f"{expected_exception} não encontrada\n"
+                f"{expected_exception}; tipos registrados: {reported_exceptions!r}\n"
                 f"stdout:\n{standard_output}\nstderr:\n{standard_error}"
             ),
         )
