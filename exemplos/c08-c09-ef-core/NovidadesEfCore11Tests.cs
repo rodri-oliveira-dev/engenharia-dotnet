@@ -20,10 +20,10 @@ public sealed class NovidadesEfCore11Tests
         await context.SaveChangesAsync();
         context.ChangeTracker.Clear();
 
-        var consulta = NovidadesEfCore11.Conciliar(context).OrderBy(linha => linha.Codigo);
+        var consulta = NovidadesEfCore11.Conciliar(context);
         var sql = consulta.ToQueryString();
         banco.Contador.Zerar();
-        var linhas = await consulta.ToListAsync();
+        var linhas = (await consulta.ToListAsync()).OrderBy(linha => linha.Codigo).ToList();
 
         Assert.Contains("FULL JOIN", sql, StringComparison.OrdinalIgnoreCase);
         Assert.Equal(1, banco.Contador.Quantidade);
@@ -102,11 +102,10 @@ public sealed class NovidadesEfCore11Tests
         await context.SaveChangesAsync();
         context.ChangeTracker.Clear();
 
-        var consulta = NovidadesEfCore11.AgruparItensPorStatus(context)
-            .OrderBy(resumo => resumo.Status);
+        var consulta = NovidadesEfCore11.AgruparItensPorStatus(context);
         var sql = consulta.ToQueryString();
         banco.Contador.Zerar();
-        var dados = await consulta.ToListAsync();
+        var dados = (await consulta.ToListAsync()).OrderBy(resumo => resumo.Status).ToList();
 
         Assert.Contains("GROUP BY", sql, StringComparison.OrdinalIgnoreCase);
         Assert.Contains("JOIN", sql, StringComparison.OrdinalIgnoreCase);

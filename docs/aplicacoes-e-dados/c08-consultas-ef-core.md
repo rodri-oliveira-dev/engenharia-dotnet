@@ -8,7 +8,7 @@
 > **Pré-requisitos:** [C03 — Coleções, LINQ e execução diferida](../linguagem-e-runtime/c03-colecoes-linq-execucao-diferida.md).
 > [C10 — Fundamentos de persistência SQL e NoSQL](c10-fundamentos-persistencia-sql-nosql.md).
 >
-> **Última revisão:** 2026-11-18
+> **Última revisão:** 2026-11-20
 
 Uma expressão LINQ curta pode significar uma consulta seletiva, dezenas de
 round trips ou uma junção que multiplica linhas. O código C# não revela sozinho
@@ -400,5 +400,5 @@ esse provider e, quando necessário, uma instância efêmera via Testcontainers.
   — cache e compiled queries, acesso em 18 novembro 2026.
 - [Provider SQLite do EF Core](https://learn.microsoft.com/ef/core/providers/sqlite/)
   — limitações e configuração, acesso em 18 novembro 2026.
-- [Microsoft.EntityFrameworkCore.Sqlite 10.0.12](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.Sqlite/10.0.12)
+- [Microsoft.EntityFrameworkCore.Sqlite 11.0.0](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.Sqlite/11.0.0)
   — pacote usado pelo laboratório, acesso em 18 novembro 2026.

@@ -9,7 +9,7 @@
 > [C06 — Composição e pipeline no ASP.NET Core](c06-composicao-pipeline-aspnet-core.md)
 > e [C08 — Consultas eficientes com EF Core](c08-consultas-ef-core.md).
 >
-> **Última revisão:** 2026-11-18
+> **Última revisão:** 2026-11-20
 
 Um `DbContext` é ao mesmo tempo sessão com o modelo, identity map, change tracker
 e coordenador de persistência. Esconder todos esses papéis atrás de uma abstração

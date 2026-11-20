@@ -26,11 +26,11 @@ public static class NovidadesEfCore11
 
     // O SQLite 3.44+ suporta ORDER BY dentro de group_concat.
     public static IQueryable<ResumoMarcadores> MarcadoresOrdenados(LojaContext context) =>
-        context.Pedidos
-            .OrderBy(pedido => pedido.Id)
-            .Select(pedido => new ResumoMarcadores(
-                pedido.Id,
-                string.Join(", ", pedido.Marcadores
+        context.Marcadores
+            .GroupBy(marcador => marcador.PedidoId)
+            .Select(grupo => new ResumoMarcadores(
+                grupo.Key,
+                string.Join(", ", grupo
                     .OrderBy(marcador => marcador.Nome)
                     .Select(marcador => marcador.Nome))));
 
