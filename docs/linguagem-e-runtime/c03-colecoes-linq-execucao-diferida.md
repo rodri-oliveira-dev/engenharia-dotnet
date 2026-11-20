@@ -128,6 +128,7 @@ enumeração. Alguns operadores diferidos precisam de trabalho antecipado quando
 a enumeração começa: `OrderBy`, por exemplo, precisa conhecer e ordenar a fonte
 antes de entregar o primeiro resultado.
 
+<!-- snippet-csharp: id=c03-01; categoria=contexto -->
 ```csharp
 var consulta = pedidos.Where(pedido => pedido.Total >= 100m);
 
@@ -145,6 +146,7 @@ surpreender quando o consumidor esperava um snapshot.
 
 O padrão abaixo faz uma busca linear para cada identificador:
 
+<!-- snippet-csharp: id=c03-02; categoria=contexto -->
 ```csharp
 foreach (var id in idsProcurados)
 {
@@ -163,6 +165,7 @@ as operações em função da entrada em vez de classificar apenas pela aparênc
 
 Pré-indexar muda o perfil:
 
+<!-- snippet-csharp: id=c03-03; categoria=contexto -->
 ```csharp
 var porId = pedidos.ToDictionary(pedido => pedido.Id);
 
@@ -189,6 +192,7 @@ qual duplicata vencerá.
 
 Um iterador executa seu corpo a cada enumeração:
 
+<!-- snippet-csharp: id=c03-04; categoria=contexto -->
 ```csharp
 static IEnumerable<int> Gerar(Action aoProduzir)
 {
@@ -211,6 +215,7 @@ parte oculta do comportamento.
 
 Se os dois consumidores precisam do mesmo snapshot, materialize uma vez:
 
+<!-- snippet-csharp: id=c03-05; categoria=contexto -->
 ```csharp
 var valores = fonte.ToArray();
 var quantidade = valores.Length;
@@ -228,6 +233,7 @@ qualquer `IEnumerable<T>` tem essas propriedades.
 resultados. Fazer isso antes de filtrar ou limitar pode ampliar memória, latência
 até o primeiro item e pressão sobre o GC:
 
+<!-- snippet-csharp: id=c03-06; categoria=contexto -->
 ```csharp
 // Materializa todos os eventos antes de selecionar os necessários.
 var todos = LerEventos().ToList();
@@ -236,6 +242,7 @@ var primeirosErros = todos.Where(e => e.Erro).Take(100).ToArray();
 
 Quando a fonte permite streaming, preserve a execução diferida até o limite:
 
+<!-- snippet-csharp: id=c03-07; categoria=contexto -->
 ```csharp
 var primeirosErros = LerEventos()
     .Where(e => e.Erro)
@@ -266,6 +273,7 @@ Em conciliações, o `Join` tradicional entrega apenas pares com chaves
 correspondentes; `LeftJoin` conserva clientes sem pedidos; `FullJoin`
 inclui **também pedidos cujo cliente não consta da fonte recebida**.
 
+<!-- snippet-csharp: id=c03-08; categoria=contexto -->
 ```csharp
 var resultado = clientes.FullJoin(
     pedidos,
@@ -293,6 +301,7 @@ O C# 15 aceita `with(...)` **como primeiro elemento** de uma expressão
 de coleção. Assim, o código pode declarar explicitamente um comparador
 ou uma reserva de capacidade:
 
+<!-- snippet-csharp: id=c03-09; categoria=contexto -->
 ```csharp
 HashSet<string> categorias =
     [with(StringComparer.OrdinalIgnoreCase), "API", "api", "Dados"];

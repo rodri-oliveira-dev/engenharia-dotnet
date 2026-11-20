@@ -44,6 +44,10 @@ Confirme especialmente:
 - Use snippets quando forem suficientes para demonstrar o comportamento.
 - Adicione projetos apenas conforme a
   [estratégia de exemplos compiláveis](docs/exemplos-compilaveis.md).
+- Classifique cada fence C# conforme o
+  [inventário de snippets](docs/planejamento/inventario-snippets-csharp.md).
+- Habilite execução apenas para snippets locais, determinísticos e seguros, com
+  saída ou exceção esperada declarada no manifesto.
 - Mantenha exemplos pequenos, completos e sem credenciais.
 - Habilite nulabilidade e trate cancelamento, falha e descarte de recursos quando
   pertinentes.
@@ -148,8 +152,9 @@ Antes de abrir o pull request:
 1. releia o texto integralmente em português;
 2. confirme que todos os links internos apontam para arquivos existentes;
 3. execute `npx markdownlint-cli2@0.20.0` na raiz;
-4. compile e teste os exemplos alterados, quando existirem;
-5. revise o diff para evitar arquivos gerados, mudanças fora do escopo ou
+4. execute `python scripts/validar-snippets-csharp.py` ao alterar fences C#;
+5. compile e teste os exemplos alterados, quando existirem;
+6. revise o diff para evitar arquivos gerados, mudanças fora do escopo ou
    alterações acidentais na licença.
 
 O pull request deve resumir a motivação, as decisões editoriais, os arquivos

@@ -32,6 +32,7 @@ contexto também não é cache de aplicação. Quanto mais tempo vive, mais enti
 e snapshots retém, maior a chance de dados obsoletos e maior a janela entre
 leitura e escrita.
 
+<!-- snippet-csharp: id=c09-01; categoria=contexto -->
 ```csharp
 await using var context = await contextFactory.CreateDbContextAsync(ct);
 var pedido = await context.Pedidos.SingleAsync(p => p.Id == id, ct);
@@ -108,6 +109,7 @@ específico do provider. No SQL Server, uma propriedade `byte[]` configurada com
 SQLite não possui um tipo autoatualizado equivalente. O laboratório usa `Guid`
 gerenciado pela aplicação e renovado antes de inserts e updates:
 
+<!-- snippet-csharp: id=c09-02; categoria=contexto -->
 ```csharp
 modelBuilder.Entity<Pedido>()
     .Property(pedido => pedido.Versao)
@@ -151,6 +153,7 @@ novamente mantendo os atuais. Isso pode sobrescrever a alteração concorrente;
 só é aceitável quando a regra permite. Merge escolhe campo a campo ou recalcula
 a operação sobre o estado recente:
 
+<!-- snippet-csharp: id=c09-03; categoria=contexto -->
 ```csharp
 catch (DbUpdateConcurrencyException exception)
 {
@@ -201,6 +204,7 @@ ferramenta forte de composição. Em fronteiras internas controladas, uma
 especificação limitada pode ser apropriada. Em uma API pública entre camadas,
 prefira operações orientadas ao caso de uso que retornem DTOs materializados:
 
+<!-- snippet-csharp: id=c09-04; categoria=contexto -->
 ```csharp
 public interface IConsultaDePedidos
 {

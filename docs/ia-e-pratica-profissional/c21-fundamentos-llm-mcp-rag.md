@@ -330,6 +330,7 @@ O server MCP usa o SDK C# oficial:
 <PackageReference Include="ModelContextProtocol" Version="2.4.0" />
 ```
 
+<!-- snippet-csharp: id=c21-01; categoria=contexto -->
 ```csharp
 builder.Services
     .AddMcpServer()

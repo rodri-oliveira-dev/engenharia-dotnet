@@ -105,6 +105,7 @@ meio dela; uma `string` também pode ser exposta como `ReadOnlySpan<char>`.
 Um span contém referência e comprimento. `Slice` e os operadores de intervalo
 criam outra visão para o mesmo armazenamento: não copiam os elementos.
 
+<!-- snippet-csharp: id=c04-01; categoria=contexto -->
 ```csharp
 ReadOnlySpan<char> linha = "42|10.50|true";
 var separador = linha.IndexOf('|');
@@ -135,6 +136,7 @@ Portanto, não é correto dizer que `Span<T>` é proibido em qualquer método
 `async`. O padrão abaixo é válido em C# moderno porque o span deixa de estar vivo
 antes do `await`:
 
+<!-- snippet-csharp: id=c04-02; categoria=contexto -->
 ```csharp
 static async Task<byte> LerAsync(ReadOnlyMemory<byte> dados)
 {
@@ -159,6 +161,7 @@ compatível com a menor versão declarada.
 são `ref struct` e podem ser armazenados no heap e preservados por uma operação
 assíncrona. Use `ReadOnlyMemory<T>` quando o consumidor não deve escrever.
 
+<!-- snippet-csharp: id=c04-03; categoria=contexto -->
 ```csharp
 static async Task<int> SomarAsync(
     ReadOnlyMemory<int> valores,
@@ -182,6 +185,7 @@ coleções convencionais costumam comunicar melhor a intenção.
 
 O parser convencional é direto:
 
+<!-- snippet-csharp: id=c04-04; categoria=contexto -->
 ```csharp
 var partes = linha.Split('|');
 return new Medicao(
@@ -193,6 +197,7 @@ return new Medicao(
 `Split` cria o array de partes e strings para os campos. A alternativa localiza
 os separadores e passa slices para overloads de `Parse` que aceitam spans:
 
+<!-- snippet-csharp: id=c04-05; categoria=contexto -->
 ```csharp
 ReadOnlySpan<char> dados = linha;
 var primeiro = dados.IndexOf('|');
@@ -227,6 +232,7 @@ materializar consultas antes da hora. Isso preserva propriedade simples.
 Se um caminho medido cria e descarta arrays relevantes, `ArrayPool<T>.Shared`
 pode amortizar alocações:
 
+<!-- snippet-csharp: id=c04-06; categoria=contexto -->
 ```csharp
 var buffer = ArrayPool<byte>.Shared.Rent(tamanhoMinimo);
 try

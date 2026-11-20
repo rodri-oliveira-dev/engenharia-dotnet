@@ -123,6 +123,7 @@ Estado sem comportamento deixa regras espalhadas. No exemplo, `Pedido` não
 expõe setters públicos nem sua lista mutável. Operações nomeadas validam a
 transição antes de alterar o estado:
 
+<!-- snippet-csharp: id=c11-01; categoria=contexto -->
 ```csharp
 public void Confirmar(DateTimeOffset ocorridoEm)
 {
@@ -174,6 +175,7 @@ que declara o tipo base. Quando os descendentes também são `sealed`,
 o compilador pode exigir que um `switch` trate todos os estados sem um
 fallback artificial:
 
+<!-- snippet-csharp: id=c11-02; categoria=contexto -->
 ```csharp
 public closed record class EtapaSeparacao;
 public sealed record class AguardandoSeparacao : EtapaSeparacao;
@@ -251,6 +253,7 @@ de domínio. Um record posicional `record Dinheiro(decimal Quantia, string
 Moeda)` ainda aceitaria moeda vazia e combinações inválidas. O construtor precisa
 estabelecer o contrato.
 
+<!-- snippet-csharp: id=c11-03; categoria=contexto -->
 ```csharp
 public readonly record struct Percentual
 {
@@ -313,6 +316,7 @@ para alterações. Sua **Aggregate Root** (raiz) é a única porta pública para
 mutação. No laboratório, `Pedido` é a raiz e `ItemPedido` é interno ao agregado:
 consumidores não instanciam nem alteram um item diretamente.
 
+<!-- snippet-csharp: id=c11-04; categoria=fragmento -->
 ```csharp
 private readonly List<ItemPedido> _itens = [];
 private readonly ReadOnlyCollection<ItemPedido> _itensSomenteLeitura;
@@ -384,6 +388,7 @@ domínio, como `PedidoConfirmado`. “Linha atualizada” é detalhe de persist�
 não evento do negócio. O agregado altera seu estado e acumula o fato sem chamar
 broker, e-mail ou repositório:
 
+<!-- snippet-csharp: id=c11-05; categoria=contexto -->
 ```csharp
 public sealed record PedidoConfirmado(
     Guid PedidoId,

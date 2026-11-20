@@ -68,6 +68,7 @@ com um valor `T`. Ambas podem terminar em três estados: sucesso, falha ou
 cancelamento. Uma task não é necessariamente uma thread e criá-la não garante
 paralelismo.
 
+<!-- snippet-csharp: id=c05-01; categoria=contexto -->
 ```csharp
 static async Task<string> LerAsync(
     HttpClient cliente,
@@ -108,6 +109,7 @@ uma callback quando apropriado. Depois que efeitos irreversíveis começaram, o
 método deve definir se ainda é seguro cancelar ou se precisa concluir uma etapa
 atômica.
 
+<!-- snippet-csharp: id=c05-02; categoria=contexto -->
 ```csharp
 static async Task ProcessarAsync(
     IEnumerable<int> itens,
@@ -150,6 +152,7 @@ o diagnóstico precisa de todas, mantenha a referência da task agregada e exami
 fail-fast: as demais operações já iniciadas continuam até seus próprios
 términos.
 
+<!-- snippet-csharp: id=c05-03; categoria=contexto -->
 ```csharp
 var todas = Task.WhenAll(tarefas);
 try
@@ -170,6 +173,7 @@ sucesso mesmo quando a vencedora falhou ou foi cancelada; é preciso aguardar a
 task devolvida para observar seu resultado. As demais não são canceladas nem
 aguardadas automaticamente.
 
+<!-- snippet-csharp: id=c05-04; categoria=contexto -->
 ```csharp
 var pendentes = endpoints
     .Select(endpoint => ConsultarAsync(endpoint, cancellationToken))
@@ -250,6 +254,7 @@ um serviço hospedado ou fila com ciclo de vida próprio, e não a fire-and-forg
 O padrão abaixo enumera a fonte e inicia uma chamada para cada item antes de
 aguardar o conjunto:
 
+<!-- snippet-csharp: id=c05-05; categoria=contexto -->
 ```csharp
 await Task.WhenAll(ids.Select(id => cliente.ObterAsync(id, cancellationToken)));
 ```
@@ -274,6 +279,7 @@ adquire uma; `Release` deve devolvê-la em `finally`. Ele é útil para adaptar 
 API existente, mas não armazena itens, não distribui trabalho entre processos,
 não implementa cota temporal e não oferece, por si só, uma política de fila.
 
+<!-- snippet-csharp: id=c05-06; categoria=contexto -->
 ```csharp
 var itensMaterializados = itens.ToArray();
 using var semaforo = new SemaphoreSlim(limite, limite);
@@ -308,6 +314,7 @@ paralelismo. Sem `ParallelOptions`, a API limita a execução a
 medida da capacidade de um banco ou endpoint. Para I/O, configure
 `MaxDegreeOfParallelism` com base na dependência.
 
+<!-- snippet-csharp: id=c05-07; categoria=contexto -->
 ```csharp
 await Parallel.ForEachAsync(
     itens,
@@ -330,6 +337,7 @@ channel limitado possui capacidade máxima. Com `BoundedChannelFullMode.Wait`,
 `WriteAsync` permanece pendente quando o buffer está cheio: o produtor sente a
 pressão dos consumidores e desacelera.
 
+<!-- snippet-csharp: id=c05-08; categoria=contexto -->
 ```csharp
 var canal = Channel.CreateBounded<Mensagem>(
     new BoundedChannelOptions(capacidade)
@@ -412,6 +420,7 @@ repetidamente, converta uma vez com `AsTask` ou exponha `Task<T>` desde a API.
 
 Um cache em caminho crítico, medido e com alta taxa de acertos é candidato:
 
+<!-- snippet-csharp: id=c05-09; categoria=contexto -->
 ```csharp
 public ValueTask<string> ObterAsync(int id, CancellationToken token) =>
     _cache.TryGetValue(id, out var valor)
@@ -437,6 +446,7 @@ descarta o enumerador ao sair. Isso reduz tempo até o primeiro item e evita
 materializar todo o conjunto, mas mantém recursos pelo tempo da enumeração e não
 impõe buffer ou paralelismo automaticamente.
 
+<!-- snippet-csharp: id=c05-10; categoria=contexto -->
 ```csharp
 static async IAsyncEnumerable<int> GerarAsync(
     int quantidade,

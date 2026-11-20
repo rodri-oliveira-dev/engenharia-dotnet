@@ -29,6 +29,7 @@ concorrência são canônicos no [C09](c09-fronteiras-concorrencia-ef-core.md).
 Um operador terminal assíncrono, como `ToListAsync`, `SingleAsync` ou
 `CountAsync`, pede ao provider que traduza e execute a expressão.
 
+<!-- snippet-csharp: id=c08-01; categoria=contexto -->
 ```csharp
 IQueryable<Pedido> consulta = context.Pedidos;
 
@@ -54,6 +55,7 @@ em SQL Server ou PostgreSQL.
 Depois de `AsEnumerable`, operadores de `Enumerable` executam em .NET. Depois de
 `ToList`, todo o resultado anterior já foi transferido e armazenado.
 
+<!-- snippet-csharp: id=c08-02; categoria=contexto -->
 ```csharp
 // Filtra e limita no banco.
 var corretos = await context.Pedidos
@@ -84,6 +86,7 @@ de trabalho modificará aquela entidade. Para uma tela ou resposta somente de
 leitura, um `Select` para um modelo de leitura costuma expressar melhor o
 contrato e reduzir transferência e materialização.
 
+<!-- snippet-csharp: id=c08-03; categoria=contexto -->
 ```csharp
 var pagina = await context.Pedidos
     .AsNoTracking()
@@ -123,6 +126,7 @@ snapshots e relacionamentos até o contexto ser limpo ou descartado.
 | `AsNoTracking()` | não | não | leitura curta sem entidades repetidas relevantes |
 | `AsNoTrackingWithIdentityResolution()` | sim, em tracker temporário | não | grafo somente leitura com repetição de entidades |
 
+<!-- snippet-csharp: id=c08-04; categoria=contexto -->
 ```csharp
 var paraEditar = await context.Pedidos.SingleAsync(p => p.Id == id);
 paraEditar.Status = "pago";
@@ -152,6 +156,7 @@ de um loop. Lazy loading torna esse acesso implícito: ler uma navegação pode
 abrir uma consulta. Explicit loading dentro do loop tem o mesmo perfil, apenas
 mais visível.
 
+<!-- snippet-csharp: id=c08-05; categoria=contexto -->
 ```csharp
 var pedidos = await context.Pedidos.AsNoTracking().ToListAsync(); // 1
 
@@ -164,6 +169,7 @@ foreach (var pedido in pedidos)
 
 Para uma listagem que precisa somente da contagem, projete a relação:
 
+<!-- snippet-csharp: id=c08-06; categoria=contexto -->
 ```csharp
 var pedidos = await context.Pedidos
     .AsNoTracking()
@@ -209,6 +215,7 @@ combinações para aquele pedido. Essa explosão cartesiana aumenta linhas,
 transferência e trabalho de materialização. Mesmo com uma coleção, colunas
 grandes do pai podem ser duplicadas em cada linha.
 
+<!-- snippet-csharp: id=c08-07; categoria=contexto -->
 ```csharp
 var pedidos = await context.Pedidos
     .Include(pedido => pedido.Itens)
@@ -283,6 +290,7 @@ construção dinâmica que embute constantes pode criar formatos e planos distin
 `EF.CompileQuery` e `EF.CompileAsyncQuery` produzem um delegate e evitam até a
 comparação da árvore com o cache em cada execução:
 
+<!-- snippet-csharp: id=c08-08; categoria=contexto -->
 ```csharp
 private static readonly Func<LojaContext, string,
     IAsyncEnumerable<ResumoPedido>> PorStatus =
