@@ -295,7 +295,7 @@ pwsh ./scripts/testar-container-observabilidade.ps1
 
 O script cria containers com nomes e labels exclusivos, usa portas efêmeras e
 valida imagem, usuário, `STOPSIGNAL`, limites, health checks, falha da dependência e
-shutdown. Para repetir apenas a execução depois de uma imagem já construída:
+shutdown. Para repetir apenas a execução com uma imagem já construída:
 
 ```powershell
 pwsh ./scripts/testar-container-observabilidade.ps1 `
@@ -446,7 +446,7 @@ docker rm --force observabilidade-limitada
 ```
 
 Esses valores servem para observar configuração e consumo, não são recomendação de
-capacidade nem evidência de performance. Um limite de memória insuficiente pode
+capacidade nem evidência de desempenho. Um limite de memória insuficiente pode
 encerrar o processo; CPU limitada pode aumentar latência e fazer timeouts expirarem.
 Dimensionamento exige carga representativa e medição no ambiente alvo.
 
@@ -472,7 +472,7 @@ Este laboratório conecta três perspectivas sem tratá-las como equivalentes:
   usa liveness, readiness, timeout e shutdown como parte do comportamento
   operacional que precisa ser monitorado e testado;
 - [C29 — Entrega compatível e gestão de risco](c29-entrega-compativel-risco-pipeline.md)
-  relaciona a imagem reproduzível e o smoke test no CI a gates de entrega. O teste
+  relaciona a imagem reproduzível e o smoke test no CI a critérios de entrega. O teste
   reduz risco, mas não prova compatibilidade de ambiente, capacidade ou rollback.
 
 O escopo termina na construção e execução local da imagem. Não há publicação em

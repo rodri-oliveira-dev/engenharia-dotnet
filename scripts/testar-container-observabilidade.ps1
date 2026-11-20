@@ -1,4 +1,4 @@
-[CmdletBinding()]
+﻿[CmdletBinding()]
 param(
     [string]$Image = "engenharia-dotnet-observabilidade:smoke",
     [switch]$SkipBuild
@@ -11,7 +11,9 @@ $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
 $dockerfile = Join-Path $repoRoot "exemplos/c27-c28-observabilidade/Dockerfile"
 $suffix = [guid]::NewGuid().ToString("N").Substring(0, 12)
 $containers = [System.Collections.Generic.List[string]]::new()
+$cleanupFailures = [System.Collections.Generic.List[string]]::new()
 $httpClient = $null
+$scriptFailure = $null
 
 function Invoke-Docker {
     param([Parameter(Mandatory)][string[]]$Arguments)
@@ -22,7 +24,7 @@ function Invoke-Docker {
     }
 }
 
-function Start-SmokeContainer {
+function Invoke-SmokeContainer {
     param(
         [Parameter(Mandatory)][string]$Name,
         [string[]]$ExtraArguments = @()
@@ -85,7 +87,7 @@ function Wait-HttpStatus {
     throw "$Uri não retornou HTTP $ExpectedStatus dentro do tempo esperado; último status: $status."
 }
 
-function Get-ContainerLogs {
+function Get-ContainerLog {
     param([Parameter(Mandatory)][string]$Name)
 
     $previousPreference = $ErrorActionPreference
@@ -110,7 +112,7 @@ function Wait-LogEvent {
     )
 
     for ($attempt = 0; $attempt -lt 60; $attempt++) {
-        $logs = Get-ContainerLogs $Name
+        $logs = Get-ContainerLog $Name
         if ($logs -match ('"EventId":' + $EventId)) {
             return
         }
@@ -130,13 +132,13 @@ try {
     $httpClient = [System.Net.Http.HttpClient]::new()
 
     if (-not $SkipBuild) {
-        Write-Host "Construindo $Image..."
+        Write-Information "Construindo $Image..." -InformationAction Continue
         Invoke-Docker @("build", "--file", $dockerfile, "--tag", $Image, $repoRoot)
     }
 
-    Write-Host "Validando container saudável e limites de recursos..."
+    Write-Information "Validando container saudável e limites de recursos..." -InformationAction Continue
     $healthyName = "engenharia-dotnet-smoke-healthy-$suffix"
-    $healthyPort = Start-SmokeContainer $healthyName @(
+    $healthyPort = Invoke-SmokeContainer $healthyName @(
         "--memory", "256m",
         "--cpus", "1",
         "--stop-timeout", "10"
@@ -149,7 +151,14 @@ try {
     $stopSignal = Invoke-Docker @("inspect", $healthyName, "--format", "{{.Config.StopSignal}}")
     $memory = [long](Invoke-Docker @("inspect", $healthyName, "--format", "{{.HostConfig.Memory}}"))
     $nanoCpus = [long](Invoke-Docker @("inspect", $healthyName, "--format", "{{.HostConfig.NanoCpus}}"))
-    if ($user -eq "0" -or [string]::IsNullOrWhiteSpace($user)) {
+    $userComponent = ([string]$user -split ":", 2)[0].Trim()
+    [uint32]$userId = 0
+    $isNumericUser = [uint32]::TryParse($userComponent, [ref]$userId)
+    if (
+        [string]::IsNullOrWhiteSpace($userComponent) -or
+        $userComponent -ieq "root" -or
+        ($isNumericUser -and $userId -eq 0)
+    ) {
         throw "O container está configurado com usuário privilegiado ou indefinido."
     }
     if ($stopSignal -ne "SIGTERM") {
@@ -159,9 +168,9 @@ try {
         throw "Limites inesperados: memória=$memory, NanoCPUs=$nanoCpus."
     }
 
-    Write-Host "Validando diferença entre liveness e readiness..."
+    Write-Information "Validando diferença entre liveness e readiness..." -InformationAction Continue
     $degradedName = "engenharia-dotnet-smoke-degraded-$suffix"
-    $degradedPort = Start-SmokeContainer $degradedName @(
+    $degradedPort = Invoke-SmokeContainer $degradedName @(
         "--env", "Dependencias__Catalogo=http://127.0.0.1:1"
     )
     $degradedBaseUri = "http://127.0.0.1:$degradedPort"
@@ -170,9 +179,9 @@ try {
     Wait-HttpStatus "$degradedBaseUri/pedidos/11111111-1111-1111-1111-111111111111?atrasoMs=0" 503
     Wait-LogEvent $degradedName 2703
 
-    Write-Host "Validando propagação de SIGTERM e cancelamento..."
+    Write-Information "Validando propagação de SIGTERM e cancelamento..." -InformationAction Continue
     $shutdownName = "engenharia-dotnet-smoke-shutdown-$suffix"
-    $shutdownPort = Start-SmokeContainer $shutdownName @("--stop-timeout", "10")
+    $shutdownPort = Invoke-SmokeContainer $shutdownName @("--stop-timeout", "10")
     $shutdownBaseUri = "http://127.0.0.1:$shutdownPort"
     Wait-HttpStatus "$shutdownBaseUri/health/live" 200
 
@@ -184,10 +193,10 @@ try {
         $requestTask.Wait(5000) | Out-Null
     }
     catch {
-        # A conexão pode terminar antes de entregar a resposta durante o shutdown.
+        Write-Verbose "A conexão terminou durante o shutdown: $($_.Exception.Message)"
     }
 
-    $shutdownLogs = Get-ContainerLogs $shutdownName
+    $shutdownLogs = Get-ContainerLog $shutdownName
     foreach ($eventId in @(2710, 2722, 2711)) {
         if ($shutdownLogs -notmatch ('"EventId":' + $eventId)) {
             throw "O evento de shutdown $eventId não foi observado."
@@ -197,18 +206,52 @@ try {
         throw "A operação cancelada não registrou ApplicationStopping=true."
     }
 
-    Write-Host "Smoke test Docker concluído com sucesso."
-    Write-Host "Imagem: $Image"
-    Write-Host "Health normal: live=200, ready=200"
-    Write-Host "Dependência indisponível: live=200, ready=503, pedido=503"
-    Write-Host "Shutdown: SIGTERM propagado, operação cancelada e ApplicationStopped observado"
+    Write-Information "Smoke test Docker concluído com sucesso." -InformationAction Continue
+    Write-Information "Imagem: $Image" -InformationAction Continue
+    Write-Information "Health normal: live=200, ready=200" -InformationAction Continue
+    Write-Information "Dependência indisponível: live=200, ready=503, pedido=503" -InformationAction Continue
+    Write-Information "Shutdown: SIGTERM propagado, operação cancelada e ApplicationStopped observado" -InformationAction Continue
+}
+catch {
+    $scriptFailure = $_
 }
 finally {
     if ($null -ne $httpClient) {
         $httpClient.Dispose()
     }
 
-    foreach ($container in $containers) {
-        & docker rm --force $container 2>$null | Out-Null
+    $previousPreference = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+    try {
+        foreach ($container in $containers) {
+            try {
+                $cleanupOutput = (& docker rm --force $container 2>&1) | Out-String
+                if ($LASTEXITCODE -ne 0) {
+                    $cleanupFailures.Add(
+                        "docker rm --force $container falhou com código $LASTEXITCODE`: $($cleanupOutput.Trim())"
+                    )
+                }
+            }
+            catch {
+                $cleanupFailures.Add(
+                    "docker rm --force $container lançou uma exceção: $($_.Exception.Message)"
+                )
+            }
+        }
     }
+    finally {
+        $ErrorActionPreference = $previousPreference
+    }
+}
+
+if ($null -ne $scriptFailure) {
+    if ($cleanupFailures.Count -gt 0) {
+        Write-Warning ("Falhas adicionais durante a limpeza: " + ($cleanupFailures -join " | "))
+    }
+
+    throw $scriptFailure
+}
+
+if ($cleanupFailures.Count -gt 0) {
+    throw ("A limpeza dos containers falhou: " + ($cleanupFailures -join " | "))
 }
