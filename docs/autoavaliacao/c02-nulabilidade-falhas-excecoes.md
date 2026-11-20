@@ -13,6 +13,7 @@ Um projeto tem `<Nullable>enable</Nullable>` e expõe o método público abaixo
 numa biblioteca usada por outros times. O que é correto afirmar sobre o
 parâmetro `titulo` em tempo de execução?
 
+<!-- snippet-csharp: id=aval-c02-q01; categoria=contexto -->
 ```csharp
 public static string Normalizar(string titulo) => titulo.Trim();
 ```
@@ -30,6 +31,7 @@ public static string Normalizar(string titulo) => titulo.Trim();
 
 O que acontece com o código abaixo em um projeto com NRT habilitado?
 
+<!-- snippet-csharp: id=aval-c02-q02; categoria=isolado -->
 ```csharp
 string? entrada = null;
 Console.WriteLine(entrada!.Length);
@@ -48,6 +50,7 @@ Console.WriteLine(entrada!.Length);
 No método abaixo, o compilador não emite warning na linha do `return`, embora
 `texto` seja `string?`. Por quê?
 
+<!-- snippet-csharp: id=aval-c02-q03; categoria=contexto -->
 ```csharp
 static string Normalizar(string? texto)
 {
@@ -73,7 +76,10 @@ Um método segue o padrão `Try`. Quando retorna `true`, o parâmetro de saída
 sempre contém um texto não vazio. Qual anotação permite que o chamador use
 `texto.Length` dentro do `if` sem warning e sem `!`?
 
+<!-- snippet-csharp: id=aval-c02-q04; categoria=invalido -->
 ```csharp
+string? entrada = " Ada ";
+
 static bool TentarNormalizar(string? valor, /* anotação */ out string? normalizado)
 {
     normalizado = valor?.Trim();
@@ -110,7 +116,10 @@ O método auxiliar `Falhar` sempre lança uma exceção. Ainda assim, o compilad
 emite warning na linha do `return`. Qual alteração resolve o warning
 descrevendo corretamente o comportamento de `Falhar`?
 
+<!-- snippet-csharp: id=aval-c02-q06; categoria=invalido -->
 ```csharp
+Console.WriteLine(Obter("Ada"));
+
 static void Falhar(string mensagem) => throw new InvalidOperationException(mensagem);
 
 static string Obter(string? valor)
@@ -166,6 +175,7 @@ Considere o trecho abaixo, em que `cancellationToken` é o token recebido do
 chamador e o repositório também pode ser interrompido por um timeout interno.
 Qual afirmação descreve corretamente o efeito do filtro `when`?
 
+<!-- snippet-csharp: id=aval-c02-q09; categoria=contexto -->
 ```csharp
 try
 {

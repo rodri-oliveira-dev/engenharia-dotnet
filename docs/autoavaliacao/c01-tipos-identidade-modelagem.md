@@ -12,6 +12,7 @@ consultar o [gabarito comentado](#gabarito-comentado), no fim desta página.
 Considere que `Pedido` é uma classe e `Ponto` é um struct, ambos com
 propriedades mutáveis. Qual será a saída?
 
+<!-- snippet-csharp: id=aval-c01-q01; categoria=isolado -->
 ```csharp
 var pedido = new Pedido { Status = "Criado" };
 var outroPedido = pedido;
@@ -22,6 +23,16 @@ var outroPonto = ponto;
 outroPonto.X = 10;
 
 Console.WriteLine($"{pedido.Status} {ponto.X}");
+
+public sealed class Pedido
+{
+    public string Status { get; set; } = "";
+}
+
+public struct Ponto
+{
+    public int X { get; set; }
+}
 ```
 
 - A. `Criado 1`
@@ -33,6 +44,7 @@ Console.WriteLine($"{pedido.Status} {ponto.X}");
 
 Qual será a saída do código a seguir?
 
+<!-- snippet-csharp: id=aval-c01-q02; categoria=isolado -->
 ```csharp
 var primeiro = new Lote { Numero = 1, Etiquetas = ["urgente"] };
 var segundo = primeiro;
@@ -73,6 +85,7 @@ afirmação está correta?
 `Ponto` é um struct mutável e `pontos` é um `List<Ponto>` com um elemento cujo
 `X` vale 1. Após o trecho abaixo, `pontos[0].X` continua valendo 1. Por quê?
 
+<!-- snippet-csharp: id=aval-c01-q04; categoria=contexto -->
 ```csharp
 var ponto = pontos[0];
 ponto.X = 5;
@@ -90,6 +103,7 @@ ponto.X = 5;
 declarado como `public sealed record Dinheiro(decimal Quantia, string Moeda);`.
 Qual será a saída?
 
+<!-- snippet-csharp: id=aval-c01-q05; categoria=isolado -->
 ```csharp
 var id = Guid.NewGuid();
 var cliente1 = new Cliente(id, "Ada");
@@ -100,6 +114,14 @@ var dinheiro2 = new Dinheiro(10m, "BRL");
 Console.WriteLine(cliente1 == cliente2);
 Console.WriteLine(dinheiro1 == dinheiro2);
 Console.WriteLine(ReferenceEquals(dinheiro1, dinheiro2));
+
+public sealed class Cliente(Guid id, string nome)
+{
+    public Guid Id { get; } = id;
+    public string Nome { get; } = nome;
+}
+
+public sealed record Dinheiro(decimal Quantia, string Moeda);
 ```
 
 - A. `True`, `True`, `True`
@@ -111,6 +133,7 @@ Console.WriteLine(ReferenceEquals(dinheiro1, dinheiro2));
 
 Qual será o resultado da comparação abaixo?
 
+<!-- snippet-csharp: id=aval-c01-q06; categoria=isolado -->
 ```csharp
 var a = new Pedido("P1", ["caderno"]);
 var b = new Pedido("P1", ["caderno"]);
@@ -169,6 +192,7 @@ está de acordo com o capítulo?
 
 O que acontece ao executar a última linha?
 
+<!-- snippet-csharp: id=aval-c01-q10; categoria=isolado -->
 ```csharp
 int quantidade = 42;
 object caixa = quantidade;
