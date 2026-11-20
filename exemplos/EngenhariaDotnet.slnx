@@ -45,4 +45,7 @@
     <Project Path="c29-entrega/C29.Entrega.csproj" />
     <Project Path="c29-entrega/C29.Entrega.Tests.csproj" />
   </Folder>
+  <Folder Name="/08 - Testes Arquiteturais/">
+    <Project Path="testes-arquiteturais/EngenhariaDotnet.Architecture.Tests.csproj" />
+  </Folder>
 </Solution>

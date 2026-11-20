@@ -297,6 +297,12 @@ Automação comprova forma e consistência parcial, não atualidade semântica. 
 diagrama válido pode estar errado e um link verde pode apontar para conteúdo
 obsoleto. Revisão humana continua responsável pelo modelo e pela decisão.
 
+Os [testes arquiteturais dos exemplos](../../exemplos/testes-arquiteturais/README.md)
+aplicam essa ideia ao grafo da solução: a fronteira é declarada no projeto, a
+regra e sua justificativa ficam versionadas próximas do código, e fixtures
+positivas e negativas comprovam o comportamento do gate. As limitações
+documentadas evitam tratar a automação como prova completa da arquitetura.
+
 ### Critério de suficiência
 
 Antes de criar um artefato, responda:
