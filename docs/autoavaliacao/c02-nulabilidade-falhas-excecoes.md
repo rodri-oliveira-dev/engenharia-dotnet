@@ -22,8 +22,8 @@ public static string Normalizar(string titulo) => titulo.Trim();
   `null`, porque o tipo foi declarado sem `?`.
 - B. O compilador gera um tipo diferente de `string` para referências não
   anuláveis, e esse tipo rejeita `null`.
-- C. A anotação existe só para a análise estática; um chamador com NRT
-  desabilitado, reflection ou o operador `!` ainda pode entregar `null`.
+- C. A anotação não adiciona validação automática pelo runtime; um chamador
+  com NRT desabilitado, reflection ou o operador `!` ainda pode entregar `null`.
 - D. Como o projeto tem NRT habilitado, nenhum código, de nenhum projeto,
   consegue compilar uma chamada que passe `null`.
 
@@ -222,10 +222,11 @@ abordagem segue as boas práticas?
 ### Questão 1
 
 **Resposta: C.** Nullable Reference Types não criam um novo tipo em runtime:
-`string` e `string?` são o mesmo `System.String` para o CLR. Código sem NRT,
-reflection, desserialização, interoperabilidade ou `!` ainda podem passar
-`null`. Por isso uma API pública deve validar o argumento quando `null` vindo
-de fora for um risco real. Veja
+`string` e `string?` são o mesmo `System.String` para o CLR. A anotação vira
+metadado, que bibliotecas como o EF Core podem ler, mas o runtime não valida o
+argumento por causa dela. Código sem NRT, reflection, desserialização,
+interoperabilidade ou `!` ainda podem passar `null`. Por isso uma API pública
+deve validar o argumento quando `null` vindo de fora for um risco real. Veja
 [O que Nullable Reference Types faz](../linguagem-e-runtime/c02-nulabilidade-falhas-excecoes.md#o-que-nullable-reference-types-faz).
 
 ### Questão 2

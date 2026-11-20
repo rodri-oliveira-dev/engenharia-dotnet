@@ -199,8 +199,8 @@ object caixa = quantidade;
 short valor = (short)caixa;
 ```
 
-- A. Lança `InvalidCastException`: o unboxing exige exatamente o tipo
-  armazenado; seria preciso `(short)(int)caixa`.
+- A. Lança `InvalidCastException`: o unboxing para `short` exige que a caixa
+  contenha um `short`; seria preciso `(short)(int)caixa`.
 - B. `valor` recebe 42, porque o unboxing converte entre tipos numéricos.
 - C. `valor` recebe 0, porque a conversão falha silenciosamente.
 - D. O código não compila, porque não é possível converter `object` em `short`.
@@ -280,8 +280,8 @@ de subclasses, mas isso não garante melhoria sem medição. Veja a seção sobr
 ### Questão 10
 
 **Resposta: A.** Boxing copia o valor para um objeto no heap. O unboxing
-verifica se o objeto contém exatamente o tipo esperado; ele não converte entre
-tipos numéricos. Para obter um `short`, primeiro faça o unboxing para `int` e
+verifica se o objeto contém o tipo de valor pedido (ou, no caso de `int?`, o
+`int` correspondente); ele não converte entre tipos numéricos. Para obter um `short`, primeiro faça o unboxing para `int` e
 depois converta. Veja
 [Boxing e unboxing](../linguagem-e-runtime/c01-tipos-identidade-modelagem.md#boxing-e-unboxing).
 
