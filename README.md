@@ -101,10 +101,10 @@ Avançado não significa mais padrões ou mais ferramentas. Muitas vezes, a melh
 
 ## Roadmap de estudos e livros em português
 
-O [roadmap de estudos por maturidade](docs/roadmap-de-estudos.md) organiza 13
+O [roadmap de estudos por maturidade](docs/roadmap-de-estudos.md) organiza 14
 livros de C#, qualidade, DDD, arquitetura e sistemas distribuídos em cinco etapas,
-dos fundamentos às decisões arquiteturais mais complexas. Cada obra tem um link
-de busca na Amazon Brasil, indicação dos capítulos relacionados e uma prática
+dos fundamentos às decisões arquiteturais mais complexas. Cada obra tem um link de busca na Amazon Brasil ou para o site oficial do
+Refactoring.Guru, indicação dos capítulos relacionados e uma prática
 com critérios para avaliar o aprendizado.
 
 A ordem é uma sugestão de aprofundamento, não um requisito de senioridade. Quem
