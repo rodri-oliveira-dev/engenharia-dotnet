@@ -112,6 +112,14 @@ build, testes e auditoria de dependências no GitHub Actions. O
 explica como executar os mesmos comandos localmente e interpretar o gate de
 vulnerabilidades.
 
+## Qualidade editorial e ortografia
+
+O pipeline possui uma etapa de [validação ortográfica em pt-BR](docs/ortografia.md)
+com CSpell, dicionário brasileiro e [vocabulário técnico](.cspell/termos-tecnicos.txt).
+Nos PRs, são verificadas somente as linhas novas de prosa Markdown, sem
+bloquear mudanças por erros anteriores. A checagem não substitui revisão
+gramatical nem valida exemplos de código.
+
 ## Compatibilidade e evolução do .NET 11
 
 Além dos capítulos de fundamentos, o [guia de compatibilidade e breaking changes](docs/compatibilidade/indice.md)
