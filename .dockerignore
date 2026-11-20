@@ -1,0 +1,12 @@
+**
+!global.json
+!NuGet.Config
+!exemplos/
+!exemplos/Directory.Build.props
+!exemplos/Directory.Build.targets
+!exemplos/Directory.Packages.props
+!exemplos/c27-c28-observabilidade/
+!exemplos/c27-c28-observabilidade/**
+
+exemplos/c27-c28-observabilidade/bin/
+exemplos/c27-c28-observabilidade/obj/

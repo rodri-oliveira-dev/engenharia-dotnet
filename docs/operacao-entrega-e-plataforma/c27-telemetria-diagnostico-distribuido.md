@@ -10,7 +10,7 @@
 > [C15 — Comunicação entre serviços e mensageria resiliente](../sistemas-distribuidos/c15-comunicacao-mensageria-resiliente.md)
 > e [C26 — Segurança nas fronteiras da aplicação](../qualidade-e-seguranca/c26-seguranca-fronteiras-aplicacao.md).
 >
-> **Última revisão:** 2026-11-18
+> **Última revisão:** 2026-11-20
 
 Monitoramento responde perguntas conhecidas: a taxa de erro ultrapassou o limite?
 Há fila acumulada? Observabilidade é a capacidade de investigar estados internos a
@@ -211,7 +211,7 @@ exporter e preserve propagação mesmo quando um span não é gravado. “100% e
 ## OpenTelemetry em ASP.NET Core
 
 O laboratório [C27/C28](../../exemplos/c27-c28-observabilidade/) usa OpenTelemetry
-.NET 1.21.0 e .NET 10. Ele demonstra:
+.NET 1.21.0 e .NET 11. Ele demonstra:
 
 - logs JSON estruturados com `EventId`, scopes e exceção sem payload sensível;
 - spans automáticos de ASP.NET Core e `HttpClient`, além de span de domínio;
@@ -265,8 +265,220 @@ Valide o comportamento central:
 dotnet test exemplos/c27-c28-observabilidade/C27C28.Observabilidade.Tests.csproj --configuration Release
 ```
 
-O teste confirma que liveness não herda a disponibilidade do catálogo, readiness
-detecta indisponibilidade e a métrica de negócio não usa ID de pedido como dimensão.
+Os testes confirmam que liveness não herda a disponibilidade do catálogo, readiness
+detecta indisponibilidade e encerramento, falhas e timeouts viram 503, operações
+observam os tokens de parada e a métrica de negócio não usa ID de pedido como
+dimensão. Também validam a separação configurada entre stdout e stderr.
+
+### Executar em container
+
+O mesmo laboratório inclui um `Dockerfile` multi-stage. O estágio de build usa o
+SDK .NET 11.0.100; a imagem final contém apenas o runtime ASP.NET Core e as
+dependências publicadas. A variante Ubuntu chiseled não inclui shell nem gerenciador
+de pacotes, e o processo executa com o usuário não privilegiado fornecido pela
+imagem oficial.
+
+Na raiz do repositório, construa e execute a imagem:
+
+```powershell
+docker build --file exemplos/c27-c28-observabilidade/Dockerfile `
+  --tag engenharia-dotnet-observabilidade:local .
+docker run --rm --name observabilidade --publish 8080:8080 `
+  engenharia-dotnet-observabilidade:local
+```
+
+Para executar build e todos os smoke tests com limpeza automática dos containers:
+
+```powershell
+pwsh ./scripts/testar-container-observabilidade.ps1
+```
+
+O script cria containers com nomes e labels exclusivos, usa portas efêmeras e
+valida imagem, usuário, `STOPSIGNAL`, limites, health checks, falha da dependência e
+shutdown. Para repetir apenas a execução depois de uma imagem já construída:
+
+```powershell
+pwsh ./scripts/testar-container-observabilidade.ps1 `
+  -Image engenharia-dotnet-observabilidade:smoke -SkipBuild
+```
+
+O job `Validar laboratório Docker` executa o mesmo script em `ubuntu-latest` no
+GitHub Actions. Assim, a validação automatizada não depende das particularidades do
+Docker Desktop usado no desenvolvimento local.
+
+Em outro terminal, confira a identidade do processo e os contratos HTTP:
+
+```powershell
+docker inspect observabilidade --format '{{.Config.User}}'
+Invoke-WebRequest http://localhost:8080/health/live
+Invoke-WebRequest http://localhost:8080/health/ready
+Invoke-RestMethod http://localhost:8080/pedidos/11111111-1111-1111-1111-111111111111
+```
+
+O valor exibido por `docker inspect` é um UID diferente de zero. O arquivo
+`.dockerignore` da raiz restringe o contexto de build aos arquivos necessários e
+impede que artefatos locais `bin/` e `obj/` sejam enviados ao daemon.
+
+A configuração segue a convenção do ASP.NET Core para variáveis hierárquicas, com
+dois sublinhados no lugar de `:`. Estes são os valores definidos pela imagem e
+podem ser substituídos com `docker run --env` ou pelo orquestrador:
+
+| Variável | Padrão no container | Finalidade |
+| --- | --- | --- |
+| `ASPNETCORE_ENVIRONMENT` | `Production` | seleciona a configuração do ambiente |
+| `ASPNETCORE_HTTP_PORTS` | `8080` | define a porta HTTP interna do Kestrel |
+| `Dependencias__Catalogo` | `http://127.0.0.1:8080` | aponta para a dependência simulada na mesma aplicação |
+| `Dependencias__CatalogoTimeout` | `00:00:03` | limita cada chamada ao catálogo simulado |
+| `HostOptions__ShutdownTimeout` | `00:00:08` | limita a etapa de encerramento do Generic Host |
+| `Telemetry__ConsoleExporter` | `false` | evita duplicar telemetria detalhada nos logs do container |
+| `Telemetry__SamplingRatio` | `0.25` | reduz o volume de traces no ambiente `Production` |
+| `OTEL_EXPORTER_OTLP_ENDPOINT` | não definido | habilita OTLP somente quando um endpoint for fornecido |
+| `OTEL_SERVICE_NAME` | `engenharia-dotnet-observabilidade` | identifica o serviço na telemetria |
+
+A porta publicada no host é independente da porta interna. Por exemplo,
+`--publish 5090:8080` expõe a aplicação em `localhost:5090` sem alterar o Kestrel.
+Para mudar também a porta interna, mantenha a URL da dependência simulada coerente:
+
+```powershell
+docker run --rm --publish 9090:9090 `
+  --env ASPNETCORE_HTTP_PORTS=9090 `
+  --env Dependencias__Catalogo=http://127.0.0.1:9090 `
+  engenharia-dotnet-observabilidade:local
+```
+
+O container recebe apenas HTTP. Em um ambiente real, HTTPS costuma terminar no
+proxy reverso ou ingress, com políticas de rede e certificados fora desta imagem.
+O exemplo não exige credenciais, backend de telemetria nem infraestrutura em nuvem.
+
+#### Viva não significa pronta
+
+`/health/live` verifica somente se o processo consegue responder. `/health/ready`
+também verifica se a aplicação ainda aceita trabalho e se o catálogo necessário ao
+fluxo está acessível. Uma falha dessa dependência deixa a aplicação viva, mas não
+pronta:
+
+```powershell
+docker run --detach --name observabilidade-degradada --publish 8081:8080 `
+  --env Dependencias__Catalogo=http://127.0.0.1:1 `
+  engenharia-dotnet-observabilidade:local
+
+Invoke-WebRequest http://localhost:8081/health/live   # 200
+Invoke-WebRequest http://localhost:8081/health/ready  # 503
+Invoke-WebRequest `
+  http://localhost:8081/pedidos/11111111-1111-1111-1111-111111111111 # 503
+```
+
+O endereço `127.0.0.1:1` representa deliberadamente uma dependência inacessível
+dentro deste container. Não simula rede, balanceador ou serviço real. A liveness
+permanece saudável porque reiniciar um processo funcional não recupera uma
+dependência indisponível. A readiness falha para impedir a admissão de trabalho que
+depende do catálogo.
+
+#### Shutdown gracioso e cancelamento
+
+O `Dockerfile` declara `STOPSIGNAL SIGTERM`. Ao executar `docker stop`, o daemon
+envia esse sinal ao processo principal. O Generic Host inicia o encerramento,
+aciona `ApplicationStopping`, deixa de aceitar novas conexões e aguarda as atuais
+dentro do timeout configurado. O laboratório registra essa transição e liga o token
+da aplicação ao de cada operação em andamento.
+
+Inicie um container sem `--rm`, para preservar os logs após a parada:
+
+```powershell
+docker run --detach --name observabilidade-encerramento `
+  --publish 8082:8080 --stop-timeout 10 `
+  engenharia-dotnet-observabilidade:local
+```
+
+No primeiro terminal, inicie um atraso local controlado:
+
+```powershell
+Invoke-WebRequest `
+  'http://localhost:8082/operacoes/demorada?duracaoMs=30000'
+```
+
+Enquanto a requisição estiver em andamento, solicite a parada em outro terminal:
+
+```powershell
+docker stop --time 10 observabilidade-encerramento
+docker logs observabilidade-encerramento
+docker rm observabilidade-encerramento
+```
+
+Os logs mostram o recebimento do sinal, `ApplicationStopping=True`, o cancelamento
+da operação e a conclusão do encerramento da aplicação. O atraso é apenas uma tarefa
+local cancelável; não representa fila, transação, persistência ou chamada externa.
+O código também observa `RequestAborted` quando o cliente encerra a requisição. Os
+dois estados são registrados separadamente: observar um token cancelado não prova,
+sozinho, qual evento originou uma `OperationCanceledException`.
+
+O timeout de 10 segundos do Docker é maior que os 8 segundos do host para deixar
+margem ao encerramento da aplicação. Se o processo não terminar nesse intervalo, o
+Docker envia `SIGKILL`; esse sinal não permite executar limpeza, callbacks ou blocos
+`finally`. Shutdown gracioso reduz interrupções, mas não substitui idempotência nem
+transações para trabalho que não pode ser perdido.
+
+#### Stdout, stderr, recursos e timeouts
+
+O provider de console emite JSON sem gravar arquivos dentro da camada gravável do
+container. Mensagens até `Information` vão para stdout; `Warning`, `Error` e
+`Critical` vão para stderr. O comando do cenário degradado produz logs nos dois
+fluxos, que podem ser separados pelo cliente Docker:
+
+```powershell
+docker logs observabilidade-degradada 1>stdout.log 2>stderr.log
+docker rm --force observabilidade-degradada
+```
+
+O Docker combina esses fluxos em `docker logs` quando não há redirecionamento. Em
+produção, o runtime de containers normalmente coleta ambos; o laboratório não
+adiciona arquivo de log, agente proprietário ou backend externo.
+
+Limites de CPU e memória pertencem à execução, pois a mesma imagem pode receber
+capacidades diferentes em ambientes distintos:
+
+```powershell
+docker run --detach --name observabilidade-limitada --publish 8083:8080 `
+  --memory 256m --cpus 1 --stop-timeout 10 `
+  engenharia-dotnet-observabilidade:local
+docker stats --no-stream observabilidade-limitada
+docker rm --force observabilidade-limitada
+```
+
+Esses valores servem para observar configuração e consumo, não são recomendação de
+capacidade nem evidência de performance. Um limite de memória insuficiente pode
+encerrar o processo; CPU limitada pode aumentar latência e fazer timeouts expirarem.
+Dimensionamento exige carga representativa e medição no ambiente alvo.
+
+Há dois timeouts com responsabilidades diferentes:
+
+- `Dependencias__CatalogoTimeout` limita uma chamada HTTP ao catálogo. Falha de
+  conexão ou timeout resulta em 503 e log `Warning`, sem derrubar a liveness.
+- `HostOptions__ShutdownTimeout` limita quanto o host aguarda serviços e requisições
+  durante a parada. `--stop-timeout` precisa conceder ao processo tempo suficiente
+  antes de o Docker recorrer a `SIGKILL`.
+
+O endpoint `/dependencia-simulada` continua no mesmo processo apenas para produzir
+respostas e atrasos determinísticos. Ele não demonstra isolamento, disponibilidade,
+DNS, rede ou comportamento de uma dependência implantada separadamente.
+
+#### Relação com operação, observabilidade e entrega
+
+Este laboratório conecta três perspectivas sem tratá-las como equivalentes:
+
+- neste capítulo, C27, logs, traces, métricas e health checks tornam transições e
+  falhas observáveis, mas não recuperam a aplicação por conta própria;
+- [C28 — Confiabilidade e resposta a incidentes](c28-confiabilidade-resposta-incidentes.md)
+  usa liveness, readiness, timeout e shutdown como parte do comportamento
+  operacional que precisa ser monitorado e testado;
+- [C29 — Entrega compatível e gestão de risco](c29-entrega-compativel-risco-pipeline.md)
+  relaciona a imagem reproduzível e o smoke test no CI a gates de entrega. O teste
+  reduz risco, mas não prova compatibilidade de ambiente, capacidade ou rollback.
+
+O escopo termina na construção e execução local da imagem. Não há publicação em
+registry, deploy, Kubernetes, TLS, descoberta de serviços ou garantia de alta
+disponibilidade. Esses mecanismos exigem contratos e ambientes próprios; adicioná-los
+ao exemplo atual esconderia o comportamento de processo que ele pretende ensinar.
 
 ## Health checks como contrato do orquestrador
 
@@ -361,6 +573,20 @@ sinais sem uso e trate mudanças de nome, unidade e atributo como evolução de 
 
 - [Diagnostics tools overview](https://learn.microsoft.com/en-us/dotnet/core/diagnostics/)
   — Microsoft, sinais, coleta e ferramentas de diagnóstico .NET, acesso em 18 novembro 2026.
+- [Introduction to Docker and .NET](https://learn.microsoft.com/en-us/dotnet/core/docker/)
+  — Microsoft, imagens chiseled e usuário não privilegiado, acesso em 20 novembro 2026.
+- [.NET Generic Host](https://learn.microsoft.com/en-us/dotnet/core/extensions/generic-host)
+  — Microsoft, ciclo de vida, sinais e shutdown gracioso, acesso em 20 novembro 2026.
+- [IHostApplicationLifetime](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.hosting.ihostapplicationlifetime)
+  — Microsoft, tokens do ciclo de vida da aplicação, acesso em 20 novembro 2026.
+- [Configure endpoints for Kestrel](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel/endpoints)
+  — Microsoft, configuração de portas HTTP por ambiente, acesso em 20 novembro 2026.
+- [docker container stop](https://docs.docker.com/reference/cli/docker/container/stop/)
+  — Docker, `SIGTERM`, período de tolerância e `SIGKILL`, acesso em 20 novembro 2026.
+- [Resource constraints](https://docs.docker.com/engine/containers/resource_constraints/)
+  — Docker, limites de CPU e memória, acesso em 20 novembro 2026.
+- [ConsoleLoggerOptions.LogToStandardErrorThreshold](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.console.consoleloggeroptions.logtostandarderrorthreshold)
+  — Microsoft, separação de níveis em stderr, acesso em 20 novembro 2026.
 - [Logging in C# and .NET](https://learn.microsoft.com/en-us/dotnet/core/extensions/logging/overview)
   — Microsoft, `ILogger`, logging estruturado e providers, acesso em 18 novembro 2026.
 - [Creating metrics](https://learn.microsoft.com/en-us/dotnet/core/diagnostics/metrics-instrumentation)
