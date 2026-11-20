@@ -60,7 +60,7 @@ class SelecionarProsaTests(unittest.TestCase):
 
     def test_link_com_nome_de_arquivo_e_ignorado(self):
         text, count = module.prose_lines(
-            "[validar-documentacao.yml](../../.github/workflows/validar-documentacao.yml)\\n",
+            "[validar-documentacao.yml](../../.github/workflows/validar-documentacao.yml)\n",
             {1},
         )
         self.assertEqual(count, 0)
