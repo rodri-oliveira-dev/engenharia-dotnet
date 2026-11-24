@@ -154,6 +154,13 @@ Os capítulos de [Qualidade e segurança](docs/qualidade-e-seguranca/indice.md) 
 
 O projeto demonstra testes unitários, de integração HTTP e de ponta a ponta (E2E), além de métricas de cobertura, *mutation testing* e validações automatizadas de qualidade (*quality gates*) no CI. A proposta é mostrar como combinar camadas de teste e interpretar métricas sem tratar cobertura alta como sinônimo de testes eficazes.
 
+## Acessibilidade
+
+O [guia de acessibilidade em aplicações .NET](docs/qualidade-e-seguranca/acessibilidade-aplicacoes-dotnet.md)
+explora requisitos de qualidade, ASP.NET Core, Blazor e estratégias de testes.
+A [declaração de acessibilidade](ACCESSIBILITY.md) descreve os objetivos e
+limitações do próprio material educacional.
+
 ## Observabilidade
 
 Os capítulos de [Operação, entrega e plataforma](docs/operacao-entrega-e-plataforma/indice.md) abordam telemetria, rastreamento distribuído e diagnóstico de sistemas. Para acompanhar esses conceitos em um ambiente executável, consulte o laboratório [Observabilidade em sistemas distribuídos com .NET](https://github.com/rodri-oliveira-dev/dotnet-observability-lab).
