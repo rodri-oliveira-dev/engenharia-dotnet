@@ -14,5 +14,9 @@ fronteiras.
 - **C25 · Avançado · Publicado:** [Cobertura, E2E e testes de
   carga](c25-cobertura-e2e-carga.md).
 
+## Material complementar
+
+- [Acessibilidade em aplicações .NET](acessibilidade-aplicacoes-dotnet.md).
+
 Consulte o [mapa editorial](../planejamento/mapa-editorial.md) para escopo,
 dependências e estratégia de exemplos. Volte ao [índice central](../indice.md).

@@ -52,6 +52,16 @@ revisão. Em caso de dúvida de escopo, prevalecem o
 - Não adicione elementos visuais decorativos, badges sem resultado verificável
   ou imagens sem texto alternativo.
 
+## Acessibilidade do conteúdo
+
+- Não use cor ou símbolos como única forma de comunicar informação.
+- Forneça descrição textual para diagramas e imagens informativas, incluindo
+  as relações essenciais quando o texto alternativo curto não for suficiente.
+- Prefira links descritivos e tabelas simples; apresente em texto as conclusões
+  relevantes de comparações visuais.
+- Consulte a [declaração de acessibilidade](../ACCESSIBILITY.md) para conhecer
+  os objetivos e as limitações do projeto.
+
 ## Código e exemplos
 
 - Exemplos devem demonstrar um comportamento, risco ou decisão observável.

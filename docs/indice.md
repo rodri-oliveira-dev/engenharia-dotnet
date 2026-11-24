@@ -54,6 +54,10 @@ oito agrupamentos definidos no mapa editorial e os 35 capítulos publicados.
 - [C34 — Migração gradual de monólito](estudos-de-caso/c34-migracao-gradual-monolito.md)
 - [C35 — Pipeline com dependência vulnerável](estudos-de-caso/c35-pipeline-dependencia-vulneravel.md)
 
+## Material complementar
+
+- [Acessibilidade em aplicações .NET](qualidade-e-seguranca/acessibilidade-aplicacoes-dotnet.md).
+
 ## Compatibilidade e evolução de versões
 
 - [Índice de compatibilidade e breaking changes do .NET 11](compatibilidade/indice.md)
