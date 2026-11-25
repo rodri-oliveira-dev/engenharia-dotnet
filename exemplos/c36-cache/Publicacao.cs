@@ -28,14 +28,13 @@ public sealed class CatalogoVersionado(VersaoCatalogo inicial)
 
     public VersaoCatalogo Capturar() => Volatile.Read(ref ativa);
 
-    public bool TentarPublicar(VersaoCatalogo candidata, long geracaoEsperada, int quantidadeEsperada)
+    public bool TentarPublicar(VersaoCatalogo candidata, VersaoCatalogo anterior, int quantidadeEsperada)
     {
         ArgumentOutOfRangeException.ThrowIfNegative(quantidadeEsperada);
         if (candidata.Quantidade != quantidadeEsperada)
             return false;
 
-        var anterior = Capturar();
-        if (anterior.Geracao != geracaoEsperada || candidata.Geracao <= anterior.Geracao)
+        if (candidata.Geracao <= anterior.Geracao)
             return false;
 
         // Um concorrente que mudar o ponteiro invalida esta tentativa.

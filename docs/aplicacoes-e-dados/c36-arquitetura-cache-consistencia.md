@@ -28,7 +28,7 @@ Defina o que pode ser entregue quando a origem está indisponível. Uma descriç
 de produto pode admitir atraso de minutos; uma autorização revogada ou um saldo
 usado para autorizar uma transação pode exigir consulta à fonte autoritativa.
 
-- **Frescor:** idade máxima aceitável desde a observação na origem.
+- **Frescor:** idade do dado em relação à origem; o contrato define a idade máxima aceitável.
 - **TTL (time to live):** tempo de vida de uma entrada; não garante, sozinho,
   frescor nem consistência entre réplicas.
 - **Evicção:** remoção para liberar capacidade, inclusive antes da expiração.
@@ -110,10 +110,15 @@ frequently used) selecionam entradas para remoção sob pressão. A política
 expiração e evicção precisam ser consideradas separadamente.
 
 Um bloqueio distribuído com prazo de validade (lease) não garante que o
-proprietário antigo pare de executar quando o prazo termina. Um identificador
-único evita que esse proprietário remova o bloqueio de outro; já um fencing
-token é uma geração crescente que o recurso protegido precisa validar para
-rejeitar operações antigas. Um bloqueio local não substitui essa coordenação.
+proprietário antigo pare de executar quando o prazo termina. No Redis 7, a
+obtenção pode usar `SET` com `NX` e `PX` e um valor exclusivo por aquisição.
+A liberação precisa comparar esse valor e excluir a chave na mesma operação
+atômica, por exemplo com Lua. Comparar e excluir em comandos separados permite
+que o proprietário anterior remova o bloqueio de outro. Uma renovação também
+precisa verificar a propriedade atomicamente; renovar não impede que uma
+execução antiga continue após perder o bloqueio. Um fencing token é uma geração
+crescente que o recurso protegido precisa validar para rejeitar operações
+antigas. Um bloqueio local não substitui essa coordenação.
 Em caso de partição de rede ou troca de primário, valide as garantias do
 serviço em vez de presumir exclusão mútua global.
 
@@ -135,6 +140,26 @@ Considere um catálogo fictício com 1,5 milhão de registros, atualizado a cada
 
 CDC (Change Data Capture) captura mudanças da origem; não substitui a
 necessidade de detectar lacunas nem garantir uma carga inicial consistente.
+
+### Consistência da extração
+
+Uma versão completa não é necessariamente consistente. Se a origem mudar
+entre páginas da extração, a quantidade esperada pode estar correta e os
+registros ainda assim representar instantes diferentes. A troca atômica do
+ponteiro não corrige essa inconsistência.
+
+No PostgreSQL, uma transação de leitura em `REPEATABLE READ` mantém a mesma
+visão dos dados para consultas sucessivas a partir da primeira instrução que
+estabelece a visão transacional. Avalie o custo de manter uma transação longa.
+Para outras fontes, prefira uma exportação imutável e versionada ou um marco
+de processamento associado a um protocolo que garanta a visão consistente.
+Um horário de corte isolado não garante isso se os registros puderem mudar
+ou chegar fora de ordem. Com CDC, coordene a carga inicial e a posição do
+fluxo de mudanças para evitar lacunas.
+
+Valide quantidade, identidade dos registros, versão da origem e, quando
+aplicável, a integridade do conteúdo contra um manifesto produzido pela
+extração. Uma contagem igual não detecta a troca de um registro por outro.
 
 ### Publicação por versão
 
@@ -166,7 +191,12 @@ slot. Evite concentrar todo o catálogo em um único slot apenas para obter
 atomicidade: mantenha os metadados da publicação juntos e distribua os dados
 quando necessário, validando a integridade e o protocolo de leitura.
 
-Planeje a retenção da versão antiga para leitores em andamento. Se uma
+Planeje a retenção da versão antiga para leitores em andamento. Quando as
+leituras têm um prazo máximo conhecido, retenha a versão anterior por pelo
+menos esse prazo após a troca, considerando propagação do ponteiro e margem
+operacional. Caso contrário, use coordenação de leitores ou um protocolo de
+repetição integral. A limpeza não deve excluir a geração ativa nem uma
+versão ainda necessária para recuperação. Se uma
 entrada desaparecer por evicção ou a versão inteira deixar de estar disponível,
 a consulta deve falhar de forma controlada, repetir com uma nova versão
 quando permitido ou usar uma origem coerente. Não misture gerações como
@@ -189,7 +219,9 @@ Uma chave precisa representar o contexto que altera a resposta: tenant,
 recurso, versão e, quando aplicável, identidade ou escopo de autorização.
 Nunca use dados sensíveis em nomes de chaves ou etiquetas de telemetria.
 Normalizar entradas sem validar limites pode permitir consumo excessivo de
-memória. Autorização não deve depender de uma cópia antiga sem um contrato
+memória. Em entregas graduais, versões incompatíveis do formato serializado
+precisam usar espaços de chaves distintos ou leitores compatíveis durante a
+transição; a versão do formato não é a geração dos dados. Autorização não deve depender de uma cópia antiga sem um contrato
 explícito de revogação. Consulte o
 [C26](../qualidade-e-seguranca/c26-seguranca-fronteiras-aplicacao.md).
 
@@ -202,8 +234,10 @@ incompleta, geração obsoleta e publicação concorrente.
 
 O modelo em memória isola a regra de publicação; não simula a rede nem
 as garantias do Redis. Um exercício separado usa Redis real via Docker,
-sem publicar portas, para observar a troca condicional de um ponteiro.
-O exercício não substitui testes de integração de uma aplicação distribuída.
+sem publicar portas, para observar a troca condicional de um ponteiro. O
+script publica a própria chave de dados validada e rejeita gerações antigas,
+chaves inválidas e cargas incompletas. O CI executa esse exercício em um job
+separado. Ele não substitui testes de integração de uma aplicação distribuída.
 
 ## Como medir antes de decidir
 
@@ -220,9 +254,11 @@ O exercício não substitui testes de integração de uma aplicação distribuí
 Compare com uma execução sem cache, aquecimento, carga estável, expiração
 simultânea e indisponibilidade. Fixe a distribuição das chaves, concorrência,
 tamanho dos dados, ambiente, versões e duração. Registre também falhas e
-respostas degradadas, não somente requisições bem-sucedidas.
+respostas degradadas, não somente requisições bem-sucedidas. Agregue métricas
+por operação ou região de cache, sem usar chaves individuais como etiquetas
+de alta cardinalidade.
 O [C04](../linguagem-e-runtime/c04-memoria-runtime-performance.md) trata
-microbenchmarks; o [C25](../qualidade-e-seguranca/c25-cobertura-e2e-carga.md)
+medições de desempenho em pequena escala; o [C25](../qualidade-e-seguranca/c25-cobertura-e2e-carga.md)
 trata carga sistêmica. Não confunda resultados desses dois níveis.
 
 ## Matriz de decisão
@@ -270,3 +306,7 @@ arquitetural por si só.
   — Redis, acesso em 25 novembro 2026.
 - [SET](https://redis.io/docs/latest/commands/set/)
   — Redis, acesso em 25 novembro 2026.
+- [Distributed locks with Redis](https://redis.io/docs/latest/develop/clients/patterns/distributed-locks/)
+  — Redis, acesso em 25 novembro 2026.
+- [Transaction isolation](https://www.postgresql.org/docs/19/transaction-iso.html)
+  — PostgreSQL 19, acesso em 25 novembro 2026.

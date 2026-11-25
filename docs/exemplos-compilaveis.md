@@ -49,7 +49,7 @@ exemplo não simula propagação, auditoria ou consistência de um serviço de f
 
 O laboratório `c36-cache/` demonstra publicação condicional de conjuntos
 imutáveis com testes .NET independentes de serviços externos. Um exercício
-opcional com Redis real usa Docker e não integra a execução padrão do CI.
+com Redis real usa Docker, é opcional localmente e possui job próprio no CI.
 
 ## Quando criar um projeto
 

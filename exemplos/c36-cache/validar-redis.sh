@@ -2,10 +2,13 @@
 set -euo pipefail
 
 # Container descartavel, sem portas publicadas e sem rede externa.
-container=$(docker run --rm -d --network none redis:7.4-alpine)
+imagem=redis:7.4-alpine
+docker pull "$imagem"
+docker image inspect --format '{{join .RepoDigests ", "}}' "$imagem"
+container=$(docker run --pull never --rm -d --network none "$imagem")
 trap 'docker rm -f "$container" >/dev/null 2>&1 || true' EXIT
 
-redis() { docker exec "$container" redis-cli --raw "$@"; }
+redis() { docker exec "$container" redis-cli -e --raw "$@"; }
 for tentativa in {1..30}; do
   if [[ "$(redis PING 2>/dev/null || true)" == PONG ]]; then
     break
@@ -14,33 +17,59 @@ for tentativa in {1..30}; do
 done
 [[ "$(redis PING)" == PONG ]]
 
-# O ponteiro e os metadados de prontidao usam a mesma hash tag.
-# Dados pequenos em hashes apenas para demonstracao.
-redis HSET '{catalogo}:A' 1 antigo 2 antigo >/dev/null
-redis SET '{catalogo}:ativo' A >/dev/null
-redis HSET '{catalogo}:B' 1 novo >/dev/null
+# O ponteiro guarda a chave completa, nao um identificador independente.
+# As geracoes de oito digitos permitem comparacao lexical sem perda numerica.
+ponteiro='{catalogo}:ativo'
+a='{catalogo}:00000001'
+b='{catalogo}:00000002'
+c='{catalogo}:00000003'
+redis HSET "$a" 1 antigo 2 antigo >/dev/null
+redis SET "$ponteiro" "$a" >/dev/null
+redis HSET "$b" 1 novo >/dev/null
 
 publicar='
+local formato = "^%{catalogo%}:%d%d%d%d%d%d%d%d$"
+if KEYS[1] ~= "{catalogo}:ativo" then return 0 end
+if not string.match(ARGV[1], formato) or not string.match(KEYS[2], formato) then
+    return 0
+end
+if KEYS[2] <= ARGV[1] then return 0 end
 if redis.call("GET", KEYS[1]) ~= ARGV[1] then return 0 end
-if redis.call("HLEN", KEYS[2]) ~= tonumber(ARGV[3]) then return 0 end
-redis.call("SET", KEYS[1], ARGV[2])
+local quantidade = tonumber(ARGV[2])
+if not quantidade or quantidade < 1 or quantidade ~= math.floor(quantidade) then
+    return 0
+end
+if redis.call("HLEN", KEYS[2]) ~= quantidade then return 0 end
+redis.call("SET", KEYS[1], KEYS[2])
 return 1
 '
 
-# Carga incompleta nao publica.
-[[ "$(redis EVAL "$publicar" 2 '{catalogo}:ativo' '{catalogo}:B' A B 2)" == 0 ]]
-[[ "$(redis GET '{catalogo}:ativo')" == A ]]
-redis HSET '{catalogo}:B' 2 novo >/dev/null
+trocar() { redis EVAL "$publicar" 2 "$ponteiro" "$2" "$1" "$3"; }
 
-# Leitor captura o ponteiro antes da troca.
-leitor=$(redis GET '{catalogo}:ativo')
-[[ "$(redis EVAL "$publicar" 2 '{catalogo}:ativo' '{catalogo}:B' A B 2)" == 1 ]]
-[[ "$(redis GET '{catalogo}:ativo')" == B ]]
-[[ "$(redis HGET "{catalogo}:$leitor" 2)" == antigo ]]
-[[ "$(redis HGET '{catalogo}:B' 2)" == novo ]]
+# Carga incompleta ou inexistente nao publica.
+[[ "$(trocar "$a" "$b" 2)" == 0 ]]
+[[ "$(trocar "$a" "$c" 2)" == 0 ]]
+[[ "$(trocar "$a" "$c" 0)" == 0 ]]
+[[ "$(redis GET "$ponteiro")" == "$a" ]]
+redis HSET "$b" 2 novo >/dev/null
 
-# Publicador obsoleto: a expectativa A ja nao e valida.
-redis HSET '{catalogo}:C' 1 outro 2 outro >/dev/null
-[[ "$(redis EVAL "$publicar" 2 '{catalogo}:ativo' '{catalogo}:C' A C 2)" == 0 ]]
-[[ "$(redis GET '{catalogo}:ativo')" == B ]]
+# Uma chave de outro conjunto, mesmo completa, nao pode ser publicada.
+redis HSET '{outro}:00000002' 1 outro 2 outro >/dev/null
+[[ "$(trocar "$a" '{outro}:00000002' 2)" == 0 ]]
+[[ "$(redis GET "$ponteiro")" == "$a" ]]
+
+# Leitor captura a chave antes da troca.
+leitor=$(redis GET "$ponteiro")
+[[ "$(trocar "$a" "$b" 2)" == 1 ]]
+[[ "$(redis GET "$ponteiro")" == "$b" ]]
+[[ "$(redis HGET "$leitor" 2)" == antigo ]]
+[[ "$(redis HGET "$b" 2)" == novo ]]
+
+# Publicador obsoleto e tentativa de reutilizar uma geracao anterior.
+redis HSET "$c" 1 outro 2 outro >/dev/null
+[[ "$(trocar "$a" "$c" 2)" == 0 ]]
+[[ "$(trocar "$b" "$a" 2)" == 0 ]]
+[[ "$(redis GET "$ponteiro")" == "$b" ]]
+[[ "$(trocar "$b" "$c" 2)" == 1 ]]
+[[ "$(redis GET "$ponteiro")" == "$c" ]]
 echo "Publicacao condicional validada."

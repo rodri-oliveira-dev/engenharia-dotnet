@@ -13,7 +13,7 @@ public sealed class PublicacaoTests
         var catalogo = new CatalogoVersionado(Versao(1, "A"));
         var leitor = catalogo.Capturar();
 
-        Assert.True(catalogo.TentarPublicar(Versao(2, "B"), 1, 2));
+        Assert.True(catalogo.TentarPublicar(Versao(2, "B"), leitor, 2));
 
         Assert.Equal("A", leitor.Buscar(1)?.Nome);
         Assert.Equal("A", leitor.Buscar(2)?.Nome);
@@ -26,7 +26,7 @@ public sealed class PublicacaoTests
         var catalogo = new CatalogoVersionado(Versao(1, "A"));
         var incompleta = new VersaoCatalogo(2, [new Produto(1, "B")]);
 
-        Assert.False(catalogo.TentarPublicar(incompleta, 1, 2));
+        Assert.False(catalogo.TentarPublicar(incompleta, catalogo.Capturar(), 2));
         Assert.Equal(1L, catalogo.Capturar().Geracao);
     }
 
@@ -35,8 +35,8 @@ public sealed class PublicacaoTests
     {
         var catalogo = new CatalogoVersionado(Versao(2, "B"));
 
-        Assert.False(catalogo.TentarPublicar(Versao(1, "A"), 2, 2));
-        Assert.False(catalogo.TentarPublicar(Versao(3, "C"), 1, 2));
+        Assert.False(catalogo.TentarPublicar(Versao(1, "A"), catalogo.Capturar(), 2));
+        Assert.False(catalogo.TentarPublicar(Versao(3, "C"), Versao(1, "A"), 2));
         Assert.Equal(2L, catalogo.Capturar().Geracao);
     }
 
@@ -44,12 +44,14 @@ public sealed class PublicacaoTests
     public async Task DuasPublicacoesDaMesmaBaseNaoPodemVencer()
     {
         var catalogo = new CatalogoVersionado(Versao(1, "A"));
+        // Ambos os publicadores observam exatamente a mesma referência antes da troca.
+        var baseComum = catalogo.Capturar();
         var inicio = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
 
         async Task<bool> Publicar(VersaoCatalogo candidata)
         {
             await inicio.Task;
-            return catalogo.TentarPublicar(candidata, 1, 2);
+            return catalogo.TentarPublicar(candidata, baseComum, 2);
         }
 
         var primeira = Publicar(Versao(2, "B"));
@@ -57,8 +59,18 @@ public sealed class PublicacaoTests
         inicio.SetResult();
         var resultados = await Task.WhenAll(primeira, segunda);
 
-        Assert.Single(resultados.Where(resultado => resultado));
+        Assert.Single(resultados, resultado => resultado);
         Assert.Equal(resultados[0] ? 2L : 3L, catalogo.Capturar().Geracao);
+    }
+
+    [Fact]
+    public void ReferenciaDeOutraPublicacaoNaoEquivaleAoPonteiroAtivo()
+    {
+        var catalogo = new CatalogoVersionado(Versao(1, "A"));
+        var mesmaGeracaoOutraReferencia = Versao(1, "A");
+
+        Assert.False(catalogo.TentarPublicar(Versao(2, "B"), mesmaGeracaoOutraReferencia, 2));
+        Assert.Equal(1L, catalogo.Capturar().Geracao);
     }
 
     [Fact]
