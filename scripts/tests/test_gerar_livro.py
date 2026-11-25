@@ -44,6 +44,19 @@ class LivroTests(unittest.TestCase):
             self.assertEqual(blocks[2]["c"][0][1], ["editorial-note"])
             self.assertEqual(blocks[3]["t"], "BlockQuote")
 
+    def test_validacao_textual_tolera_quebras_sem_ignorar_ausencias(self):
+        path = SCRIPT.parent / "livro/validar_pdf.py"
+        spec = importlib.util.spec_from_file_location("validar_pdf", path)
+        validator = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(validator)
+        text = "Conhecimento livre, acesso\ngratuito\nCC BY-NC\u00a04.0"
+        self.assertEqual(validator.missing_text(text, (
+            "Conhecimento livre, acesso gratuito", "CC BY-NC 4.0",
+        )), [])
+        self.assertEqual(validator.missing_text(text, (
+            "CC BY-NC 4.0", "distribuição gratuita",
+        )), ["distribuição gratuita"])
+
     def test_links_e_ancoras(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp).resolve()

@@ -55,7 +55,9 @@ python scripts/gerar-livro.py
 
 O resultado fica em `dist/livro/engenharia-dotnet.pdf`.
 O fluxo de validação disponibiliza o mesmo PDF como artefato de cada PR
-relevante. Confira a capa, o sumário, as tabelas, os blocos de código e os
+relevante, mesmo se a validação editorial posterior falhar. O artefato de
+revisão não equivale a uma edição aprovada: a publicação exige sucesso de
+todas as verificações. Confira a capa, o sumário, as tabelas, os blocos de código e os
 diagramas antes de aprovar uma mudança editorial.
 
 ## Publicar

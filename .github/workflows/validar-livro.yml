@@ -53,43 +53,34 @@ jobs:
         run: python -m unittest discover -s scripts/tests -p "test_gerar_livro.py" -v
 
       - name: Gerar livro
+        id: gerar
         run: python scripts/gerar-livro.py
-
-      - name: Verificar PDF
-        run: |
-          pdfinfo dist/livro/engenharia-dotnet.pdf
-          pdftotext -f 1 -l 1 dist/livro/engenharia-dotnet.pdf "$RUNNER_TEMP/capa.txt"
-          grep -F "Engenharia .NET" "$RUNNER_TEMP/capa.txt"
-          grep -F "Distribuição gratuita" "$RUNNER_TEMP/capa.txt"
-          grep -F "Rodrigo de Oliveira" "$RUNNER_TEMP/capa.txt"
-          pdftotext dist/livro/engenharia-dotnet.pdf "$RUNNER_TEMP/livro.txt"
-          grep -F "Engenharia .NET" "$RUNNER_TEMP/livro.txt"
-          grep -F "MIT License" "$RUNNER_TEMP/livro.txt"
-          grep -F "Como utilizar este livro" "$RUNNER_TEMP/livro.txt"
-          grep -F "https://github.com/rodri-oliveira-dev/engenharia-dotnet" "$RUNNER_TEMP/capa.txt"
-          pdfinfo dist/livro/engenharia-dotnet.pdf | grep -E "^Tagged:[[:space:]]+yes"
-          pdftotext -f 2 -l 2 dist/livro/engenharia-dotnet.pdf "$RUNNER_TEMP/direitos.txt"
-          grep -F "Conhecimento livre, acesso gratuito" "$RUNNER_TEMP/direitos.txt"
-          grep -F "distribuição gratuita" "$RUNNER_TEMP/direitos.txt"
-          grep -F "CC BY-NC 4.0" "$RUNNER_TEMP/direitos.txt"
-
-      - name: Gerar amostras para revisão visual
-        run: |
-          mkdir -p "$RUNNER_TEMP/livro-amostras"
-          pdftoppm -f 1 -l 6 -r 110 -png dist/livro/engenharia-dotnet.pdf "$RUNNER_TEMP/livro-amostras/pagina"
-
-      - name: Disponibilizar amostras para revisão visual
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        with:
-          name: engenharia-dotnet-amostras
-          path: ${{ runner.temp }}/livro-amostras/
-          if-no-files-found: error
-          retention-days: 14
 
       - name: Disponibilizar PDF para revisão
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: engenharia-dotnet-livro
           path: dist/livro/engenharia-dotnet.pdf
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Verificar PDF
+        run: |
+          pdfinfo dist/livro/engenharia-dotnet.pdf
+          python scripts/livro/validar_pdf.py dist/livro/engenharia-dotnet.pdf
+
+      - name: Gerar amostras para revisão visual
+        id: amostras
+        if: ${{ !cancelled() && steps.gerar.outcome == 'success' }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/livro-amostras"
+          pdftoppm -f 1 -l 6 -r 110 -png dist/livro/engenharia-dotnet.pdf "$RUNNER_TEMP/livro-amostras/pagina"
+
+      - name: Disponibilizar amostras para revisão visual
+        if: ${{ !cancelled() && steps.amostras.outcome == 'success' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: engenharia-dotnet-amostras
+          path: ${{ runner.temp }}/livro-amostras/
           if-no-files-found: error
           retention-days: 14
