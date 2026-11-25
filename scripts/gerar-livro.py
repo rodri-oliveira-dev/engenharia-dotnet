@@ -191,6 +191,15 @@ def text_inline(text):
     return [{"t": "Str", "c": text}]
 
 
+def insert_rights(page, source):
+    """Insere a página editorial após a capa e antes do sumário."""
+    if page.count("</header>") != 1 or '<nav id="TOC"' not in page:
+        raise ValueError("Capa ou sumário não encontrado no livro.")
+    rights = run("pandoc", "--from=gfm-raw_html", "--to=html5", str(source))
+    return page.replace("</header>", '</header><section class="rights" id="direitos-autorais">'
+                        + rights + "</section>", 1)
+
+
 def build(root, output, directory, commit):
     from weasyprint import HTML, default_url_fetcher
 
@@ -207,8 +216,8 @@ def build(root, output, directory, commit):
             print(f"Preparando {path.relative_to(root)}", flush=True)
             blocks.extend(convert(documents[path]["blocks"], root, path, maps,
                                   commit, directory, assets))
-    blocks.append(header(1, "licenca", text_inline("Licença")))
-    for paragraph in (root / "LICENSE").read_text(encoding="utf-8").strip().split("\n\n"):
+    blocks.append(header(1, "licenca", text_inline("Licença MIT dos exemplos de código")))
+    for paragraph in (root / "LICENSE-CODE").read_text(encoding="utf-8").strip().split("\n\n"):
         blocks.append({"t": "Para", "c": text_inline(" ".join(paragraph.splitlines()))})
     metadata = {key: {"t": "MetaString", "c": value} for key, value in {
         "title": "Engenharia .NET",
@@ -224,7 +233,8 @@ def build(root, output, directory, commit):
     page = page.replace("</head>", "<style>" + css + "</style></head>", 1)
     page = page.replace("</header>", f'<p class="edition">Commit: {html.escape(commit[:12])}</p>'
                         f'<p><a href="{REPO}/tree/{commit}">Código e documentação</a></p>'
-                        '<p>Licença MIT</p></header>', 1)
+                        '<p>Conteúdo editorial: CC BY-NC 4.0 | Código: MIT</p></header>', 1)
+    page = insert_rights(page, root / "scripts/livro/direitos-autorais.md")
     page = page.replace('<nav id="TOC"', '<h1 class="toc-title">Sumário</h1><nav id="TOC"', 1)
 
     def fetch(url):
@@ -248,7 +258,9 @@ def build(root, output, directory, commit):
         anchors = {a for p in document.pages for a in p.anchors}
         internal = {link[1] for p in document.pages for link in p.links
                     if link[0] == "internal"}
-        required = {a for m in maps.values() for a in m.values()}
+        required = {a for m in maps.values() for a in m.values()} | {"direitos-autorais"}
+        if len(document.pages) < 3 or "direitos-autorais" not in document.pages[1].anchors:
+            raise ValueError("Página de direitos autorais fora da posição editorial.")
         if not required <= anchors or not internal <= anchors or len(document.pages) < len(paths):
             raise ValueError("Âncoras, sumário ou paginação incompletos.")
         if errors:

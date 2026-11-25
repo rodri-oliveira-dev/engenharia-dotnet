@@ -50,3 +50,8 @@ tr { break-inside: avoid; }
 img { max-width: 100%; max-height: 185mm; object-fit: contain; }
 img.diagram { display: block; margin: 4mm auto; }
 figure { margin: 4mm 0; break-inside: avoid; }
+
+/* Página de direitos autorais, entre a capa e o sumário. */
+.rights { break-after: page; padding-top: 10mm; }
+.rights h1 { font-size: 24pt; margin: 0 0 8mm; }
+.rights p { margin: 0 0 4mm; }

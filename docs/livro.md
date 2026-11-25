@@ -3,6 +3,15 @@
 O livro reúne os capítulos publicados e os materiais complementares em um
 único PDF. Os arquivos Markdown continuam sendo a fonte de verdade.
 
+## Distribuição e licença
+
+A edição oficial é gratuita. O conteúdo editorial original e o PDF seguem
+[CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/deed.pt).
+Os trechos de código mantêm a [licença MIT](../LICENSE-CODE).
+A página de direitos autorais precede o sumário. A
+[política de licenciamento](../LICENSE) preserva permissões anteriores e
+licenças de terceiros.
+
 ## Organização
 
 O índice central define as áreas. Os índices de cada área definem a ordem

@@ -41,4 +41,4 @@ jobs:
           gh release create "$tag" dist/livro/engenharia-dotnet.pdf \
             --target "$GITHUB_SHA" --latest=false \
             --title "Engenharia .NET | Livro ${GITHUB_SHA:0:12}" \
-            --notes "Edição PDF consolidada da documentação no commit $GITHUB_SHA. Licença MIT."
+            --notes "Edição PDF consolidada da documentação no commit $GITHUB_SHA. Distribuição gratuita. Conteúdo editorial: CC BY-NC 4.0. Código: MIT. Consulte a política de licenciamento do repositório."

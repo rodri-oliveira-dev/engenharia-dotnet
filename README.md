@@ -4,7 +4,8 @@
 ![.NET 11](https://img.shields.io/badge/.NET-11.0-512BD4?logo=dotnet&logoColor=white)
 ![C# 15](https://img.shields.io/badge/C%23-15-239120)
 ![Português](https://img.shields.io/badge/idioma-pt--BR-blue)
-[![Licença MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-green)](LICENSE)
+[![Código MIT](https://img.shields.io/badge/c%C3%B3digo-MIT-green)](LICENSE-CODE)
+[![Conteúdo CC BY-NC 4.0](https://img.shields.io/badge/conte%C3%BAdo-CC%20BY--NC%204.0-blue)](LICENSE)
 
 Trabalho com C# e .NET há bastante tempo e sei que algumas dúvidas merecem mais do que uma resposta rápida. Criei este espaço para reunir explicações sobre a linguagem, o runtime e as decisões de engenharia que aparecem quando desenvolvemos, evoluímos e mantemos sistemas.
 
@@ -182,4 +183,11 @@ Antes de abrir um pull request, dê uma olhada no [guia de contribuição](CONTR
 
 ## Licença
 
-O conteúdo deste repositório é disponibilizado sob a [licença MIT](LICENSE).
+O projeto utiliza [licenças distintas](LICENSE) para código e conteúdo editorial:
+
+- Código-fonte, laboratórios e trechos de código: [MIT](LICENSE-CODE).
+- Conteúdo editorial original e livro em PDF: [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/deed.pt).
+
+A edição oficial do livro é gratuita. O uso comercial do conteúdo editorial
+exige autorização, ressalvados os direitos anteriormente concedidos e as
+exceções legais. As licenças de materiais de terceiros são preservadas.

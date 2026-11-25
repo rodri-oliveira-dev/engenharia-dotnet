@@ -23,6 +23,15 @@ Para uma revisão geral, execute `npm run ortografia`. Termos técnicos
 necessários devem entrar em `.cspell/termos-tecnicos.txt` após revisão;
 não adicione grafias incorretas apenas para silenciar o job.
 
+## Licenciamento das contribuições
+
+Ao contribuir, disponibilize seu conteúdo original sob a licença aplicável:
+[MIT para código](LICENSE-CODE) e
+[CC BY-NC 4.0 para conteúdo editorial](LICENSE).
+Confirme que possui os direitos necessários e identifique materiais de terceiros
+com suas fontes, licenças e créditos. Não inclua conteúdo incompatível com
+as condições de distribuição do projeto.
+
 ## Novos capítulos
 
 - Escolha um capítulo já aprovado no mapa editorial ou justifique a nova lacuna.

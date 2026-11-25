@@ -22,6 +22,17 @@ class LivroTests(unittest.TestCase):
         self.assertLess(chapters.index(next(p for p in chapters if p.name.startswith("c05-"))),
                         chapters.index(next(p for p in chapters if p.name.startswith("c04-"))))
 
+    def test_pagina_de_direitos_antes_do_sumario(self):
+        source = SCRIPT.parents[1] / "scripts/livro/direitos-autorais.md"
+        page = '<header>Capa</header><nav id="TOC">Sumário</nav>'
+        result = book.insert_rights(page, source)
+        self.assertLess(result.index("</header>"), result.index('id="direitos-autorais"'))
+        self.assertLess(result.index('id="direitos-autorais"'), result.index('id="TOC"'))
+        self.assertIn("CC BY-NC 4.0", result)
+        self.assertIn("MIT", result)
+        with self.assertRaises(ValueError):
+            book.insert_rights("<html></html>", source)
+
     def test_links_e_ancoras(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp).resolve()

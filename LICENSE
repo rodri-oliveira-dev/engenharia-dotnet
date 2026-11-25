@@ -1,21 +1,26 @@
-MIT License
+Engenharia .NET — Licenciamento
 
 Copyright (c) 2026 Rodrigo de Oliveira
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+1. Código-fonte, exemplos, trechos de código nos documentos, laboratórios,
+   testes, scripts e configurações de execução: licença MIT (LICENSE-CODE).
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+2. Conteúdo editorial original, incluindo textos, capítulos, ilustrações
+   e diagramas autorais, bem como a edição consolidada do livro em PDF:
+   Creative Commons Atribuição-NãoComercial 4.0 Internacional (CC BY-NC 4.0).
+   Termos legais: https://creativecommons.org/licenses/by-nc/4.0/legalcode
+   Resumo em português: https://creativecommons.org/licenses/by-nc/4.0/deed.pt
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+   A edição oficial é distribuída gratuitamente. A comercialização do
+   conteúdo editorial exige autorização do titular dos direitos, salvo
+   quando já permitida por outra licença ou pela legislação aplicável.
+   A licença CC permite compartilhamento e adaptação para fins não comerciais,
+   com atribuição, referência à licença e indicação de alterações.
+
+3. Materiais de terceiros permanecem sujeitos às respectivas licenças e
+   direitos. Nenhuma disposição modifica permissões anteriormente concedidas,
+   inclusive sob a licença MIT, nem limita exceções legais aplicáveis.
+
+Em caso de dúvida sobre autorização comercial, utilize os canais de contato
+indicados no repositório:
+https://github.com/rodri-oliveira-dev/engenharia-dotnet
