@@ -68,7 +68,19 @@ redis.call("SET", KEYS[1], KEYS[2])
 return 1
 '
 
-trocar() { redis EVAL "$publicar" 2 "$ponteiro" "$2" "$1" "$3"; }
+sha_publicar=$(redis SCRIPT LOAD "$publicar")
+trocar() {
+  local resultado
+  if resultado=$(redis EVALSHA "$sha_publicar" 2 "$ponteiro" "$2" "$1" "$3" 2>&1); then
+    printf '%s\n' "$resultado"
+  elif [[ "$resultado" == NOSCRIPT* ]]; then
+    # Apenas NOSCRIPT permite essa repeticao sem ambiguidade sobre a execucao.
+    redis EVAL "$publicar" 2 "$ponteiro" "$2" "$1" "$3"
+  else
+    printf '%s\n' "$resultado" >&2
+    return 1
+  fi
+}
 
 estado() {
   local nome=$1 chave=$2 valor=$3
@@ -102,7 +114,10 @@ redis SET '{catalogo}:00000006' texto >/dev/null
 rejeitar "Tipo de candidata invalido" "$a" '{catalogo}:00000006' 2 "$a" antigo
 
 leitor=$(redis GET "$ponteiro")
-verificar "Publicacao de B" 1 trocar "$a" "$b" 2
+verificar "Limpar cache de scripts" OK redis SCRIPT FLUSH
+verificar "Script ausente" 0 redis SCRIPT EXISTS "$sha_publicar"
+verificar "Publicacao de B com NOSCRIPT" 1 trocar "$a" "$b" 2
+verificar "Script recarregado" 1 redis SCRIPT EXISTS "$sha_publicar"
 estado "Versao B ativa" "$b" novo
 verificar "Leitor antigo: campo 1" antigo redis HGET "$leitor" 1
 verificar "Leitor antigo: campo 2" antigo redis HGET "$leitor" 2
@@ -145,4 +160,71 @@ verificar "Candidata rejeitada preservada: campo 1" "$valor_perdedora" redis HGE
 verificar "Candidata rejeitada preservada: campo 2" "$valor_perdedora" redis HGET "$perdedora" 2
 rejeitar "Nova tentativa com base obsoleta" "$c" "$perdedora" 2 "$vencedora" "$valor"
 
-echo "Publicacao condicional validada."
+# Experimentos independentes de operacao. Todos usam dados descartaveis.
+verificar "SET com prazo" OK redis SET teste:ttl inicial EX 600
+verificar "SET substitui valor" OK redis SET teste:ttl novo
+verificar "SET remove TTL anterior" -1 redis TTL teste:ttl
+verificar "Hash inicial" 1 redis HSET teste:hash campo inicial
+verificar "Expiracao do hash" 1 redis EXPIRE teste:hash 600
+verificar "HSET altera campo" 0 redis HSET teste:hash campo novo
+ttl_hash=$(redis TTL teste:hash)
+if (( ttl_hash <= 0 || ttl_hash > 600 )); then
+  falhar "HSET preserva TTL" "1 a 600" "$ttl_hash"
+fi
+printf 'OK [HSET preserva TTL]\n'
+
+# Forcar vencimento com PEXPIRE 0 evita depender do agendamento do teste.
+lock=teste:lock
+liberar='if redis.call("GET", KEYS[1]) == ARGV[1] then return redis.call("DEL", KEYS[1]) end return 0'
+verificar "Adquirir lock A" OK redis SET "$lock" dono-a NX PX 600000
+verificar "Lock ocupado" "" redis SET "$lock" dono-b NX PX 600000
+verificar "Vencimento forcado de A" 1 redis PEXPIRE "$lock" 0
+verificar "Adquirir lock B" OK redis SET "$lock" dono-b NX PX 600000
+verificar "Liberacao por A rejeitada" 0 redis EVAL "$liberar" 1 "$lock" dono-a
+verificar "Lock B preservado" dono-b redis GET "$lock"
+verificar "Liberacao por B" 1 redis EVAL "$liberar" 1 "$lock" dono-b
+verificar "Lock removido" 0 redis EXISTS "$lock"
+
+# Atomicidade de Lua nao implica reversao das escritas em caso de erro.
+if erro=$(redis EVAL 'redis.call("SET", KEYS[1], "gravado"); return redis.call("HLEN", KEYS[1])' 1 teste:lua 2>&1); then
+  falhar "Erro apos escrita Lua" "WRONGTYPE" "$erro"
+fi
+[[ "$erro" == *WRONGTYPE* ]] || falhar "Erro apos escrita Lua" "WRONGTYPE" "$erro"
+verificar "Escrita anterior ao erro preservada" gravado redis GET teste:lua
+
+# Apos encerrar o leitor antigo, remover apenas a geracao aposentada A.
+# Nao demonstra coordenacao de leitores nem limpeza concorrente em producao.
+verificar "Remover geracao aposentada" 1 redis UNLINK "$a"
+verificar "Geracao aposentada ausente" 0 redis EXISTS "$a"
+verificar "Remocao idempotente" 0 redis UNLINK "$a"
+estado "Ativa apos limpeza" "$vencedora" "$valor"
+
+# ACL DRYRUN valida permissoes sem trafegar credenciais ou mudar o usuario ativo.
+verificar "Criar identidade de leitura" OK redis ACL SETUSER leitor-c36 reset on '>senha-ficticia-local' '~{catalogo}:*' -@all +get +hget
+verificar "ACL permite leitura do ponteiro" OK redis ACL DRYRUN leitor-c36 GET "$ponteiro"
+if erro=$(redis ACL DRYRUN leitor-c36 SET "$ponteiro" invalido 2>&1); then
+  # ACL DRYRUN pode devolver uma descricao em vez de um erro RESP.
+  [[ "$erro" != OK ]] || falhar "ACL nega escrita" "negado" "$erro"
+fi
+[[ "$erro" == *"permission"* ]] || falhar "ACL nega escrita" "permission" "$erro"
+printf 'OK [ACL nega escrita]\n'
+if erro=$(redis ACL DRYRUN leitor-c36 GET teste:ttl 2>&1); then
+  [[ "$erro" != OK ]] || falhar "ACL nega outra chave" "negado" "$erro"
+fi
+[[ "$erro" == *"permission"* ]] || falhar "ACL nega outra chave" "permission" "$erro"
+printf 'OK [ACL nega outra chave]\n'
+verificar "Remover identidade de teste" 1 redis ACL DELUSER leitor-c36
+
+# Limite artificial inferior ao consumo atual; jamais aplicar em um Redis real.
+verificar "Politica noeviction" OK redis CONFIG SET maxmemory-policy noeviction
+verificar "Limite artificial" OK redis CONFIG SET maxmemory 1
+status_oom=0
+erro_oom=$(redis SET teste:oom valor 2>&1) || status_oom=$?
+verificar "Restaurar limite do laboratorio" OK redis CONFIG SET maxmemory 0
+[[ "$status_oom" != 0 && "$erro_oom" == *OOM* ]] ||
+  falhar "Escrita rejeitada por memoria" "erro OOM" "$erro_oom"
+printf 'OK [Escrita rejeitada por memoria]\n'
+verificar "Chave rejeitada ausente" 0 redis EXISTS teste:oom
+estado "Ativa apos falta de memoria" "$vencedora" "$valor"
+
+echo "Publicacao condicional e boas praticas validadas."

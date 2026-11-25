@@ -65,6 +65,32 @@ Ao contrário do modelo .NET, a carga vazia é rejeitada deliberadamente no
 Redis: um hash sem campos não permanece como chave. Sistemas que aceitem
 catálogos vazios precisam de um manifesto de prontidão separado.
 
+## Comportamentos adicionais verificados no Redis
+
+| Cenário | Evidência esperada |
+| --- | --- |
+| Cache de scripts | Após `SCRIPT FLUSH`, a publicação usa a resposta `NOSCRIPT` para executar novamente o script. |
+| Expiração | `SET` sem opção de expiração remove o TTL anterior; `HSET` preserva o TTL da chave. |
+| Bloqueio | Após vencimento forçado, a liberação condicional pelo dono anterior não remove o novo bloqueio. |
+| Erro em Lua | Uma escrita anterior ao erro continua visível. |
+| Limpeza | `UNLINK` remove a geração aposentada, e repetir a remoção não altera a geração ativa. |
+| ACL | `ACL DRYRUN` permite leitura do conjunto e nega escrita e acesso a outro espaço de chaves. |
+| Memória | `noeviction` rejeita uma escrita sob limite artificial; o conjunto ativo permanece intacto. |
+
+Os comandos administrativos são executados exclusivamente no container
+descartável. O teste força o vencimento do bloqueio com `PEXPIRE 0`,
+não mede a precisão temporal de expiração. A limpeza ocorre depois que
+o leitor de teste encerra sua leitura; não implementa retenção concorrente.
+O teste de memória reduz temporariamente o limite para provocar rejeição,
+não mede capacidade. O teste de ACL valida permissões sem estabelecer uma
+sessão autenticada. Não reutilize essas configurações em produção.
+
+O [capítulo C36](../../docs/aplicacoes-e-dados/c36-arquitetura-cache-consistencia.md)
+discute também particionamento, pipelining, uso do StackExchange.Redis,
+replicação, persistência, TLS, métricas e limites de consistência. Esses
+tópicos exigem ambientes e testes específicos; não há evidência de
+desempenho, segurança de rede ou failover neste exercício.
+
 ## Próximos experimentos
 
 Compare a consulta direta, o cache local e o cache distribuído com uma
