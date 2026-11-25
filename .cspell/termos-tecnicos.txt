@@ -305,3 +305,4 @@ ConnectionMultiplexer
 slots
 hashes
 manifesto
+SLOWLOG
