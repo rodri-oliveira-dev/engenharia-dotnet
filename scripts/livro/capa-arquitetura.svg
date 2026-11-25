@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 480" role="img">
+<title>Estruturas arquiteturais em camadas</title>
+<desc>Três planos isométricos sobre uma malha de desenho técnico, ligados por eixos e linhas de projeção.</desc>
+<g fill="none" stroke="#52749d" stroke-width="0.65" opacity=".23"><path d="M0 0V480"/><path d="M26 0V480"/><path d="M52 0V480"/><path d="M78 0V480"/><path d="M104 0V480"/><path d="M130 0V480"/><path d="M156 0V480"/><path d="M182 0V480"/><path d="M208 0V480"/><path d="M234 0V480"/><path d="M260 0V480"/><path d="M286 0V480"/><path d="M312 0V480"/><path d="M338 0V480"/><path d="M364 0V480"/><path d="M390 0V480"/><path d="M416 0V480"/><path d="M442 0V480"/><path d="M468 0V480"/><path d="M494 0V480"/><path d="M520 0V480"/><path d="M546 0V480"/><path d="M572 0V480"/><path d="M598 0V480"/><path d="M624 0V480"/><path d="M650 0V480"/><path d="M676 0V480"/><path d="M702 0V480"/><path d="M728 0V480"/><path d="M754 0V480"/><path d="M780 0V480"/><path d="M806 0V480"/><path d="M832 0V480"/><path d="M858 0V480"/><path d="M884 0V480"/><path d="M0 0H880"/><path d="M0 26H880"/><path d="M0 52H880"/><path d="M0 78H880"/><path d="M0 104H880"/><path d="M0 130H880"/><path d="M0 156H880"/><path d="M0 182H880"/><path d="M0 208H880"/><path d="M0 234H880"/><path d="M0 260H880"/><path d="M0 286H880"/><path d="M0 312H880"/><path d="M0 338H880"/><path d="M0 364H880"/><path d="M0 390H880"/><path d="M0 416H880"/><path d="M0 442H880"/><path d="M0 468H880"/></g>
+<g fill="none" stroke="#8cadd4" stroke-width="1" opacity=".85">
+<path d="M18 45V18H45M835 18H862V45M18 435V462H45M835 462H862V435"/>
+<path d="M110 34V420M100 34H120M100 420H120M770 34V420M760 34H780M760 420H780" stroke-dasharray="4 5"/>
+<path d="M180 152V308M700 152V308M440 40V420" stroke-dasharray="6 7"/>
+<path d="M45 240H835M440 12V455" stroke-dasharray="3 8" opacity=".65"/>
+</g>
+<g transform="translate(0 156)"><path d="M440 40 700 152 440 264 180 152Z" fill="#132c4d" stroke="#90b4df" stroke-width="2.4"/><path d="M310 96 570 208M570 96 310 208M440 40V264M180 152H700" stroke="#6686ad" stroke-width="1.2"/><path d="M375 68 635 180M505 68 245 180M375 236 635 124M505 236 245 124" stroke="#6686ad" stroke-width="0.8" opacity=".7"/><path d="M440 94 574 152 440 210 306 152Z" fill="#192e53" stroke="#c9b7ff" stroke-width="1.8"/><circle cx="440" cy="152" r="5" fill="#c9b7ff"/><circle cx="306" cy="152" r="3.5" fill="#f0f6ff"/><circle cx="574" cy="152" r="3.5" fill="#f0f6ff"/></g>
+<g transform="translate(0 78)"><path d="M440 40 700 152 440 264 180 152Z" fill="#132c4d" stroke="#90b4df" stroke-width="2.4"/><path d="M310 96 570 208M570 96 310 208M440 40V264M180 152H700" stroke="#6686ad" stroke-width="1.2"/><path d="M375 68 635 180M505 68 245 180M375 236 635 124M505 236 245 124" stroke="#6686ad" stroke-width="0.8" opacity=".7"/><path d="M440 94 574 152 440 210 306 152Z" fill="#192e53" stroke="#c9b7ff" stroke-width="1.8"/><circle cx="440" cy="152" r="5" fill="#c9b7ff"/><circle cx="306" cy="152" r="3.5" fill="#f0f6ff"/><circle cx="574" cy="152" r="3.5" fill="#f0f6ff"/></g>
+<g transform="translate(0 0)"><path d="M440 40 700 152 440 264 180 152Z" fill="#132c4d" stroke="#c9b7ff" stroke-width="2.4"/><path d="M310 96 570 208M570 96 310 208M440 40V264M180 152H700" stroke="#6686ad" stroke-width="1.2"/><path d="M375 68 635 180M505 68 245 180M375 236 635 124M505 236 245 124" stroke="#6686ad" stroke-width="0.8" opacity=".7"/><path d="M440 94 574 152 440 210 306 152Z" fill="#192e53" stroke="#c9b7ff" stroke-width="1.8"/><circle cx="440" cy="152" r="5" fill="#c9b7ff"/><circle cx="306" cy="152" r="3.5" fill="#f0f6ff"/><circle cx="574" cy="152" r="3.5" fill="#f0f6ff"/></g>
+<g fill="none" stroke="#c9b7ff" stroke-width="1.6">
+<path d="M180 152V308M700 152V308M440 264V420" stroke-dasharray="5 6"/>
+<path d="M135 152H180M700 308H745M440 420V447H620"/>
+<circle cx="135" cy="152" r="4"/><circle cx="745" cy="308" r="4"/><circle cx="620" cy="447" r="4"/>
+</g>
+</svg>

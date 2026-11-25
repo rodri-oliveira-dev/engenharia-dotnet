@@ -12,6 +12,12 @@ A página de direitos autorais precede o sumário. A
 [política de licenciamento](../LICENSE) preserva permissões anteriores e
 licenças de terceiros.
 
+## Capa
+
+A capa usa uma composição vetorial inspirada em desenho arquitetural, com
+textos em português, identificação da edição e revisão obtidas do commit.
+O cabeçalho e o rodapé mantêm o nome e o endereço do projeto.
+
 ## Organização
 
 O índice central define as áreas. Os índices de cada área definem a ordem

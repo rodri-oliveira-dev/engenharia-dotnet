@@ -225,11 +225,12 @@ def build(root, output, directory, commit):
     blocks.append(header(1, "licenca", text_inline("Licença MIT dos exemplos de código")))
     for paragraph in (root / "LICENSE-CODE").read_text(encoding="utf-8").strip().split("\n\n"):
         blocks.append({"t": "Para", "c": text_inline(" ".join(paragraph.splitlines()))})
+    edition_date = run("git", "-C", str(root), "show", "-s", "--format=%cs", commit).strip()
     metadata = {key: {"t": "MetaString", "c": value} for key, value in {
         "title": "Engenharia .NET",
         "subtitle": "Da linguagem à arquitetura de software",
         "author": "Rodrigo de Oliveira",
-        "date": run("git", "-C", str(root), "show", "-s", "--format=%cs", commit).strip(),
+        "date": "Edição " + edition_date[:4],
         "lang": "pt-BR",
     }.items()}
     payload = {"pandoc-api-version": api, "meta": metadata, "blocks": blocks}
@@ -237,7 +238,18 @@ def build(root, output, directory, commit):
                "--toc-depth=2", "--highlight-style=tango", input=json.dumps(payload))
     css = (root / "scripts/livro/estilo.css").read_text(encoding="utf-8")
     page = page.replace("</head>", "<style>" + css + "</style></head>", 1)
-    page = page.replace("</header>", f'<p class="edition">Commit: {html.escape(commit[:12])}</p>'
+    cover = root / "scripts/livro/capa-arquitetura.svg"
+    (directory / cover.name).write_bytes(cover.read_bytes())
+    if '<header id="title-block-header">' not in page or '<p class="author">' not in page:
+        raise ValueError("Estrutura da capa não encontrada.")
+    page = page.replace('<header id="title-block-header">',
+                        '<header id="title-block-header"><p class="cover-label">'
+                        'PUBLICAÇÃO TÉCNICA INDEPENDENTE</p>', 1)
+    page = page.replace('<p class="author">',
+                        '<img class="cover-art" src="capa-arquitetura.svg" alt="">'
+                        '<p class="author">', 1)
+    page = page.replace("</header>", '<p class="cover-free">Distribuição gratuita</p>'
+                        f'<p class="edition">Revisão: {html.escape(commit[:12])}</p>'
                         f'<p><a href="{REPO}/tree/{commit}">Código e documentação</a></p>'
                         '<p>Conteúdo editorial: CC BY-NC 4.0 | Código: MIT</p></header>', 1)
     page = insert_rights(page, root / "scripts/livro/direitos-autorais.md")

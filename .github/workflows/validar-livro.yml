@@ -58,6 +58,10 @@ jobs:
       - name: Verificar PDF
         run: |
           pdfinfo dist/livro/engenharia-dotnet.pdf
+          pdftotext -f 1 -l 1 dist/livro/engenharia-dotnet.pdf "$RUNNER_TEMP/capa.txt"
+          grep -F "Engenharia .NET" "$RUNNER_TEMP/capa.txt"
+          grep -F "Distribuição gratuita" "$RUNNER_TEMP/capa.txt"
+          grep -F "Rodrigo de Oliveira" "$RUNNER_TEMP/capa.txt"
           pdftotext dist/livro/engenharia-dotnet.pdf "$RUNNER_TEMP/livro.txt"
           grep -F "Engenharia .NET" "$RUNNER_TEMP/livro.txt"
           grep -F "MIT License" "$RUNNER_TEMP/livro.txt"

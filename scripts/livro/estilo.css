@@ -11,15 +11,31 @@
   @bottom-right { content: counter(page) " / " counter(pages); font: 9pt "DejaVu Sans"; color: #52596b; }
 }
 @page :first {
+  background: #10223d;
+  @top-left { color: #d7e5f7; }
+  @bottom-left { color: #d7e5f7; }
   @bottom-right { content: none; }
 }
-html { font-family: "DejaVu Serif", serif; color: #1e293b; background: white; }
+html { font-family: "DejaVu Serif", serif; color: #1e293b; }
 body { margin: 0; max-width: none; padding: 0; font-size: 10pt; line-height: 1.5; }
-header#title-block-header { text-align: left; padding: 42mm 0 0; break-after: page; margin: 0; }
-header .title { font-size: 38pt; color: #34216e; margin: 0 0 8mm; border: 0; }
-header .subtitle { font: 19pt "DejaVu Sans"; color: #414c63; margin: 0 0 25mm; }
-header .author { font: 14pt "DejaVu Sans"; font-weight: bold; }
-header .edition, header .date { font: 10pt "DejaVu Sans"; }
+/* Capa inspirada em uma planta arquitetural. Texto real, ilustração vetorial. */
+header#title-block-header {
+  text-align: left; padding: 12mm 0 0; break-after: page; margin: 0;
+  color: #f0f6ff; font-family: "DejaVu Sans", sans-serif;
+}
+header .cover-label {
+  font-size: 9pt; font-weight: bold; letter-spacing: 1.5pt;
+  color: #b7cce5; border-top: 1pt solid #8cadd4; padding-top: 5mm;
+  margin: 0 0 13mm;
+}
+header .title { font-size: 36pt; color: #f0f6ff; margin: 0 0 5mm; border: 0; line-height: 1.1; }
+header .subtitle { font: 17pt "DejaVu Sans"; color: #d7e5f7; margin: 0 0 7mm; }
+header .cover-art { display: block; width: 100%; height: 87mm; margin: 0 0 6mm; }
+header .author { font: 16pt "DejaVu Sans"; font-weight: bold; margin: 0 0 3mm; }
+header .date { font: 12pt "DejaVu Sans"; color: #d7e5f7; margin: 0 0 4mm; }
+header .cover-free { color: #d6c8ff; font-weight: bold; margin: 3mm 0; }
+header .edition { font: 9pt "DejaVu Sans"; color: #b7cce5; }
+header a { color: #d7e5f7; }
 h1, h2, h3, h4, h5, h6 { font-family: "DejaVu Sans", sans-serif; color: #34216e; break-after: avoid; line-height: 1.25; }
 h1.part { break-before: page; font-size: 23pt; border-bottom: 2pt solid #7665ae; padding-bottom: 3mm; }
 h2.chapter { break-before: page; font-size: 20pt; }
