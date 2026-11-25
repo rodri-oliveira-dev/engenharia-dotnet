@@ -1,6 +1,6 @@
 # Conhecimento livre, acesso gratuito
 
-Copyright © 2026 Rodrigo de Oliveira.
+Copyright © 2026 Rodrigo de Oliveira e respectivos colaboradores.
 
 O Engenharia .NET nasceu com o propósito de compartilhar conhecimento,
 incentivar o aprendizado contínuo e contribuir para a evolução da comunidade

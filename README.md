@@ -181,6 +181,9 @@ Encontrou um erro, acha que algum trecho poderia ser mais claro ou quer sugerir 
 
 Antes de abrir um pull request, dê uma olhada no [guia de contribuição](CONTRIBUTING.md), no [mapa editorial](docs/planejamento/mapa-editorial.md) e no [guia de estilo](docs/guia-de-estilo.md). Eles ajudam a manter os capítulos conectados e as explicações consistentes.
 
+Antes de enviar contribuições, leia os [termos de contribuição](CONTRIBUTION-TERMS.md).
+A autoria é reconhecida nos [créditos do projeto](CONTRIBUTORS.md).
+
 ## Licença
 
 O projeto utiliza [licenças distintas](LICENSE) para código e conteúdo editorial:

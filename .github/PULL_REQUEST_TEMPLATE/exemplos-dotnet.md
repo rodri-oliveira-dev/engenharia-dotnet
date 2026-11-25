@@ -40,3 +40,12 @@ Issue relacionada: <!-- #numero ou "Não há" -->
 - [ ] Nulabilidade, cancelamento, falhas e descarte de recursos considerados no escopo.
 - [ ] Nenhum segredo, endpoint privado ou dado pessoal incluído.
 - [ ] Mudanças de dependências, segurança e comportamento foram descritas.
+
+## Termos de contribuição (v1.0)
+
+- [ ] Li e concordo com os Termos de Contribuição do Engenharia .NET v1.0.
+- [ ] Declaro possuir os direitos e autorizações necessários sobre o material enviado.
+
+<!-- Leia CONTRIBUTION-TERMS.md no repositório. Publique um comentário com a
+     declaração exata prevista nos termos, pela conta autora deste PR,
+     antes de salvar a descrição com as duas declarações marcadas. -->

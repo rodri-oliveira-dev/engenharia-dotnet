@@ -23,14 +23,15 @@ Para uma revisão geral, execute `npm run ortografia`. Termos técnicos
 necessários devem entrar em `.cspell/termos-tecnicos.txt` após revisão;
 não adicione grafias incorretas apenas para silenciar o job.
 
-## Licenciamento das contribuições
+## Licenciamento e aceite das contribuições
 
-Ao contribuir, disponibilize seu conteúdo original sob a licença aplicável:
-[MIT para código](LICENSE-CODE) e
-[CC BY-NC 4.0 para conteúdo editorial](LICENSE).
-Confirme que possui os direitos necessários e identifique materiais de terceiros
-com suas fontes, licenças e créditos. Não inclua conteúdo incompatível com
-as condições de distribuição do projeto.
+Leia os [termos de contribuição](CONTRIBUTION-TERMS.md) antes de abrir o PR.
+O aceite é condição para incorporar a contribuição. Código segue a
+[MIT](LICENSE-CODE) e conteúdo editorial segue a [CC BY-NC 4.0](LICENSE).
+Marque as declarações do modelo de PR e publique o comentário de aceite
+pela própria conta, conforme os termos. O mantenedor deve revisar a autoria
+quando houver participação de terceiros e atualizar os
+[créditos dos colaboradores](CONTRIBUTORS.md) quando pertinente.
 
 ## Novos capítulos
 

@@ -216,6 +216,12 @@ def build(root, output, directory, commit):
             print(f"Preparando {path.relative_to(root)}", flush=True)
             blocks.extend(convert(documents[path]["blocks"], root, path, maps,
                                   commit, directory, assets))
+    credits = parse(root / "CONTRIBUTORS.md")["blocks"]
+    for item in credits:
+        if item["t"] == "Header" and item["c"][0] == 1:
+            item["c"][1][0] = "creditos-colaboradores"
+            item["c"][1][1].append("part")
+    blocks.extend(credits)
     blocks.append(header(1, "licenca", text_inline("Licença MIT dos exemplos de código")))
     for paragraph in (root / "LICENSE-CODE").read_text(encoding="utf-8").strip().split("\n\n"):
         blocks.append({"t": "Para", "c": text_inline(" ".join(paragraph.splitlines()))})
@@ -258,7 +264,7 @@ def build(root, output, directory, commit):
         anchors = {a for p in document.pages for a in p.anchors}
         internal = {link[1] for p in document.pages for link in p.links
                     if link[0] == "internal"}
-        required = {a for m in maps.values() for a in m.values()} | {"direitos-autorais"}
+        required = {a for m in maps.values() for a in m.values()} | {"direitos-autorais", "creditos-colaboradores"}
         if len(document.pages) < 3 or "direitos-autorais" not in document.pages[1].anchors:
             raise ValueError("Página de direitos autorais fora da posição editorial.")
         if not required <= anchors or not internal <= anchors or len(document.pages) < len(paths):

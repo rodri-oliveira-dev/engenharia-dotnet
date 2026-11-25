@@ -9,6 +9,7 @@ on:
       - "scripts/tests/test_gerar_livro.py"
       - "LICENSE"
       - "LICENSE-CODE"
+      - "CONTRIBUTORS.md"
       - ".github/workflows/*livro*.yml"
   workflow_call:
 
