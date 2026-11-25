@@ -12,6 +12,13 @@ A ideia não é decorar padrões ou acumular respostas prontas para entrevistas.
 
 Todo o conteúdo está em português e pode ser consultado diretamente pelo GitHub. Você não precisa ler tudo em sequência: pode começar pelo assunto que faz sentido para você agora.
 
+## Livro em PDF
+
+O conteúdo também pode ser lido como um livro único, com sumário navegável,
+capítulos e materiais complementares. As edições publicadas ficam nas
+[releases do projeto](https://github.com/rodri-oliveira-dev/engenharia-dotnet/releases).
+Consulte as [instruções de geração e publicação](docs/livro.md).
+
 ## Por onde começar
 
 Se você chegou com uma dúvida específica, vá direto ao assunto. Se quiser explorar, os índices ajudam a encontrar uma sequência de leitura:

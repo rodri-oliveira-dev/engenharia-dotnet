@@ -18,3 +18,6 @@ override.tf.json
 # CSpell: dependências e arquivos temporários de verificação.
 node_modules/
 .cspell-mudancas-*/
+
+# Arquivo gerado para publicação do livro.
+/dist/livro/

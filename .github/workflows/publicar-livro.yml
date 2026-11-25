@@ -1,0 +1,44 @@
+name: Publicar livro PDF
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publicar-livro
+  cancel-in-progress: false
+
+jobs:
+  gerar:
+    if: github.ref == 'refs/heads/main' && github.repository == 'rodri-oliveira-dev/engenharia-dotnet'
+    uses: ./.github/workflows/validar-livro.yml
+    permissions:
+      contents: read
+
+  publicar:
+    needs: gerar
+    if: github.ref == 'refs/heads/main' && github.repository == 'rodri-oliveira-dev/engenharia-dotnet'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - name: Obter livro validado
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: engenharia-dotnet-livro
+          path: dist/livro
+
+      - name: Publicar edição sem alterar releases de código
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          tag="livro-$GITHUB_SHA"
+          gh release create "$tag" dist/livro/engenharia-dotnet.pdf \
+            --target "$GITHUB_SHA" --latest=false \
+            --title "Engenharia .NET | Livro ${GITHUB_SHA:0:12}" \
+            --notes "Edição PDF consolidada da documentação no commit $GITHUB_SHA. Licença MIT."

@@ -1,0 +1,48 @@
+/* Edição impressa: hierarquia editorial e leitura de código. */
+@page {
+  size: A4;
+  margin: 20mm 19mm 22mm;
+  @top-left { content: "Engenharia .NET"; font: 9pt "DejaVu Sans"; color: #52596b; }
+  @bottom-right { content: counter(page) " / " counter(pages); font: 9pt "DejaVu Sans"; color: #52596b; }
+}
+@page :first {
+  @top-left { content: none; }
+  @bottom-right { content: none; }
+}
+html { font-family: "DejaVu Serif", serif; color: #1e293b; background: white; }
+body { margin: 0; max-width: none; padding: 0; font-size: 10pt; line-height: 1.5; }
+header#title-block-header { text-align: left; padding: 42mm 0 0; break-after: page; margin: 0; }
+header .title { font-size: 38pt; color: #34216e; margin: 0 0 8mm; border: 0; }
+header .subtitle { font: 19pt "DejaVu Sans"; color: #414c63; margin: 0 0 25mm; }
+header .author { font: 14pt "DejaVu Sans"; font-weight: bold; }
+header .edition, header .date { font: 10pt "DejaVu Sans"; }
+h1, h2, h3, h4, h5, h6 { font-family: "DejaVu Sans", sans-serif; color: #34216e; break-after: avoid; line-height: 1.25; }
+h1.part { break-before: page; font-size: 23pt; border-bottom: 2pt solid #7665ae; padding-bottom: 3mm; }
+h2.chapter { break-before: page; font-size: 20pt; }
+h1.part + h2.chapter { break-before: auto; }
+h3 { font-size: 14pt; } h4 { font-size: 12pt; }
+.toc-title { font-size: 25pt; }
+nav#TOC { break-after: page; }
+nav#TOC ul { padding-left: 5mm; list-style: none; }
+nav#TOC > ul { padding-left: 0; }
+nav#TOC > ul > li { font-weight: bold; margin-top: 3mm; }
+nav#TOC li li { font-weight: normal; }
+nav#TOC a { display: block; text-decoration: none; }
+nav#TOC a::after { content: leader(".") target-counter(attr(href), page); }
+a { color: #40317d; text-decoration: underline; overflow-wrap: anywhere; }
+p, li { orphans: 3; widows: 3; }
+blockquote { border-left: 2pt solid #7665ae; padding: 1mm 4mm; margin: 4mm 0; color: #364152; }
+pre, code { font-family: "DejaVu Sans Mono", monospace; font-size: 8pt; }
+pre, pre.sourceCode { white-space: pre-wrap; overflow-wrap: anywhere; overflow: visible; background: #f3f4f8; border: 0.5pt solid #d8dbe7; padding: 3mm; margin: 3mm 0; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { line-height: 1.45; }
+div.sourceCode { overflow: visible; margin: 0; }
+code { overflow-wrap: anywhere; }
+table { width: 100%; table-layout: fixed; border-collapse: collapse; margin: 4mm 0; font-size: 8.5pt; }
+th, td { border: 0.5pt solid #c6cbd8; padding: 2mm; vertical-align: top; overflow-wrap: anywhere; }
+th { background: #e8e5f2; font-weight: bold; }
+thead { display: table-header-group; }
+tr { break-inside: avoid; }
+img { max-width: 100%; max-height: 185mm; object-fit: contain; }
+img.diagram { display: block; margin: 4mm auto; }
+figure { margin: 4mm 0; break-inside: avoid; }
