@@ -18,6 +18,14 @@ A capa usa uma composição vetorial inspirada em desenho arquitetural, com
 textos em português, identificação da edição e revisão obtidas do commit.
 O cabeçalho e o rodapé mantêm o nome e o endereço do projeto.
 
+## Experiência de leitura
+
+A introdução explica os percursos de estudo. O texto principal usa corpo de
+11 pontos e os blocos de código usam 9,5 pontos. Os metadados dos capítulos
+recebem tratamento visual próprio, e as tabelas se ajustam ao conteúdo.
+O PDF inclui marcação estrutural e o fluxo gera amostras das primeiras seis
+páginas para revisão visual. A marcação não comprova conformidade com PDF/UA.
+
 ## Organização
 
 O índice central define as áreas. Os índices de cada área definem a ordem

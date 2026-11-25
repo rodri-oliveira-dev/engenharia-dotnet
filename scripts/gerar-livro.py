@@ -172,7 +172,10 @@ def convert(value, root, source, maps, commit, directory, assets):
         value["c"][-1][0] = name
     elif kind == "CodeBlock" and "mermaid" in value["c"][0][1]:
         assets.append(source)
-        name = render_diagram(value["c"][1], directory, len(assets))
+        try:
+            name = render_diagram(value["c"][1], directory, len(assets))
+        except subprocess.CalledProcessError as error:
+            raise ValueError(f"Falha no diagrama {len(assets)} de {source.relative_to(root)}") from error
         return {"t": "Para", "c": [{"t": "Image", "c": [
             ["", ["diagram"], []], [{"t": "Str", "c": "Diagrama Mermaid"}], [name, ""]]}]}
     elif kind in {"RawInline", "RawBlock"}:
@@ -181,6 +184,23 @@ def convert(value, root, source, maps, commit, directory, assets):
         raise ValueError(f"HTML bruto não suportado no livro: {source}")
     return {k: convert(v, root, source, maps, commit, directory, assets)
             for k, v in value.items()}
+
+
+def editorial_blocks(document):
+    """Identifica metadados iniciais e avisos sem modificar o conteúdo."""
+    blocks = document["blocks"]
+    for index, block in enumerate(blocks):
+        if block["t"] != "BlockQuote":
+            continue
+        words = " ".join(item["c"] for item in nodes(block, "Str"))
+        if index == 1 and ("Nível:" in words or "Objetivo:" in words):
+            css_class = "chapter-meta"
+        elif re.match(r"^(Atenção|Importante|Nota|Recomendação|Cuidado|Dica)\b", words, re.I):
+            css_class = "editorial-note"
+        else:
+            continue
+        blocks[index] = {"t": "Div", "c": [["", [css_class], []], [block]]}
+    return blocks
 
 
 def header(level, ident, inline):
@@ -209,12 +229,15 @@ def build(root, output, directory, commit):
     maps = {p: anchor_map(p, d) for p, d in documents.items()}
     if len({m[""] for m in maps.values()}) != len(maps):
         raise ValueError("Nomes de documentos repetidos.")
-    blocks, assets = [], []
+    intro = parse(root / "scripts/livro/como-utilizar.md")["blocks"]
+    intro[0]["c"][1][0] = "como-utilizar"
+    intro[0]["c"][1][1].append("part")
+    blocks, assets = intro, []
     for i, (title, group) in enumerate(areas + [(text_inline("Apêndices"), appendices)], 1):
         blocks.append(header(1, f"parte-{i}", title))
         for path in group:
             print(f"Preparando {path.relative_to(root)}", flush=True)
-            blocks.extend(convert(documents[path]["blocks"], root, path, maps,
+            blocks.extend(convert(editorial_blocks(documents[path]), root, path, maps,
                                   commit, directory, assets))
     credits = parse(root / "CONTRIBUTORS.md")["blocks"]
     for item in credits:
@@ -253,7 +276,7 @@ def build(root, output, directory, commit):
                         f'<p><a href="{REPO}/tree/{commit}">Código e documentação</a></p>'
                         '<p>Conteúdo editorial: CC BY-NC 4.0 | Código: MIT</p></header>', 1)
     page = insert_rights(page, root / "scripts/livro/direitos-autorais.md")
-    page = page.replace('<nav id="TOC"', '<h1 class="toc-title">Sumário</h1><nav id="TOC"', 1)
+    page = page.replace('<nav id="TOC"', '<h1 class="toc-title" id="sumario">Sumário</h1><nav id="TOC"', 1)
 
     def fetch(url):
         parsed = urlsplit(url)
@@ -276,7 +299,7 @@ def build(root, output, directory, commit):
         anchors = {a for p in document.pages for a in p.anchors}
         internal = {link[1] for p in document.pages for link in p.links
                     if link[0] == "internal"}
-        required = {a for m in maps.values() for a in m.values()} | {"direitos-autorais", "creditos-colaboradores"}
+        required = {a for m in maps.values() for a in m.values()} | {"direitos-autorais", "creditos-colaboradores", "como-utilizar", "sumario"}
         if len(document.pages) < 3 or "direitos-autorais" not in document.pages[1].anchors:
             raise ValueError("Página de direitos autorais fora da posição editorial.")
         if not required <= anchors or not internal <= anchors or len(document.pages) < len(paths):
@@ -286,7 +309,7 @@ def build(root, output, directory, commit):
         output.parent.mkdir(parents=True, exist_ok=True)
         temporary = output.with_suffix(".tmp.pdf")
         try:
-            document.write_pdf(temporary)
+            document.write_pdf(temporary, pdf_tags=True)
             temporary.replace(output)
         finally:
             temporary.unlink(missing_ok=True)

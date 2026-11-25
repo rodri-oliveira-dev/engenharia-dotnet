@@ -2,35 +2,37 @@
 @page {
   size: A4;
   margin: 20mm 19mm 22mm;
-  @top-left { content: "Engenharia .NET"; font: 9pt "DejaVu Sans"; color: #52596b; }
+  @top-left { content: "Engenharia .NET"; font: 10pt "DejaVu Sans"; color: #434b5d; border-bottom: 0.5pt solid #cbd5e1; padding-bottom: 2mm; }
   @bottom-left {
     content: "https://github.com/rodri-oliveira-dev/engenharia-dotnet";
-    font: 8pt "DejaVu Sans";
+    font: 9pt "DejaVu Sans";
     color: #52596b;
   }
   @bottom-right { content: counter(page) " / " counter(pages); font: 9pt "DejaVu Sans"; color: #52596b; }
 }
 @page :first {
   background: #10223d;
-  @top-left { color: #d7e5f7; }
+  @top-left { color: #d7e5f7; border-color: #52749d; }
   @bottom-left { color: #d7e5f7; }
   @bottom-right { content: none; }
 }
-html { font-family: "DejaVu Serif", serif; color: #1e293b; }
-body { margin: 0; max-width: none; padding: 0; font-size: 10pt; line-height: 1.5; }
+html { font-family: "DejaVu Serif", serif; color: #1e293b; background: transparent; }
+body { margin: 0; max-width: none; padding: 0; font-size: 11pt; line-height: 1.48; background: transparent; }
+p { margin: 0 0 3.5mm; }
 /* Capa inspirada em uma planta arquitetural. Texto real, ilustração vetorial. */
 header#title-block-header {
-  text-align: left; padding: 12mm 0 0; break-after: page; margin: 0;
+  text-align: left; padding: 8mm 0 0; break-after: page; margin: 0;
   color: #f0f6ff; font-family: "DejaVu Sans", sans-serif;
+  background: #10223d;
 }
 header .cover-label {
   font-size: 9pt; font-weight: bold; letter-spacing: 1.5pt;
   color: #b7cce5; border-top: 1pt solid #8cadd4; padding-top: 5mm;
-  margin: 0 0 13mm;
+  margin: 0 0 9mm;
 }
 header .title { font-size: 36pt; color: #f0f6ff; margin: 0 0 5mm; border: 0; line-height: 1.1; }
 header .subtitle { font: 17pt "DejaVu Sans"; color: #d7e5f7; margin: 0 0 7mm; }
-header .cover-art { display: block; width: 100%; height: 87mm; margin: 0 0 6mm; }
+header .cover-art { display: block; width: 100%; height: 79mm; margin: 0 0 6mm; }
 header .author { font: 16pt "DejaVu Sans"; font-weight: bold; margin: 0 0 3mm; }
 header .date { font: 12pt "DejaVu Sans"; color: #d7e5f7; margin: 0 0 4mm; }
 header .cover-free { color: #d6c8ff; font-weight: bold; margin: 3mm 0; }
@@ -38,11 +40,17 @@ header .edition { font: 9pt "DejaVu Sans"; color: #b7cce5; }
 header a { color: #d7e5f7; }
 h1, h2, h3, h4, h5, h6 { font-family: "DejaVu Sans", sans-serif; color: #34216e; break-after: avoid; line-height: 1.25; }
 h1.part { break-before: page; font-size: 23pt; border-bottom: 2pt solid #7665ae; padding-bottom: 3mm; }
-h2.chapter { break-before: page; font-size: 20pt; }
+h2.chapter { break-before: page; font-size: 22pt; margin-bottom: 5mm; }
+.chapter-meta { background: #f1eff8; border-left: 3pt solid #7665ae; margin: 0 0 5mm; padding: 3mm 4mm; break-inside: avoid; }
+.chapter-meta blockquote { border: 0; margin: 0; padding: 0; font-family: "DejaVu Sans"; font-size: 10pt; }
+.chapter-meta p:last-child, .editorial-note p:last-child { margin-bottom: 0; }
+.editorial-note { background: #f6f4ee; border-left: 3pt solid #91732e; padding: 2mm 4mm; margin: 4mm 0; }
+.editorial-note blockquote { border: 0; margin: 0; padding: 0; }
 h1.part + h2.chapter { break-before: auto; }
 h3 { font-size: 14pt; } h4 { font-size: 12pt; }
 .toc-title { font-size: 25pt; }
-nav#TOC { break-after: page; }
+nav#TOC { break-after: page; font-size: 10pt; line-height: 1.4; }
+nav#TOC li { break-inside: avoid; }
 nav#TOC ul { padding-left: 5mm; list-style: none; }
 nav#TOC > ul { padding-left: 0; }
 nav#TOC > ul > li { font-weight: bold; margin-top: 3mm; }
@@ -52,22 +60,24 @@ nav#TOC a::after { content: leader(".") target-counter(attr(href), page); }
 a { color: #40317d; text-decoration: underline; overflow-wrap: anywhere; }
 p, li { orphans: 3; widows: 3; }
 blockquote { border-left: 2pt solid #7665ae; padding: 1mm 4mm; margin: 4mm 0; color: #364152; }
-pre, code { font-family: "DejaVu Sans Mono", monospace; font-size: 8pt; }
+pre, code { font-family: "DejaVu Sans Mono", monospace; font-size: 9.5pt; }
 pre, pre.sourceCode { white-space: pre-wrap; overflow-wrap: anywhere; overflow: visible; background: #f3f4f8; border: 0.5pt solid #d8dbe7; padding: 3mm; margin: 3mm 0; }
 pre > code.sourceCode { white-space: pre-wrap; }
 pre > code.sourceCode > span { line-height: 1.45; }
 div.sourceCode { overflow: visible; margin: 0; }
 code { overflow-wrap: anywhere; }
-table { width: 100%; table-layout: fixed; border-collapse: collapse; margin: 4mm 0; font-size: 8.5pt; }
+table { width: 100%; table-layout: auto; border-collapse: collapse; margin: 4mm 0; font-size: 9.5pt; }
 th, td { border: 0.5pt solid #c6cbd8; padding: 2mm; vertical-align: top; overflow-wrap: anywhere; }
-th { background: #e8e5f2; font-weight: bold; }
+th { background: #e8e5f2; font-weight: bold; text-align: left; }
+tbody tr:nth-child(even) { background: #f8f9fc; }
+td code, th code { font-size: 9pt; }
 thead { display: table-header-group; }
 tr { break-inside: avoid; }
 img { max-width: 100%; max-height: 185mm; object-fit: contain; }
-img.diagram { display: block; margin: 4mm auto; }
+img.diagram { display: block; margin: 4mm auto; max-height: 160mm; }
 figure { margin: 4mm 0; break-inside: avoid; }
 
 /* Página de direitos autorais, entre a capa e o sumário. */
-.rights { break-after: page; padding-top: 10mm; }
+.rights { break-after: page; padding-top: 4mm; font-size: 10.5pt; line-height: 1.4; }
 .rights h1 { font-size: 24pt; margin: 0 0 8mm; }
-.rights p { margin: 0 0 4mm; }
+.rights p { margin: 0 0 3mm; }

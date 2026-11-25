@@ -33,6 +33,17 @@ class LivroTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             book.insert_rights("<html></html>", source)
 
+    def test_metadados_e_avisos_editoriais(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "a.md"
+            path.write_text("# Título\n\n> **Nível:** Fundamental\n\n"
+                            "> Atenção: verifique o comportamento.\n\n"
+                            "> Uma citação comum.\n", encoding="utf-8")
+            blocks = book.editorial_blocks(book.parse(path))
+            self.assertEqual(blocks[1]["c"][0][1], ["chapter-meta"])
+            self.assertEqual(blocks[2]["c"][0][1], ["editorial-note"])
+            self.assertEqual(blocks[3]["t"], "BlockQuote")
+
     def test_links_e_ancoras(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp).resolve()
