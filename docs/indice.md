@@ -71,6 +71,14 @@ oito agrupamentos definidos no mapa editorial e os 35 capítulos publicados.
 
 - [Roadmap de estudos por maturidade, com 14 livros em português, links para Amazon Brasil e Refactoring.Guru](roadmap-de-estudos.md)
 
+## Autoavaliação
+
+Questões de múltipla escolha com gabarito comentado, para fixar o conteúdo de
+cada capítulo:
+
+- [C01 — Tipos, identidade e modelagem em C#](autoavaliacao/c01-tipos-identidade-modelagem.md)
+- [C02 — Nulabilidade, falhas e exceções](autoavaliacao/c02-nulabilidade-falhas-excecoes.md)
+
 ## Documentação do projeto
 
 - [Guia de estilo editorial](guia-de-estilo.md)

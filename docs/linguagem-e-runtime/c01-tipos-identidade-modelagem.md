@@ -445,6 +445,13 @@ demonstram semântica; eventuais custos devem ser medidos no contexto real.
   propósito](../dominio-e-arquitetura/c13-dependencias-abstracoes-padroes.md)
   aprofunda abstrações, composição e herança.
 
+## Autoavaliação
+
+Teste seu entendimento com as
+[questões de autoavaliação do C01](../autoavaliacao/c01-tipos-identidade-modelagem.md),
+que aplicam cópia, igualdade, imutabilidade, `sealed` e boxing a cenários
+concretos, com gabarito comentado.
+
 ## Referências
 
 - [Sistema de tipos de C#](https://learn.microsoft.com/dotnet/csharp/fundamentals/types/)
