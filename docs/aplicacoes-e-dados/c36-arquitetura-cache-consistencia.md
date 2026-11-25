@@ -236,8 +236,9 @@ O modelo em memória isola a regra de publicação; não simula a rede nem
 as garantias do Redis. Um exercício separado usa Redis real via Docker,
 sem publicar portas, para observar a troca condicional de um ponteiro. O
 script publica a própria chave de dados validada e rejeita gerações antigas,
-chaves inválidas e cargas incompletas. O CI executa esse exercício em um job
-separado. Ele não substitui testes de integração de uma aplicação distribuída.
+chaves inválidas e cargas incompletas. Dois clientes disputam a mesma base,
+e cada rejeição verifica a preservação do estado ativo. O CI executa esse
+exercício em um job separado, com imagem fixada por digest. Ele não substitui testes de integração de uma aplicação distribuída.
 
 ## Como medir antes de decidir
 

@@ -33,11 +33,18 @@ public sealed class PublicacaoTests
     [Fact]
     public void GeracaoAntigaOuExpectativaObsoletaNaoPublica()
     {
-        var catalogo = new CatalogoVersionado(Versao(2, "B"));
+        var catalogo = new CatalogoVersionado(Versao(1, "A"));
+        var anterior = catalogo.Capturar();
+        var atual = Versao(2, "B");
+        Assert.True(catalogo.TentarPublicar(atual, anterior, 2));
 
-        Assert.False(catalogo.TentarPublicar(Versao(1, "A"), catalogo.Capturar(), 2));
-        Assert.False(catalogo.TentarPublicar(Versao(3, "C"), Versao(1, "A"), 2));
-        Assert.Equal(2L, catalogo.Capturar().Geracao);
+        Assert.False(catalogo.TentarPublicar(Versao(1, "A"), atual, 2));
+        Assert.Same(atual, catalogo.Capturar());
+
+        Assert.False(catalogo.TentarPublicar(Versao(3, "C"), anterior, 2));
+        Assert.Same(atual, catalogo.Capturar());
+        Assert.Equal("B", catalogo.Capturar().Buscar(1)?.Nome);
+        Assert.Equal("B", catalogo.Capturar().Buscar(2)?.Nome);
     }
 
     [Fact]
@@ -71,6 +78,65 @@ public sealed class PublicacaoTests
 
         Assert.False(catalogo.TentarPublicar(Versao(2, "B"), mesmaGeracaoOutraReferencia, 2));
         Assert.Equal(1L, catalogo.Capturar().Geracao);
+    }
+
+    [Theory]
+    [InlineData(0L)]
+    [InlineData(-1L)]
+    [InlineData(long.MinValue)]
+    public void GeracaoNaoPositivaEhRejeitada(long geracao)
+    {
+        Assert.Throws<ArgumentOutOfRangeException>("geracao", () =>
+            new VersaoCatalogo(geracao, []));
+    }
+
+    [Fact]
+    public void GeracaoIgualNaoSubstituiVersaoAtiva()
+    {
+        var atual = Versao(1, "A");
+        var catalogo = new CatalogoVersionado(atual);
+
+        Assert.False(catalogo.TentarPublicar(Versao(1, "B"), atual, 2));
+        Assert.Same(atual, catalogo.Capturar());
+        Assert.Equal("A", catalogo.Capturar().Buscar(1)?.Nome);
+    }
+
+    [Fact]
+    public void QuantidadeEsperadaNegativaEhRejeitada()
+    {
+        var atual = Versao(1, "A");
+        var catalogo = new CatalogoVersionado(atual);
+
+        Assert.Throws<ArgumentOutOfRangeException>("quantidadeEsperada", () =>
+        {
+            catalogo.TentarPublicar(Versao(2, "B"), atual, -1);
+        });
+        Assert.Same(atual, catalogo.Capturar());
+    }
+
+    [Fact]
+    public void QuantidadeSuperiorAEsperadaNaoSubstituiVersaoAtiva()
+    {
+        var atual = Versao(1, "A");
+        var catalogo = new CatalogoVersionado(atual);
+
+        Assert.False(catalogo.TentarPublicar(Versao(2, "B"), atual, 1));
+        Assert.Same(atual, catalogo.Capturar());
+        Assert.Equal("A", catalogo.Capturar().Buscar(1)?.Nome);
+    }
+
+    [Fact]
+    public void CatalogoVazioPodeSerPublicadoQuandoEsperadoNoModeloLocal()
+    {
+        var atual = Versao(1, "A");
+        var catalogo = new CatalogoVersionado(atual);
+        var vazio = new VersaoCatalogo(2, []);
+
+        Assert.True(catalogo.TentarPublicar(vazio, atual, 0));
+        Assert.Same(vazio, catalogo.Capturar());
+        Assert.Equal(0, vazio.Quantidade);
+        Assert.Null(vazio.Buscar(1));
+        Assert.Equal("A", atual.Buscar(1)?.Nome);
     }
 
     [Fact]
