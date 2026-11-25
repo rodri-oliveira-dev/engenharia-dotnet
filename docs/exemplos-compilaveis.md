@@ -47,6 +47,10 @@ O laboratório `c29-entrega/` demonstra uma feature flag com os caminhos estáve
 e novo isolados e testados. A fonte de configuração é deliberadamente local: o
 exemplo não simula propagação, auditoria ou consistência de um serviço de flags.
 
+O laboratório `c36-cache/` demonstra publicação condicional de conjuntos
+imutáveis com testes .NET independentes de serviços externos. Um exercício
+opcional com Redis real usa Docker e não integra a execução padrão do CI.
+
 ## Quando criar um projeto
 
 Crie um laboratório quando compilação, testes, benchmark ou integração forem

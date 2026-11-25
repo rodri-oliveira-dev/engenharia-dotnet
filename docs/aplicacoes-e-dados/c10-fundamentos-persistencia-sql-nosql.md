@@ -461,6 +461,8 @@ planos do PostgreSQL.
 
 ## Relação com outros capítulos
 
+- [C36](c36-arquitetura-cache-consistencia.md) discute quando complementar a
+  origem com cache, mantendo explícitos os contratos de consistência.
 - [C08](c08-consultas-ef-core.md) aplica projeção, tracking, SQL gerado e
   diagnóstico de consultas no EF Core.
 - [C09](c09-fronteiras-concorrencia-ef-core.md) aplica unidade de trabalho,

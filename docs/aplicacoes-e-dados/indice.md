@@ -15,6 +15,8 @@ dados.
   [Consultas eficientes com EF Core](c08-consultas-ef-core.md).
 - **C09 · Intermediário · Publicado:**
   [Fronteiras e concorrência no EF Core](c09-fronteiras-concorrencia-ef-core.md).
+- **C36 · Avançado · Publicado:**
+  [Arquitetura de cache e consistência de dados](c36-arquitetura-cache-consistencia.md).
 
 ## Compatibilidade do ASP.NET Core
 

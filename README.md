@@ -30,7 +30,8 @@ Os assuntos vão dos fundamentos de C# a problemas de arquitetura e operação. 
   — tipos, nulabilidade, coleções, LINQ, memória, assincronismo, concorrência e
   performance.
 - [Aplicações e dados](docs/aplicacoes-e-dados/indice.md)
-  — ASP.NET Core, APIs HTTP, Entity Framework Core e
+  — ASP.NET Core, APIs HTTP, Entity Framework Core,
+  [arquitetura de cache](docs/aplicacoes-e-dados/c36-arquitetura-cache-consistencia.md) e
   [fundamentos de persistência SQL e NoSQL](docs/aplicacoes-e-dados/c10-fundamentos-persistencia-sql-nosql.md).
 - [Domínio e arquitetura](docs/dominio-e-arquitetura/indice.md)
   — DDD estratégico, [entidades, value objects e agregados](docs/dominio-e-arquitetura/c11-entidades-value-objects-agregados.md),
@@ -63,7 +64,7 @@ Os assuntos vão dos fundamentos de C# a problemas de arquitetura e operação. 
 | Área | Capítulos |
 |---|---|
 | Linguagem e runtime | [C01](docs/linguagem-e-runtime/c01-tipos-identidade-modelagem.md) · [C02](docs/linguagem-e-runtime/c02-nulabilidade-falhas-excecoes.md) · [C03](docs/linguagem-e-runtime/c03-colecoes-linq-execucao-diferida.md) · [C04](docs/linguagem-e-runtime/c04-memoria-runtime-performance.md) · [C05](docs/linguagem-e-runtime/c05-assincronicidade-concorrencia-controlada.md) |
-| Aplicações e dados | [C06](docs/aplicacoes-e-dados/c06-composicao-pipeline-aspnet-core.md) · [C07](docs/aplicacoes-e-dados/c07-apis-http-integracoes-resilientes.md) · [C08](docs/aplicacoes-e-dados/c08-consultas-ef-core.md) · [C09](docs/aplicacoes-e-dados/c09-fronteiras-concorrencia-ef-core.md) · [C10](docs/aplicacoes-e-dados/c10-fundamentos-persistencia-sql-nosql.md) |
+| Aplicações e dados | [C06](docs/aplicacoes-e-dados/c06-composicao-pipeline-aspnet-core.md) · [C07](docs/aplicacoes-e-dados/c07-apis-http-integracoes-resilientes.md) · [C08](docs/aplicacoes-e-dados/c08-consultas-ef-core.md) · [C09](docs/aplicacoes-e-dados/c09-fronteiras-concorrencia-ef-core.md) · [C10](docs/aplicacoes-e-dados/c10-fundamentos-persistencia-sql-nosql.md) · [C36](docs/aplicacoes-e-dados/c36-arquitetura-cache-consistencia.md) |
 | Domínio e arquitetura | [C11](docs/dominio-e-arquitetura/c11-entidades-value-objects-agregados.md) · [C12](docs/dominio-e-arquitetura/c12-servicos-dominio-integracao-modelos.md) · [C13](docs/dominio-e-arquitetura/c13-dependencias-abstracoes-padroes.md) · [C14](docs/dominio-e-arquitetura/c14-cqrs-modelos-orientados-uso.md) · [C19](docs/dominio-e-arquitetura/c19-documentacao-arquitetural-viva.md) |
 | Sistemas distribuídos | [C15](docs/sistemas-distribuidos/c15-comunicacao-mensageria-resiliente.md) · [C16](docs/sistemas-distribuidos/c16-idempotencia-entrega-confiavel.md) · [C17](docs/sistemas-distribuidos/c17-consistencia-eventual-sagas.md) · [C18](docs/sistemas-distribuidos/c18-limites-microservicos-evolucao-monolitos.md) |
 | Qualidade e segurança | [C23](docs/qualidade-e-seguranca/c23-testes-comportamento-risco.md) · [C24](docs/qualidade-e-seguranca/c24-integracao-real-testes-legado.md) · [C25](docs/qualidade-e-seguranca/c25-cobertura-e2e-carga.md) · [C26](docs/qualidade-e-seguranca/c26-seguranca-fronteiras-aplicacao.md) |

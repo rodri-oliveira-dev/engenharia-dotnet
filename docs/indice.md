@@ -1,12 +1,12 @@
 # Índice
 
 Este é o ponto central de navegação do Engenharia .NET. A estrutura reflete os
-oito agrupamentos definidos no mapa editorial e os 35 capítulos publicados.
+oito agrupamentos definidos no mapa editorial e os 36 capítulos publicados.
 
 ## Áreas de conhecimento
 
 1. [Linguagem e runtime](linguagem-e-runtime/indice.md) — C01 a C05.
-2. [Aplicações e dados](aplicacoes-e-dados/indice.md) — C06 a C10.
+2. [Aplicações e dados](aplicacoes-e-dados/indice.md) — C06 a C10 e C36.
 3. [Domínio e arquitetura](dominio-e-arquitetura/indice.md) — C11 a C14 e C19.
 4. [Sistemas distribuídos](sistemas-distribuidos/indice.md) — C15 a C18.
 5. [Qualidade e segurança](qualidade-e-seguranca/indice.md) — C23 a C26.
@@ -53,6 +53,7 @@ oito agrupamentos definidos no mapa editorial e os 35 capítulos publicados.
 - [C33 — Sistema legado com baixa testabilidade](estudos-de-caso/c33-legado-baixa-testabilidade.md)
 - [C34 — Migração gradual de monólito](estudos-de-caso/c34-migracao-gradual-monolito.md)
 - [C35 — Pipeline com dependência vulnerável](estudos-de-caso/c35-pipeline-dependencia-vulneravel.md)
+- [C36 — Arquitetura de cache e consistência de dados](aplicacoes-e-dados/c36-arquitetura-cache-consistencia.md)
 
 ## Material complementar
 
@@ -88,7 +89,7 @@ oito agrupamentos definidos no mapa editorial e os 35 capítulos publicados.
 
 ## Status editorial
 
-O mapa possui 35 capítulos publicados, distribuídos em cinco fases editoriais. A
+O mapa possui 36 capítulos publicados, distribuídos em seis fases editoriais. A
 ordem de cada capítulo está nos índices das áreas; a definição completa de
 escopo, dependências e fases permanece no [mapa
 editorial](planejamento/mapa-editorial.md).
