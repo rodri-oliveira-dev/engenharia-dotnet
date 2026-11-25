@@ -158,6 +158,7 @@ OpenTelemetry
 OpenTracing
 Outbox
 OWASP
+Pandoc
 Payload
 Pipeline
 Pipelines
@@ -234,6 +235,8 @@ URLs
 UTF
 ValueTask
 VSTest
+Weasy
+WeasyPrint
 Webhook
 Webhooks
 Worker
