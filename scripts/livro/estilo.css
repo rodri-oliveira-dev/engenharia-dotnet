@@ -3,10 +3,14 @@
   size: A4;
   margin: 20mm 19mm 22mm;
   @top-left { content: "Engenharia .NET"; font: 9pt "DejaVu Sans"; color: #52596b; }
+  @bottom-left {
+    content: "https://github.com/rodri-oliveira-dev/engenharia-dotnet";
+    font: 8pt "DejaVu Sans";
+    color: #52596b;
+  }
   @bottom-right { content: counter(page) " / " counter(pages); font: 9pt "DejaVu Sans"; color: #52596b; }
 }
 @page :first {
-  @top-left { content: none; }
   @bottom-right { content: none; }
 }
 html { font-family: "DejaVu Serif", serif; color: #1e293b; background: white; }
