@@ -102,6 +102,12 @@ def prose_lines(markdown: str, changed_lines: set[int]) -> tuple[str, int]:
     return "\n".join(result) + "\n", checked
 
 
+def cspell_binary(root: Path, platform: str = sys.platform) -> Path:
+    """Seleciona o shim executável do npm para a plataforma atual."""
+    name = "cspell.cmd" if platform == "win32" else "cspell"
+    return root / "node_modules" / ".bin" / name
+
+
 def run(base: str, head: str, root: Path) -> int:
     result = subprocess.run(
         ["git", "-c", "core.quotePath=false", "diff", "--no-ext-diff",
@@ -114,7 +120,7 @@ def run(base: str, head: str, root: Path) -> int:
         return 2
 
     ranges = changed_markdown_ranges(result.stdout)
-    binary = root / "node_modules" / ".bin" / "cspell"
+    binary = cspell_binary(root)
     if not binary.is_file():
         print("CSpell não instalado: execute npm install.", file=sys.stderr)
         return 2

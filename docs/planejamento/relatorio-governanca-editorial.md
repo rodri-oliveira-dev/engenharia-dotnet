@@ -149,8 +149,10 @@ A separação de responsabilidades ficou documentada:
 - Skill validada pelo `quick_validate.py` do criador de skills.
 - 18 testes do gerador do livro aprovados com Pandoc portátil 3.14.
 - Markdownlint 0.20.0: 97 arquivos, nenhuma ocorrência.
-- Links internos: 717 destinos, nenhuma falha.
+- Links internos: 719 destinos, nenhuma falha.
 - Verificação de segredos: nenhuma ocorrência.
+- Validador ortográfico: 724 linhas novas em 33 arquivos, nenhuma ocorrência;
+  11 testes do seletor aprovados.
 - O script de links foi restringido a Markdown versionado ou novo e não ignorado,
   evitando validar documentação de `node_modules`.
 
@@ -163,8 +165,10 @@ A separação de responsabilidades ficou documentada:
 - A geração visual completa de PDF e EPUB requer Mermaid CLI, WeasyPrint,
   librsvg e EPUBCheck. A estrutura e a portabilidade do gerador foram cobertas
   por testes, mas a inspeção visual dos artefatos permanece para o CI Linux.
-- O script `npm run ortografia` usa aspas POSIX no glob e não funciona
-  integralmente no Windows. A validação oficial de linhas novas permanece no CI.
+- O comando de varredura integral `npm run ortografia` usa aspas POSIX no glob e
+  não funciona integralmente no Windows. O validador das linhas novas foi
+  corrigido para selecionar o shim do CSpell por plataforma e passou localmente;
+  a repetição oficial permanece no CI.
 
 ### Oportunidades, não correções desta revisão
 

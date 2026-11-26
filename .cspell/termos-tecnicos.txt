@@ -329,3 +329,5 @@ slots
 hashes
 manifesto
 SLOWLOG
+evolucao
+librsvg

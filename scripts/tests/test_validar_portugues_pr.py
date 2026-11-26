@@ -11,6 +11,11 @@ spec.loader.exec_module(module)
 
 
 class SelecionarProsaTests(unittest.TestCase):
+    def test_seleciona_shim_do_cspell_por_plataforma(self):
+        root = Path("repo")
+        self.assertEqual(module.cspell_binary(root, "win32").name, "cspell.cmd")
+        self.assertEqual(module.cspell_binary(root, "linux").name, "cspell")
+
     def test_hunks_de_adicao_e_modificacao(self):
         diff = """--- a/docs/a.md
 +++ b/docs/a.md
