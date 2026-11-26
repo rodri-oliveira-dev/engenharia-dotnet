@@ -5,6 +5,6 @@
 # The schema V2 applies to the referenced template, not to this redirect file.
 
 remote_config:
-  repository: ".github"
+  repository: "rodri-oliveira-dev/.github"
   ref: "main"
   path: "coderabbit-templates/dotnet-educacional.yaml"
