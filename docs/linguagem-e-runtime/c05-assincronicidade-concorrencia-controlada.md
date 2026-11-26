@@ -577,6 +577,8 @@ operacional revisável, não uma constante universal.
 
 ## Relação com outros capítulos
 
+- [C36](../aplicacoes-e-dados/c36-arquitetura-cache-consistencia.md) aplica
+  concorrência controlada à publicação de versões de cache.
 - **Pré-requisitos:** [C02](c02-nulabilidade-falhas-excecoes.md) define ausência,
   resultados e fronteiras de exceção; [C03](c03-colecoes-linq-execucao-diferida.md)
   define iteração sob demanda e reenumeração.

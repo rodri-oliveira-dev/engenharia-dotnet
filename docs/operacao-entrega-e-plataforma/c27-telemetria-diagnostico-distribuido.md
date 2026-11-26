@@ -558,6 +558,8 @@ sinais sem uso e trate mudanças de nome, unidade e atributo como evolução de 
 
 ## Relação com outros capítulos
 
+- [C36](../aplicacoes-e-dados/c36-arquitetura-cache-consistencia.md) aplica
+  métricas ao frescor, à efetividade e à capacidade do cache.
 - [C18](../sistemas-distribuidos/c18-limites-microservicos-evolucao-monolitos.md)
   aplica correlação e traces a limites de microserviços.
 - [C25](../qualidade-e-seguranca/c25-cobertura-e2e-carga.md) usa throughput,

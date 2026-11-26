@@ -50,6 +50,7 @@ O repositório será organizado por **trilhas de conhecimento**, não pelas cate
 | 33 | C33 | Estudos de caso | **Sistema legado com baixa testabilidade** — caracterização, seams, refatoração incremental e mitigação de risco. | Intermediário | C13, C23, C24 | Parcial |
 | 34 | C34 | Estudos de caso | **Migração gradual de monólito** — limites, Strangler Fig, contratos, dados e observabilidade durante a convivência. | Avançado | C12, C18, C27, C29 | Parcial |
 | 35 | C35 | Estudos de caso | **Pipeline com dependência vulnerável** — alcance, segurança, políticas, atualização e decisão de liberação. | Avançado | C26, C29, C30 | Não |
+| 36 | C36 | Aplicações e dados | **Arquitetura de cache e consistência de dados** — estratégias, níveis, invalidação, publicação por versões, segurança e capacidade. | Avançado | C05, C07, C10, C17 | Sim |
 
 ## Dependências conceituais
 
@@ -69,6 +70,8 @@ Segurança, telemetria e operação (C26 → C27 → C28)
 Entrega e plataforma (C29 → C20)
      ↓
 IA aplicada (C21 → C22) e estudos integrados (C31–C35)
+     ↓
+Aprofundamento de dados (C36)
 ```
 
 Essa é uma ordem de implementação editorial, não uma sequência obrigatória de leitura. Links de pré-requisito permitem ao leitor entrar pelo problema que precisa resolver.
@@ -76,7 +79,7 @@ Essa é uma ordem de implementação editorial, não uma sequência obrigatória
 ## Agrupamentos principais
 
 1. **Linguagem e runtime (C01–C05):** base para código correto e eficiente.
-2. **Aplicações e dados (C06–C10):** fronteiras HTTP, composição, persistência e concorrência.
+2. **Aplicações e dados (C06–C10, C36):** fronteiras HTTP, composição, persistência e concorrência.
 3. **Domínio e arquitetura (C11–C14, C19):** modelos, dependências, decisões e documentação.
 4. **Sistemas distribuídos (C15–C18):** comunicação, entrega, consistência e decomposição.
 5. **Qualidade e segurança (C23–C26):** confiança no comportamento e proteção de fronteiras.
@@ -93,6 +96,7 @@ Essa é uma ordem de implementação editorial, não uma sequência obrigatória
 | 3 — distribuição e operação | C15, C16, C17, C18, C27, C28 | Narrativa coerente de sistemas distribuídos, resiliência e operação. |
 | 4 — aprofundamentos | C04, C14, C25, C29, C20 | Performance, CQRS, qualidade sistêmica e entrega segura apoiados nas bases. |
 | 5 — IA e síntese | C21, C22, C31–C35 | Temas emergentes e estudos integrados apoiados em capítulos já publicados. |
+| 6 — aprofundamento de dados | C36 | Decisões de cache e publicação por versões com comportamento verificável. |
 
 Dentro de cada fase, a ordem da tabela de capítulos prevalece. Um capítulo só entra em redação quando seus pré-requisitos estiverem publicados ou tiverem um resumo provisório claramente marcado.
 
