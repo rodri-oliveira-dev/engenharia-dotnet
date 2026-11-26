@@ -1,7 +1,9 @@
 import importlib.util
 from pathlib import Path
+import sys
 import tempfile
 import unittest
+from unittest import mock
 
 SCRIPT = Path(__file__).resolve().parents[1] / "gerar-livro.py"
 SPEC = importlib.util.spec_from_file_location("gerar_livro", SCRIPT)
@@ -56,9 +58,13 @@ class LivroTests(unittest.TestCase):
                  "draft": False, "prerelease": False,
                  "assets": [{"name": "engenharia-dotnet.pdf"},
                             {"name": "engenharia-dotnet.epub"}]}
-        self.assertEqual(book.official_editions([[valid, dict(valid, tag_name="1.0.0"),
-            dict(valid, draft=True), dict(valid, assets=[]), dict(valid, prerelease=True)]]),
+        self.assertEqual(book.official_editions([[valid, dict(valid, tag_name="1.0.0")]]),
             [(valid["tag_name"], valid["published_at"])])
+        for number, variant in enumerate((
+                {"draft": True}, {"assets": []}, {"prerelease": True}), 1):
+            with self.subTest(variant=variant):
+                invalid = dict(valid, tag_name="livro-" + str(number) * 40, **variant)
+                self.assertEqual(book.official_editions([[invalid]]), [])
 
     def test_ordem_pre_textual_epub(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -69,8 +75,14 @@ class LivroTests(unittest.TestCase):
                               "# Epígrafe {#epigrafe}\n\nTexto.\n\n"
                               "# Autor {#sobre-o-autor}\n\nTexto.\n", encoding="utf-8")
             output = root / "teste.epub"
+            cover = root / "capa.svg"
+            cover.write_text(
+                '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="150">'
+                '<rect width="100" height="150"/></svg>', encoding="utf-8")
             book.run("pandoc", str(source), "--to=epub3", "--toc",
-                     "--metadata=title:Teste", "--split-level=2", "--output=" + str(output))
+                     "--metadata=title:Teste", "--split-level=2",
+                     "--epub-title-page=false", "--epub-cover-image=" + str(cover),
+                     "--output=" + str(output))
             book.reorder_epub_nav(output)
             book.reorder_epub_nav(output)
 
@@ -123,16 +135,36 @@ class LivroTests(unittest.TestCase):
             output = Path(tmp) / "livro.pdf"
             output.write_bytes(b"anterior")
             errors = []
+            temporary = []
 
             class Document:
                 def write_pdf(self, path, **kwargs):
+                    temporary.append(path)
                     path.write_bytes(b"novo")
                     errors.append("recurso ausente")
 
             with self.assertRaisesRegex(ValueError, "recurso ausente"):
                 book.write_checked_pdf(Document(), output, errors)
             self.assertEqual(output.read_bytes(), b"anterior")
-            self.assertFalse(output.with_suffix(".tmp.pdf").exists())
+            self.assertEqual(temporary[0].parent, output.parent)
+            self.assertNotEqual(temporary[0], output.with_suffix(".tmp.pdf"))
+            self.assertFalse(temporary[0].exists())
+
+    def test_rejeita_destinos_iguais_somente_para_ambos_formatos(self):
+        same = Path("edicao.bin")
+        for format_ in ("pdf", "epub"):
+            with self.subTest(format=format_), mock.patch.object(
+                    sys, "argv", [str(SCRIPT), "--format", format_,
+                                  "--output", str(same), "--epub-output", str(same)]), \
+                    mock.patch.object(book, "run", side_effect=RuntimeError("após validação")):
+                with self.assertRaisesRegex(RuntimeError, "após validação"):
+                    book.main()
+        with mock.patch.object(
+                sys, "argv", [str(SCRIPT), "--format", "both",
+                              "--output", str(same), "--epub-output", str(same)]):
+            with self.assertRaises(SystemExit) as error:
+                book.main()
+            self.assertEqual(error.exception.code, 2)
 
     def test_apresentacao_do_autor(self):
         source = SCRIPT.parent / "livro/sobre-o-autor.md"

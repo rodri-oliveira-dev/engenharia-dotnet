@@ -136,6 +136,29 @@ jobs:
         run: |
           set -euo pipefail
           tag="livro-$GITHUB_SHA"
+          if reference=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$tag"); then
+            object_type=$(jq -r '.object.type' <<< "$reference")
+            object_sha=$(jq -r '.object.sha' <<< "$reference")
+            for _ in {1..10}; do
+              if [ "$object_type" = "commit" ]; then
+                break
+              fi
+              if [ "$object_type" != "tag" ]; then
+                echo "A referência $tag não aponta para commit nem tag anotada." >&2
+                exit 1
+              fi
+              object=$(gh api "repos/$GITHUB_REPOSITORY/git/tags/$object_sha")
+              object_type=$(jq -r '.object.type' <<< "$object")
+              object_sha=$(jq -r '.object.sha' <<< "$object")
+            done
+            if [ "$object_type" != "commit" ] || [ "$object_sha" != "$GITHUB_SHA" ]; then
+              echo "A tag $tag não aponta para o commit esperado $GITHUB_SHA." >&2
+              exit 1
+            fi
+          else
+            gh api --method POST "repos/$GITHUB_REPOSITORY/git/refs" \
+              -f ref="refs/tags/$tag" -f sha="$GITHUB_SHA" >/dev/null
+          fi
           gh release create "$tag" \
             dist/livro/engenharia-dotnet.pdf dist/livro/engenharia-dotnet.epub \
             dist/livro/engenharia-dotnet.pdf.sigstore.json \

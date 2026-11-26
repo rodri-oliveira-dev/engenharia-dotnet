@@ -138,7 +138,7 @@ def render_diagram(code, directory, counter):
     config.write_text(json.dumps({"securityLevel": "strict", "theme": "neutral",
                                   "flowchart": {"htmlLabels": False}}), encoding="utf-8")
     browser = directory / "puppeteer.json"
-    settings = {"args": ["--no-sandbox", "--disable-setuid-sandbox"]}
+    settings = {}
     if os.environ.get("CHROME_BIN"):
         settings["executablePath"] = os.environ["CHROME_BIN"]
     browser.write_text(json.dumps(settings), encoding="utf-8")
@@ -291,7 +291,10 @@ def history_blocks(root, commit, release_history):
 def write_checked_pdf(document, output, errors):
     """Só promove a saída se a escrita final não registrar erros."""
     output.parent.mkdir(parents=True, exist_ok=True)
-    temporary = output.with_suffix(".tmp.pdf")
+    with tempfile.NamedTemporaryFile(
+            dir=output.parent, prefix=output.stem + ".", suffix=".tmp.pdf",
+            delete=False) as handle:
+        temporary = Path(handle.name)
     try:
         document.write_pdf(temporary, pdf_tags=True)
         if errors:
@@ -513,7 +516,9 @@ def reorder_epub_nav(path):
                     if ident in {i for i, _ in FRONT_MATTER} | {"sobre-o-autor"}:
                         front[ident] = item.attrib["id"]
             expected = [front[i] for i, _ in FRONT_MATTER]
-            if len(set(expected)) != 3 or [i for i in order if i in expected] != expected:
+            content_order = [item for item in order if item != nav]
+            if (len(set(expected)) != 3
+                    or content_order[1:1 + len(expected)] != expected):
                 raise ValueError("Ordem pré-textual EPUB inválida.")
             if order.index(nav) < order.index(expected[-1]):
                 # Pandoc emite itemref vazio; mova somente esse elemento, sem
@@ -532,7 +537,7 @@ def reorder_epub_nav(path):
             ordered = [i.attrib["idref"] for i in
                        ET.fromstring(data).findall(".//{*}spine/{*}itemref")]
             sequence = expected + [nav, front["sobre-o-autor"]]
-            if [i for i in ordered if i in sequence] != sequence:
+            if ordered[1:1 + len(sequence)] != sequence:
                 raise ValueError("Sumário EPUB fora da posição editorial.")
             with zipfile.ZipFile(rewritten, "w") as target:
                 for info in source.infolist():
@@ -559,6 +564,7 @@ def build_epub(root, output, directory, commit, payload, maps, edition_date):
             "--split-level=2", "--highlight-style=tango",
             "--resource-path=" + str(directory),
             "--css=" + str(root / "scripts/livro/estilo-epub.css"),
+            "--epub-title-page=false",
             "--epub-cover-image=" + str(cover),
             "--output=" + str(temporary), input=json.dumps(edition))
         required = {a for m in maps.values() for a in m.values()} | {
@@ -580,6 +586,10 @@ def main():
     parser.add_argument("--epub-output", type=Path, default=Path("dist/livro/engenharia-dotnet.epub"))
     parser.add_argument("--release-history", type=Path, help="JSON paginado de releases oficiais")
     args = parser.parse_args()
+    pdf_output = args.output.resolve()
+    epub_output = args.epub_output.resolve()
+    if args.format == "both" and pdf_output == epub_output:
+        parser.error("--output e --epub-output devem apontar para arquivos diferentes")
     root = Path(__file__).resolve().parents[1]
     commit = run("git", "-C", str(root), "rev-parse", "HEAD").strip()
     with tempfile.TemporaryDirectory(prefix="engenharia-livro-") as temporary:
@@ -588,9 +598,9 @@ def main():
                    if args.release_history else None)
         payload, paths, maps, edition_date = prepare(root, directory, commit, history)
         if args.format in ("pdf", "both"):
-            build_pdf(root, args.output.resolve(), directory, commit, payload, paths, maps)
+            build_pdf(root, pdf_output, directory, commit, payload, paths, maps)
         if args.format in ("epub", "both"):
-            build_epub(root, args.epub_output.resolve(), directory, commit, payload, maps, edition_date)
+            build_epub(root, epub_output, directory, commit, payload, maps, edition_date)
 
 
 if __name__ == "__main__":
