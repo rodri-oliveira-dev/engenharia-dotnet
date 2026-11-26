@@ -34,6 +34,10 @@ Issue relacionada: <!-- #numero ou "Não há" -->
 
 <!-- Inclua efeitos sobre capítulos, índices, dependências, CI e leitores. Escreva "Nenhum" quando não houver. -->
 
+Para novo capítulo, ampliação substancial ou mudança estrutural, inclua o
+[registro de decisão editorial](../docs/templates/registro-decisao-editorial.md)
+na issue ou na descrição do PR.
+
 ## Checklist
 
 - [ ] Alterações relacionadas ao objetivo do PR, sem refatorações paralelas.

@@ -14,6 +14,10 @@ Issue relacionada: <!-- #numero ou "Não há" -->
 
 <!-- Resuma a correção, o novo conteúdo e as decisões editoriais. -->
 
+## Integração à obra
+
+<!-- Para mudança estrutural, registre a decisão com docs/templates/registro-decisao-editorial.md. Diferencie ID estável, posição de leitura e dependências. Em correções locais, escreva "Não aplicável". -->
+
 ## Fundamentação técnica
 
 <!-- Relacione documentação oficial, especificações e outras fontes primárias. Informe versões quando relevantes. -->
@@ -24,6 +28,7 @@ Issue relacionada: <!-- #numero ou "Não há" -->
 - [ ] Links relativos e âncoras conferidos.
 - [ ] Markdown validado com `npx markdownlint-cli2@0.20.0`.
 - [ ] Índices, IDs, pré-requisitos e relações entre capítulos atualizados quando necessário.
+- [ ] Governança editorial e experiência no GitHub, PDF e EPUB validadas quando aplicável.
 - [ ] Exemplos executáveis compilados/testados, quando alterados.
 - [ ] Verificações não aplicáveis ou não executadas justificadas abaixo.
 

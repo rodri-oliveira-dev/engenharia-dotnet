@@ -58,7 +58,21 @@ body:
       label: "Relação com capítulos existentes"
       description: "Indique capítulos relacionados, possíveis pré-requisitos e se a proposta amplia um capítulo canônico."
     validations:
-      required: false
+      required: true
+  - type: textarea
+    id: posicionamento
+    attributes:
+      label: "Posicionamento e alternativas editoriais"
+      description: "Compare capítulo independente, ampliação de conteúdo existente e material complementar. Indique nível e posição recomendada de leitura."
+    validations:
+      required: true
+  - type: textarea
+    id: competencia
+    attributes:
+      label: "Competência e conexões narrativas"
+      description: "Qual competência será desenvolvida, quais conhecimentos serão retomados e quais capítulos posteriores se beneficiarão?"
+    validations:
+      required: true
   - type: dropdown
     id: exemplo
     attributes:

@@ -10,6 +10,9 @@
 
 Apresente em um parágrafo o problema que o capítulo ajuda a compreender ou
 resolver. Delimite o escopo e indique explicitamente o que não será tratado.
+Quando houver dependência narrativa, recupere somente o fundamento necessário e
+mostre por que ele ainda não resolve o cenário atual. Preserve contexto para que
+o capítulo também funcione como consulta independente.
 
 ## Contexto
 
@@ -68,6 +71,10 @@ Explique contextos nos quais o custo supera o benefício e apresente alternativa
 - **Pré-requisitos:** links para os fundamentos necessários.
 - **Aprofundamentos:** links para capítulos que desenvolvem este assunto.
 - **Aplicações:** links para capítulos que reutilizam o conceito.
+
+Explique a função de cada conexão. Diferencie pré-requisito obrigatório de
+leitura complementar e atualize o capítulo relacionado quando a conexão
+bidirecional trouxer benefício real.
 
 Não crie links para arquivos planejados que ainda não existem; mencione o ID e o
 título como texto até sua publicação.

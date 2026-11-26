@@ -13,6 +13,10 @@ consistente no GitHub.
 3. Verifique se já existe um capítulo canônico ou uma proposta para o assunto.
 4. Para mudanças grandes de escopo, abra uma issue antes de escrever para alinhar
    lacuna, área, dependências e sobreposições.
+5. Para novo capítulo, ampliação substancial, mudança de ordem ou de agrupamento,
+   aplique a skill de [governança editorial](.agents/skills/governar-evolucao-editorial/SKILL.md)
+   e registre a decisão na issue ou no PR com o
+   [modelo editorial](docs/templates/registro-decisao-editorial.md).
 
 ## Ortografia em português
 
@@ -35,6 +39,9 @@ quando houver participação de terceiros e atualizar os
 
 ## Novos capítulos
 
+- Antes de redigir, compare capítulo independente, ampliação do conteúdo
+  canônico e material complementar. Registre problema educacional, competência,
+  posição de leitura, pré-requisitos, conexões e impactos de publicação.
 - Escolha um capítulo já aprovado no mapa editorial ou justifique a nova lacuna.
 - Copie o [template de capítulo](docs/templates/capitulo-tecnico.md) e nomeie o
   arquivo como `cXX-titulo-descritivo.md` na área correspondente.
@@ -132,7 +139,7 @@ e a [avaliação do .NET 11](docs/planejamento/avaliacao-dotnet-11-csharp-15.md)
 O [AGENTS.md](AGENTS.md) fornece as regras persistentes para agentes,
 incluindo a seção `Code Review Rules` usada pelo Codex no GitHub.
 
-Três skills locais aprofundam procedimentos específicos:
+Quatro skills locais aprofundam procedimentos específicos:
 
 - [Revisão de PRs](.agents/skills/revisar-pr-dotnet/SKILL.md):
   falhas, contratos, segurança e testes.
@@ -140,6 +147,8 @@ Três skills locais aprofundam procedimentos específicos:
   compilação, comportamento e resultados esperados.
 - [Revisão editorial técnica](.agents/skills/revisar-conteudo-tecnico/SKILL.md):
   conceitos, fontes, questões e gabaritos.
+- [Governança da evolução editorial](.agents/skills/governar-evolucao-editorial/SKILL.md):
+  posição, progressão, storytelling e integração ao GitHub, PDF e EPUB.
 
 Agentes compatíveis podem carregar essas skills conforme a tarefa.
 Não pressuponha que todas sejam carregadas automaticamente durante

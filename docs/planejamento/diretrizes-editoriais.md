@@ -134,6 +134,11 @@ Cada capítulo deve declarar no histórico de mudanças quando uma atualização
 
 O mapa editorial é vivo. Novos capítulos exigem demonstração de lacuna, fonte ou demanda real, relação com a taxonomia e análise de sobreposição. Novas perguntas da planilha devem primeiro entrar no inventário com linha, grupo, tema normalizado e destino editorial.
 
+Propostas e mudanças estruturais seguem a skill
+`governar-evolucao-editorial`. O registro da decisão pode permanecer na issue ou
+no pull request; seu propósito é demonstrar posicionamento consciente, não criar
+documentação cerimonial.
+
 ## Fora de escopo
 
 - respostas modelo para entrevistas;
