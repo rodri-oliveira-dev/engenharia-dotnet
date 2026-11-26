@@ -52,6 +52,7 @@ def validate(pdf):
             "MIT License",
             "Como utilizar este livro",
             "Histórico de edições",
+            "Autenticidade e procedência",
             "Sobre o autor",
             "Conhecimento compartilhado",
             "Arquiteto de Software Sênior",

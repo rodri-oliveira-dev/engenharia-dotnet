@@ -17,15 +17,17 @@ jobs:
     permissions:
       contents: read
 
-  publicar:
+  atestar:
     needs: gerar
     if: github.ref == 'refs/heads/main' && github.repository == 'rodri-oliveira-dev/engenharia-dotnet'
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 10
     permissions:
-      contents: write
+      contents: read
+      id-token: write
+      attestations: write
     steps:
-      - name: Obter livro validado
+      - name: Obter PDF validado
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: engenharia-dotnet-livro
@@ -37,6 +39,96 @@ jobs:
           name: engenharia-dotnet-epub
           path: dist/livro
 
+      - name: Conferir arquivos e gerar somas de verificação
+        working-directory: dist/livro
+        run: |
+          set -euo pipefail
+          test -s engenharia-dotnet.pdf
+          test -s engenharia-dotnet.epub
+          sha256sum engenharia-dotnet.pdf engenharia-dotnet.epub > SHA256SUMS
+
+      - name: Atestar proveniência do PDF
+        id: pdf
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+        with:
+          subject-path: dist/livro/engenharia-dotnet.pdf
+          push-to-registry: false
+          create-storage-record: false
+
+      - name: Atestar proveniência do EPUB
+        id: epub
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+        with:
+          subject-path: dist/livro/engenharia-dotnet.epub
+          push-to-registry: false
+          create-storage-record: false
+
+      - name: Verificar assinaturas e identidade antes da publicação
+        working-directory: dist/livro
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PDF_BUNDLE: ${{ steps.pdf.outputs.bundle-path }}
+          EPUB_BUNDLE: ${{ steps.epub.outputs.bundle-path }}
+        run: |
+          set -euo pipefail
+          cp -- "$PDF_BUNDLE" engenharia-dotnet.pdf.sigstore.json
+          cp -- "$EPUB_BUNDLE" engenharia-dotnet.epub.sigstore.json
+          sha256sum --check --strict SHA256SUMS
+          for format in pdf epub; do
+            file="engenharia-dotnet.$format"
+            gh attestation verify "$file" --repo "$GITHUB_REPOSITORY" \
+              --signer-workflow "$GITHUB_REPOSITORY/.github/workflows/publicar-livro.yml" \
+              --source-ref refs/heads/main --source-digest "$GITHUB_SHA" \
+              --deny-self-hosted-runners --bundle "$file.sigstore.json"
+            gh attestation verify "$file" --repo "$GITHUB_REPOSITORY" \
+              --signer-workflow "$GITHUB_REPOSITORY/.github/workflows/publicar-livro.yml" \
+              --source-ref refs/heads/main --source-digest "$GITHUB_SHA" \
+              --deny-self-hosted-runners
+          done
+
+      - name: Transferir edição atestada ao job de publicação
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: engenharia-dotnet-edicao-atestada
+          path: |
+            dist/livro/engenharia-dotnet.pdf
+            dist/livro/engenharia-dotnet.epub
+            dist/livro/engenharia-dotnet.pdf.sigstore.json
+            dist/livro/engenharia-dotnet.epub.sigstore.json
+            dist/livro/SHA256SUMS
+          if-no-files-found: error
+          retention-days: 14
+
+  publicar:
+    needs: atestar
+    if: github.ref == 'refs/heads/main' && github.repository == 'rodri-oliveira-dev/engenharia-dotnet'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      attestations: read
+    steps:
+      - name: Obter edição atestada
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: engenharia-dotnet-edicao-atestada
+          path: dist/livro
+
+      - name: Conferir integridade e proveniência dos arquivos recebidos
+        working-directory: dist/livro
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          sha256sum --check --strict SHA256SUMS
+          for format in pdf epub; do
+            file="engenharia-dotnet.$format"
+            gh attestation verify "$file" --repo "$GITHUB_REPOSITORY" \
+              --signer-workflow "$GITHUB_REPOSITORY/.github/workflows/publicar-livro.yml" \
+              --source-ref refs/heads/main --source-digest "$GITHUB_SHA" \
+              --deny-self-hosted-runners --bundle "$file.sigstore.json"
+          done
+
       - name: Publicar edição sem alterar releases de código
         env:
           GH_TOKEN: ${{ github.token }}
@@ -44,7 +136,10 @@ jobs:
         run: |
           set -euo pipefail
           tag="livro-$GITHUB_SHA"
-          gh release create "$tag" dist/livro/engenharia-dotnet.pdf dist/livro/engenharia-dotnet.epub \
+          gh release create "$tag" \
+            dist/livro/engenharia-dotnet.pdf dist/livro/engenharia-dotnet.epub \
+            dist/livro/engenharia-dotnet.pdf.sigstore.json \
+            dist/livro/engenharia-dotnet.epub.sigstore.json dist/livro/SHA256SUMS \
             --target "$GITHUB_SHA" --latest=false \
             --title "Engenharia .NET | Livro ${GITHUB_SHA:0:12}" \
-            --notes "Edição PDF e EPUB consolidada da documentação no commit $GITHUB_SHA. Distribuição gratuita. Conteúdo editorial: CC BY-NC 4.0. Código: MIT. Consulte a política de licenciamento do repositório."
+            --notes "Edição PDF e EPUB consolidada no commit $GITHUB_SHA. Distribuição gratuita. Conteúdo editorial: CC BY-NC 4.0. Código: MIT. Arquivos com atestação de proveniência e somas SHA-256. Verificação: https://github.com/$GITHUB_REPOSITORY/blob/$GITHUB_SHA/docs/livro.md#autenticidade-e-procedência"

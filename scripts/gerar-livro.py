@@ -333,6 +333,7 @@ def prepare(root, directory, commit, release_history=None):
             item["c"][1][1].append("part")
     blocks.extend(credits)
     blocks.extend(history_blocks(root, commit, release_history))
+    blocks.extend(front_blocks(root, "autenticidade", "part"))
     blocks.append(header(1, "licenca", text_inline("Licença MIT dos exemplos de código")))
     for paragraph in (root / "LICENSE-CODE").read_text(encoding="utf-8").strip().split("\n\n"):
         blocks.append({"t": "Para", "c": text_inline(" ".join(paragraph.splitlines()))})
@@ -393,7 +394,7 @@ def build_pdf(root, output, directory, commit, payload, paths, maps):
         anchors = {a for p in document.pages for a in p.anchors}
         internal = {link[1] for p in document.pages for link in p.links
                     if link[0] == "internal"}
-        required = {a for m in maps.values() for a in m.values()} | {"direitos-autorais", "dedicatoria", "epigrafe", "historico-edicoes", "creditos-colaboradores", "como-utilizar", "sumario", "sobre-o-autor"}
+        required = {a for m in maps.values() for a in m.values()} | {"direitos-autorais", "dedicatoria", "epigrafe", "historico-edicoes", "autenticidade", "creditos-colaboradores", "como-utilizar", "sumario", "sobre-o-autor"}
         for index, ident in enumerate(("direitos-autorais", "dedicatoria", "epigrafe", "sumario"), 1):
             if len(document.pages) <= index or ident not in document.pages[index].anchors:
                 raise ValueError(f"Seção editorial fora da posição: {ident}")
@@ -562,7 +563,7 @@ def build_epub(root, output, directory, commit, payload, maps, edition_date):
             "--output=" + str(temporary), input=json.dumps(edition))
         required = {a for m in maps.values() for a in m.values()} | {
             "direitos-autorais", "dedicatoria", "epigrafe", "historico-edicoes",
-            "creditos-colaboradores", "sobre-o-autor", "como-utilizar"}
+            "autenticidade", "creditos-colaboradores", "sobre-o-autor", "como-utilizar"}
         reorder_epub_nav(temporary)
         check_epub_structure(temporary, required)
         print(run("epubcheck", str(temporary)), end="")

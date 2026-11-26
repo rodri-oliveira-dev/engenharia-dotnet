@@ -9,7 +9,8 @@ A edição oficial é gratuita. O conteúdo editorial original e as edições PD
 [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/deed.pt).
 Os trechos de código mantêm a [licença MIT](../LICENSE-CODE).
 Após a capa, seguem os direitos autorais, a dedicatória, a epígrafe e o sumário.
-O histórico de edições fica após os créditos e antes da licença de código. A
+O histórico de edições e a seção de autenticidade ficam após os créditos
+e antes da licença de código. A
 [política de licenciamento](../LICENSE) preserva permissões anteriores e
 licenças de terceiros.
 
@@ -98,6 +99,51 @@ A edição recebe uma tag específica do commit. A publicação não substitui
 edições anteriores nem altera a release principal de código. O PDF e o EPUB ficam
 disponíveis nos arquivos anexos da edição na página de releases.
 Se a edição já existir, a publicação falha em vez de sobrescrever o arquivo.
+
+## Autenticidade e procedência
+
+O fluxo oficial de publicação na branch main gera uma atestação de
+proveniência SLSA para cada formato com GitHub Artifact Attestations,
+usando identidade OIDC e Sigstore. A geração e a validação dos livros
+não recebem permissões de assinatura ou publicação. Um job separado
+atesta os arquivos validados sem executar o conteúdo dos livros;
+outro job verifica novamente as atestações antes de publicar.
+
+A release inclui cinco arquivos: PDF, EPUB, duas atestações
+(`engenharia-dotnet.pdf.sigstore.json` e `engenharia-dotnet.epub.sigstore.json`)
+e `SHA256SUMS`.
+
+Para verificar a origem pela API do GitHub, use o GitHub CLI atualizado
+e substitua o valor de `REVISAO` pelo SHA completo da tag da edição,
+sem o prefixo `livro-`:
+
+~~~sh
+REVISAO="SHA_COMPLETO_DA_EDICAO"
+REPO="rodri-oliveira-dev/engenharia-dotnet"
+gh attestation verify engenharia-dotnet.pdf \
+  --repo "$REPO" \
+  --signer-workflow "$REPO/.github/workflows/publicar-livro.yml" \
+  --source-ref refs/heads/main --source-digest "$REVISAO" \
+  --deny-self-hosted-runners
+~~~
+
+Repita o comando para `engenharia-dotnet.epub`. Para usar a atestação
+distribuída com o arquivo, acrescente a opção
+`--bundle engenharia-dotnet.pdf.sigstore.json` ou o nome correspondente
+ao EPUB. A verificação com arquivo local pode precisar consultar as
+raízes de confiança do Sigstore; para uso sem rede, obtenha previamente
+uma raiz confiável conforme a documentação oficial.
+
+Em Linux, confira as somas com `sha256sum --check SHA256SUMS`. A soma
+isolada não autentica a origem: verifique também a assinatura.
+
+Consulte a [documentação do GitHub sobre atestações](https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/use-artifact-attestations),
+o [manual do GitHub CLI](https://cli.github.com/manual/gh_attestation_verify)
+e o [registro da decisão](planejamento/adr-proveniencia-livro.md).
+
+As atestações não são assinaturas pessoais do autor, não equivalem a
+certificados ICP-Brasil e não demonstram a titularidade de direitos
+autorais. Artefatos de PR e gerações locais não são atestados.
 
 ## Limitações
 

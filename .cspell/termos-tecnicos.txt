@@ -263,3 +263,9 @@ Rafaela
 Aristóteles
 Metafísica
 fallback
+Attestations
+Sigstore
+OIDC
+SLSA
+ICP
+proveniência

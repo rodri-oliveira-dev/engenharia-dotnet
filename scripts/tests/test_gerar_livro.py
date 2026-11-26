@@ -33,6 +33,13 @@ class LivroTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             book.insert_rights("<html></html>", source)
 
+    def test_autenticidade_editorial(self):
+        root = SCRIPT.parents[1]
+        blocks = book.front_blocks(root, "autenticidade", "part")
+        self.assertEqual(blocks[0]["c"][1][0], "autenticidade")
+        self.assertIn(f"{book.REPO}/releases", list(book.links(blocks)))
+        self.assertIn("SHA-256", " ".join(s["c"] for s in book.nodes(blocks, "Str")))
+
     def test_ordem_pre_textual_pdf(self):
         root = SCRIPT.parents[1]
         page = '<header>Capa</header><nav id="TOC">Sumário</nav>'
