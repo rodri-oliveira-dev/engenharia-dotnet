@@ -189,8 +189,9 @@
         "command": "pwsh",
         "args": [
           "-NoProfile",
-          "-Command",
-          "$report = Join-Path ([IO.Path]::GetTempPath()) ('engenharia-dotnet-nuget-' + [Guid]::NewGuid().ToString('N') + '.json'); try { & dotnet restore 'exemplos/EngenhariaDotnet.slnx' '-p:NuGetAudit=true' '-p:NuGetAuditMode=all' '-p:NuGetAuditLevel=low'; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; & dotnet package list --project 'exemplos/EngenhariaDotnet.slnx' --vulnerable --include-transitive --no-restore --format json --output-version 1 | Set-Content -LiteralPath $report -Encoding utf8; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; & $args[0] 'scripts/verificar-vulnerabilidades-nuget.py' $report; exit $LASTEXITCODE } finally { Remove-Item -LiteralPath $report -Force -ErrorAction SilentlyContinue }",
+          "-File",
+          "scripts/auditar-dependencias.ps1",
+          "-Python",
           "${command:python.interpreterPath}"
         ],
         "options": {

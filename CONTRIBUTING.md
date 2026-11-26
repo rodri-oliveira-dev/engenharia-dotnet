@@ -29,7 +29,8 @@ code engenharia-dotnet.code-workspace
 
 O workspace recomenda apenas extensões relacionadas às tecnologias usadas pelo
 projeto. A instalação é uma decisão do contribuidor e nenhuma extensão ou task é
-executada automaticamente ao abrir o repositório.
+executada automaticamente ao abrir o repositório. A extensão oficial Python é
+necessária para as tasks que usam o interpretador selecionado no VS Code.
 
 Para as validações principais, instale o SDK definido em [`global.json`](global.json),
 Node.js 22.18 ou superior, Python 3, PowerShell 7 e execute `npm install`. Docker,

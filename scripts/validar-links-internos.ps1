@@ -1,8 +1,16 @@
 $ErrorActionPreference = "Stop"
 
 $raiz = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
-$saida = & git -C $raiz ls-files -z --cached --others --exclude-standard -- "*.md"
-if ($LASTEXITCODE -ne 0) {
+$codificacaoAnterior = [Console]::OutputEncoding
+try {
+    [Console]::OutputEncoding = [Text.UTF8Encoding]::new($false)
+    $saida = & git -C $raiz ls-files -z --cached --others --exclude-standard -- "*.md"
+    $codigoGit = $LASTEXITCODE
+}
+finally {
+    [Console]::OutputEncoding = $codificacaoAnterior
+}
+if ($codigoGit -ne 0) {
     throw "Não foi possível listar os arquivos Markdown pelo Git."
 }
 $caminhos = (($saida -join "") -split "`0") | Where-Object { $_ }
