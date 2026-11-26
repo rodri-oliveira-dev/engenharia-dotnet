@@ -61,7 +61,17 @@ Chrome ou Chromium, as fontes DejaVu e as bibliotecas nativas do WeasyPrint
 [de validação](../.github/workflows/validar-livro.yml) registra os comandos
 usados no CI, incluindo as versões das ferramentas de renderização.
 
-Execute a partir da raiz do repositório:
+Instale as ferramentas Python e Node.js usadas na renderização. O segundo
+comando instala o `mmdc` em um diretório temporário; o terceiro o adiciona ao
+`PATH` da sessão atual:
+
+~~~sh
+python -m pip install "weasyprint==68.0"
+npm install --prefix /tmp/engenharia-dotnet-livro-tools --no-audit --no-fund "@mermaid-js/mermaid-cli@11.4.2"
+export PATH="/tmp/engenharia-dotnet-livro-tools/node_modules/.bin:$PATH"
+~~~
+
+Depois, execute a partir da raiz do repositório:
 
 ~~~sh
 python -m unittest discover -s scripts/tests -p "test_gerar_livro.py" -v
