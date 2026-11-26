@@ -1,7 +1,8 @@
 name: Validar termos de contribuição
 
 on:
-  pull_request:
+  pull_request_target:
+    branches: [main]
     types: [opened, reopened, synchronize, edited, ready_for_review]
 
 permissions:
@@ -52,10 +53,33 @@ jobs:
               print(message, file=sys.stderr)
               sys.exit(1)
 
+          def checked_declarations(body):
+              body = (body or "").replace("\r\n", "\n").replace("\r", "\n")
+              # Não aceite caixas dentro de comentários HTML ou blocos de código.
+              body = re.sub(r"<!--[\s\S]*?(?:-->|$)", "", body)
+              body = re.sub(r"(?ms)^ *(`{3,}|~{3,})[^\n]*\n.*?^ *\1[^\n]*(?:\n|$)", "", body)
+              return {m.group(1).strip() for m in re.finditer(
+                  r"(?m)^- \[[xX]\] ([^\r\n]+)$", body
+              )}
+
+          # Testes de regressão antes de consultar metadados do PR.
+          for newline in ("\n", "\r\n", "\r"):
+              sample = newline.join(f"- [x] {item}" for item in REQUIRED)
+              if checked_declarations(sample) != set(REQUIRED):
+                  fail("Falha no teste de reconhecimento das declarações.")
+              if checked_declarations("<!--" + newline + sample + newline + "-->"):
+                  fail("Falha no teste de declarações ocultas.")
+              if checked_declarations("```" + newline + sample + newline + "```"):
+                  fail("Falha no teste de declarações em código.")
+          if checked_declarations("- [ ] " + REQUIRED[0]):
+              fail("Falha no teste de declaração não marcada.")
+
           event = json.loads(Path(os.environ["GITHUB_EVENT_PATH"]).read_text())
           repo = os.environ["GITHUB_REPOSITORY"]
           number = int(event["pull_request"]["number"])
           pr = api(f"repos/{repo}/pulls/{number}")[0]
+          if pr["head"]["sha"] != event["pull_request"]["head"]["sha"]:
+              fail("O PR mudou desde o evento. Execute novamente a validação.")
           author = pr["user"]
 
           # A automação oficial não fornece aceite pessoal. Limite a exceção
@@ -75,13 +99,7 @@ jobs:
                   sys.exit(0)
               fail("Dependabot: alteração fora do escopo da exceção. Revisão necessária.")
 
-          body = pr.get("body") or ""
-          # Não aceite caixas dentro de comentários HTML ou blocos de código.
-          body = re.sub(r"<!--[\s\S]*?(?:-->|$)", "", body)
-          body = re.sub(r"(?ms)^ *(`{3,}|~{3,})[^\n]*\n.*?^ *\1[^\n]*(?:\n|$)", "", body)
-          checked = {m.group(1).strip() for m in re.finditer(
-              r"(?m)^- \[[xX]\] ([^\r\n]+)$", body
-          )}
+          checked = checked_declarations(pr.get("body"))
           if not set(REQUIRED) <= checked:
               fail("Marque as duas declarações dos termos vigentes na descrição do PR.")
 

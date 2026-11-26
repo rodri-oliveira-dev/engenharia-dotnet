@@ -70,7 +70,8 @@ def select(root):
                 chapters = []
                 for dest in links(area["blocks"]):
                     ref = urlsplit(dest)
-                    if not ref.scheme and not ref.netloc and CHAPTER.fullmatch(ref.path):
+                    if (not ref.scheme and not ref.netloc
+                            and CHAPTER.fullmatch(Path(unquote(ref.path)).name)):
                         chapter = local_path(root, index, ref.path)
                         if chapter not in chapters:
                             chapters.append(chapter)
@@ -220,6 +221,19 @@ def insert_rights(page, source):
                         + rights + "</section>", 1)
 
 
+def write_checked_pdf(document, output, errors):
+    """Só promove a saída se a escrita final não registrar erros."""
+    output.parent.mkdir(parents=True, exist_ok=True)
+    temporary = output.with_suffix(".tmp.pdf")
+    try:
+        document.write_pdf(temporary, pdf_tags=True)
+        if errors:
+            raise ValueError("Falhas de renderização: " + "; ".join(errors))
+        temporary.replace(output)
+    finally:
+        temporary.unlink(missing_ok=True)
+
+
 def build(root, output, directory, commit):
     from weasyprint import HTML, default_url_fetcher
 
@@ -306,13 +320,7 @@ def build(root, output, directory, commit):
             raise ValueError("Âncoras, sumário ou paginação incompletos.")
         if errors:
             raise ValueError("Falhas de renderização: " + "; ".join(errors))
-        output.parent.mkdir(parents=True, exist_ok=True)
-        temporary = output.with_suffix(".tmp.pdf")
-        try:
-            document.write_pdf(temporary, pdf_tags=True)
-            temporary.replace(output)
-        finally:
-            temporary.unlink(missing_ok=True)
+        write_checked_pdf(document, output, errors)
     finally:
         logger.removeHandler(handler)
     print(f"{len(paths)} documentos, {len(document.pages)} páginas: {output}")

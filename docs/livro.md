@@ -41,8 +41,9 @@ Os comentários internos não fazem parte da edição publicada.
 
 ## Gerar e validar
 
-Em Linux, instale Python 3, Pandoc, Node.js 22, Chrome ou Chromium, as fontes
-DejaVu e as bibliotecas nativas do WeasyPrint. O arquivo
+Em Linux, instale Python 3.13 (versão usada no CI), Pandoc, Node.js 22,
+Chrome ou Chromium, as fontes DejaVu e as bibliotecas nativas do WeasyPrint
+68.0. Instale também `poppler-utils`, que fornece `pdftotext` e `pdfinfo`. O arquivo
 [de validação](../.github/workflows/validar-livro.yml) registra os comandos
 usados no CI, incluindo as versões das ferramentas de renderização.
 
@@ -51,6 +52,7 @@ Execute a partir da raiz do repositório:
 ~~~sh
 python -m unittest discover -s scripts/tests -p "test_gerar_livro.py" -v
 python scripts/gerar-livro.py
+python scripts/livro/validar_pdf.py dist/livro/engenharia-dotnet.pdf
 ~~~
 
 O resultado fica em `dist/livro/engenharia-dotnet.pdf`.

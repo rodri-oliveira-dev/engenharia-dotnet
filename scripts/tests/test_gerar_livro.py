@@ -57,6 +57,42 @@ class LivroTests(unittest.TestCase):
             "CC BY-NC 4.0", "distribuição gratuita",
         )), ["distribuição gratuita"])
 
+    def test_selecao_com_caminho_relativo_e_codificado(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            area = root / "docs/area"
+            area.mkdir(parents=True)
+            (root / "docs/indice.md").write_text(
+                "# Índice\n\n## Áreas de conhecimento\n\n"
+                "- [Área](area/indice.md)\n\n"
+                "## Material complementar\n\n- [Guia](guia.md)\n",
+                encoding="utf-8")
+            (root / "docs/guia.md").write_text("# Guia\n", encoding="utf-8")
+            chapter = area / "c01-titulo.md"
+            chapter.write_text("# Capítulo\n", encoding="utf-8")
+            for target in ("c01-titulo.md", "./c01-titulo.md", "./%6301-titulo.md"):
+                with self.subTest(target=target):
+                    (area / "indice.md").write_text(
+                        f"# Área\n\n- [Capítulo]({target})\n", encoding="utf-8")
+                    _, areas, _ = book.select(root)
+                    self.assertEqual(areas[0][1], [chapter])
+
+    def test_erro_na_escrita_preserva_pdf_anterior(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp) / "livro.pdf"
+            output.write_bytes(b"anterior")
+            errors = []
+
+            class Document:
+                def write_pdf(self, path, **kwargs):
+                    path.write_bytes(b"novo")
+                    errors.append("recurso ausente")
+
+            with self.assertRaisesRegex(ValueError, "recurso ausente"):
+                book.write_checked_pdf(Document(), output, errors)
+            self.assertEqual(output.read_bytes(), b"anterior")
+            self.assertFalse(output.with_suffix(".tmp.pdf").exists())
+
     def test_links_e_ancoras(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp).resolve()

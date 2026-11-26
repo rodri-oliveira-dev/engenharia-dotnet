@@ -54,7 +54,13 @@ O aceite do autor do PR não comprova o consentimento de todos os coautores.
 ## Automação e revisão
 
 O fluxo de validação verifica a declaração na descrição e o comentário
-do autor do PR. A automação oficial do Dependabot é dispensada da declaração
+do autor do PR. A execução usa a definição da branch de destino confiável
+(`pull_request_target` na `main`), com permissões somente de leitura e sem
+obter ou executar arquivos do PR. Na implantação inicial, o fluxo passa a
+executar após sua incorporação à `main`. Até lá, o mantenedor deve conferir
+manualmente o aceite deste PR. Após a implantação, configure a verificação
+obrigatória e proteja mudanças nos fluxos de trabalho contra alterações
+não revisadas. O nome do check, isoladamente, não garante sua procedência. A automação oficial do Dependabot é dispensada da declaração
 pessoal, mas somente para alterações em arquivos de dependências autorizados.
 Outras automações precisam de revisão e procedimento de aceite humano.
 
