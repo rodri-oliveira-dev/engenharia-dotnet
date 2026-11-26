@@ -23,6 +23,16 @@ Para uma revisão geral, execute `npm run ortografia`. Termos técnicos
 necessários devem entrar em `.cspell/termos-tecnicos.txt` após revisão;
 não adicione grafias incorretas apenas para silenciar o job.
 
+## Licenciamento e aceite das contribuições
+
+Leia os [termos de contribuição](CONTRIBUTION-TERMS.md) antes de abrir o PR.
+O aceite é condição para incorporar a contribuição. Código segue a
+[MIT](LICENSE-CODE) e conteúdo editorial segue a [CC BY-NC 4.0](LICENSE).
+Marque as declarações do modelo de PR e publique o comentário de aceite
+pela própria conta, conforme os termos. O mantenedor deve revisar a autoria
+quando houver participação de terceiros e atualizar os
+[créditos dos colaboradores](CONTRIBUTORS.md) quando pertinente.
+
 ## Novos capítulos
 
 - Escolha um capítulo já aprovado no mapa editorial ou justifique a nova lacuna.

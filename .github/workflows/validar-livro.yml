@@ -1,0 +1,102 @@
+name: Validar livro PDF e EPUB
+
+on:
+  pull_request:
+    paths:
+      - "docs/**"
+      - "scripts/gerar-livro.py"
+      - "scripts/livro/**"
+      - "scripts/tests/test_gerar_livro.py"
+      - "LICENSE"
+      - "LICENSE-CODE"
+      - "CONTRIBUTORS.md"
+      - ".github/workflows/*livro*.yml"
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  livro:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - name: Obter repositório
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Configurar Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.13"
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "22"
+
+      - name: Instalar ferramentas de publicação
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: "true"
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends pandoc fonts-dejavu libpango-1.0-0 libpangoft2-1.0-0 libharfbuzz-subset0 poppler-utils epubcheck librsvg2-bin
+          python -m pip install "weasyprint==68.0"
+          npm install --prefix "$RUNNER_TEMP/livro-tools" --no-audit --no-fund @mermaid-js/mermaid-cli@11.4.2
+          echo "$RUNNER_TEMP/livro-tools/node_modules/.bin" >> "$GITHUB_PATH"
+          echo "CHROME_BIN=$(command -v google-chrome)" >> "$GITHUB_ENV"
+          pandoc --version
+          weasyprint --version
+
+      - name: Testar regras editoriais
+        run: python -m unittest discover -s scripts/tests -p "test_gerar_livro.py" -v
+
+      - name: Consultar edições oficiais
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api "repos/$GITHUB_REPOSITORY/releases?per_page=100" --paginate --slurp > "$RUNNER_TEMP/livro-releases.json"
+
+      - name: Gerar livro
+        id: gerar
+        run: python scripts/gerar-livro.py --format both --release-history "$RUNNER_TEMP/livro-releases.json"
+
+      - name: Disponibilizar PDF para revisão
+        if: ${{ !cancelled() && hashFiles('dist/livro/engenharia-dotnet.pdf') != '' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: engenharia-dotnet-livro
+          path: dist/livro/engenharia-dotnet.pdf
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Disponibilizar EPUB para revisão
+        if: ${{ !cancelled() && hashFiles('dist/livro/engenharia-dotnet.epub') != '' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: engenharia-dotnet-epub
+          path: dist/livro/engenharia-dotnet.epub
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Verificar PDF
+        if: ${{ !cancelled() && hashFiles('dist/livro/engenharia-dotnet.pdf') != '' }}
+        run: |
+          pdfinfo dist/livro/engenharia-dotnet.pdf
+          python scripts/livro/validar_pdf.py dist/livro/engenharia-dotnet.pdf
+
+      - name: Gerar amostras para revisão visual
+        id: amostras
+        if: ${{ !cancelled() && hashFiles('dist/livro/engenharia-dotnet.pdf') != '' }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/livro-amostras"
+          pdftoppm -f 1 -l 10 -r 110 -png dist/livro/engenharia-dotnet.pdf "$RUNNER_TEMP/livro-amostras/pagina"
+
+      - name: Disponibilizar amostras para revisão visual
+        if: ${{ !cancelled() && steps.amostras.outcome == 'success' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: engenharia-dotnet-amostras
+          path: ${{ runner.temp }}/livro-amostras/
+          if-no-files-found: error
+          retention-days: 14

@@ -41,3 +41,12 @@ Issue relacionada: <!-- #numero ou "Não há" -->
 - [ ] Não há duplicação injustificada de conteúdo canônico.
 - [ ] Não foram criados links para capítulos ainda não publicados.
 - [ ] Nenhum dado privado ou referência não verificada foi introduzido.
+
+## Termos de contribuição (v1.0)
+
+- [ ] Li e concordo com os Termos de Contribuição do Engenharia .NET v1.0.
+- [ ] Declaro possuir os direitos e autorizações necessários sobre o material enviado.
+
+<!-- Leia CONTRIBUTION-TERMS.md no repositório. Publique um comentário com a
+     declaração exata prevista nos termos, pela conta autora deste PR,
+     antes de salvar a descrição com as duas declarações marcadas. -->

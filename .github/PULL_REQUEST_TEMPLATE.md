@@ -41,3 +41,12 @@ Issue relacionada: <!-- #numero ou "Não há" -->
 - [ ] Links e índices atualizados quando a estrutura de conteúdo mudou.
 - [ ] Nenhuma credencial, informação privada ou log sensível foi adicionado.
 - [ ] Riscos e validações não executadas foram explicitados.
+
+## Termos de contribuição (v1.0)
+
+- [ ] Li e concordo com os Termos de Contribuição do Engenharia .NET v1.0.
+- [ ] Declaro possuir os direitos e autorizações necessários sobre o material enviado.
+
+<!-- Leia CONTRIBUTION-TERMS.md no repositório. Publique um comentário com a
+     declaração exata prevista nos termos, pela conta autora deste PR,
+     antes de salvar a descrição com as duas declarações marcadas. -->

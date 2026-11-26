@@ -283,7 +283,7 @@ sequenceDiagram
     participant S as Serviço
     participant DB as Banco local
     C->>S: mensagem M / idempotency-key K
-    S->>DB: BEGIN; INSERT inbox(K) UNIQUE
+    S->>DB: BEGIN #59; INSERT inbox(K) UNIQUE
     alt primeira execução
         DB-->>S: inseriu
         S->>DB: aplica efeito de negócio

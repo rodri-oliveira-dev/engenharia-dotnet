@@ -4,13 +4,21 @@
 ![.NET 11](https://img.shields.io/badge/.NET-11.0-512BD4?logo=dotnet&logoColor=white)
 ![C# 15](https://img.shields.io/badge/C%23-15-239120)
 ![Português](https://img.shields.io/badge/idioma-pt--BR-blue)
-[![Licença MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-green)](LICENSE)
+[![Código MIT](https://img.shields.io/badge/c%C3%B3digo-MIT-green)](LICENSE-CODE)
+[![Conteúdo CC BY-NC 4.0](https://img.shields.io/badge/conte%C3%BAdo-CC%20BY--NC%204.0-blue)](LICENSE)
 
 Trabalho com C# e .NET há bastante tempo e sei que algumas dúvidas merecem mais do que uma resposta rápida. Criei este espaço para reunir explicações sobre a linguagem, o runtime e as decisões de engenharia que aparecem quando desenvolvemos, evoluímos e mantemos sistemas.
 
 A ideia não é decorar padrões ou acumular respostas prontas para entrevistas. É entender o que acontece por trás do código, quais alternativas existem, onde cada escolha pode falhar e o que vale a pena testar ou medir.
 
 Todo o conteúdo está em português e pode ser consultado diretamente pelo GitHub. Você não precisa ler tudo em sequência: pode começar pelo assunto que faz sentido para você agora.
+
+## Livro em PDF e EPUB
+
+O conteúdo também pode ser lido como um livro único, com sumário navegável,
+capítulos e materiais complementares. As edições publicadas ficam nas
+[releases do projeto](https://github.com/rodri-oliveira-dev/engenharia-dotnet/releases).
+Consulte as [instruções de geração e publicação](docs/livro.md).
 
 ## Por onde começar
 
@@ -174,6 +182,16 @@ Encontrou um erro, acha que algum trecho poderia ser mais claro ou quer sugerir 
 
 Antes de abrir um pull request, dê uma olhada no [guia de contribuição](CONTRIBUTING.md), no [mapa editorial](docs/planejamento/mapa-editorial.md) e no [guia de estilo](docs/guia-de-estilo.md). Eles ajudam a manter os capítulos conectados e as explicações consistentes.
 
+Antes de enviar contribuições, leia os [termos de contribuição](CONTRIBUTION-TERMS.md).
+A autoria é reconhecida nos [créditos do projeto](CONTRIBUTORS.md).
+
 ## Licença
 
-O conteúdo deste repositório é disponibilizado sob a [licença MIT](LICENSE).
+O projeto utiliza [licenças distintas](LICENSE) para código e conteúdo editorial:
+
+- Código-fonte, laboratórios e trechos de código: [MIT](LICENSE-CODE).
+- Conteúdo editorial original e livro em PDF e EPUB: [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/deed.pt).
+
+A edição oficial do livro é gratuita. O uso comercial do conteúdo editorial
+exige autorização, ressalvados os direitos anteriormente concedidos e as
+exceções legais. As licenças de materiais de terceiros são preservadas.

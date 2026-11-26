@@ -1,0 +1,149 @@
+name: Validar termos de contribuição
+
+on:
+  pull_request_target:
+    branches: [main]
+    types: [opened, reopened, synchronize, edited, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: read
+  issues: read
+
+concurrency:
+  group: termos-contribuicao-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  aceite:
+    name: Aceite dos termos de contribuição
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Conferir declarações e identidade do autor
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          import re
+          import subprocess
+          import sys
+          from pathlib import Path
+
+          VERSION = "1.0"
+          DECLARATION = (
+              "Li e concordo com os Termos de Contribuição do Engenharia .NET "
+              f"v{VERSION} e declaro possuir os direitos necessários."
+          )
+          REQUIRED = (
+              f"Li e concordo com os Termos de Contribuição do Engenharia .NET v{VERSION}.",
+              "Declaro possuir os direitos e autorizações necessários sobre o material enviado.",
+          )
+
+          def api(endpoint):
+              result = subprocess.run(
+                  ["gh", "api", endpoint, "--paginate", "--slurp"],
+                  check=True, capture_output=True, text=True,
+              )
+              return json.loads(result.stdout)
+
+          def fail(message):
+              print(message, file=sys.stderr)
+              sys.exit(1)
+
+          def without_fenced_code(body):
+              result = []
+              fence = None
+              for line in body.splitlines(keepends=True):
+                  content = line.rstrip("\r\n")
+                  if fence is None:
+                      opening = re.match(r"^ {0,3}(`{3,}|~{3,})(.*)$", content)
+                      if opening and not (
+                              opening.group(1)[0] == "`"
+                              and "`" in opening.group(2)):
+                          fence = (opening.group(1)[0], len(opening.group(1)))
+                          continue
+                      result.append(line)
+                  elif re.match(
+                          rf"^ {{0,3}}{re.escape(fence[0])}{{{fence[1]},}}[ \t]*$",
+                          content):
+                      fence = None
+              return "".join(result)
+
+          def checked_declarations(body):
+              body = (body or "").replace("\r\n", "\n").replace("\r", "\n")
+              # Não aceite caixas dentro de comentários HTML ou blocos de código.
+              body = without_fenced_code(body)
+              body = re.sub(r"<!--[\s\S]*?(?:-->|$)", "", body)
+              return {m.group(1).strip() for m in re.finditer(
+                  r"(?m)^- \[[xX]\] ([^\r\n]+)$", body
+              )}
+
+          # Testes de regressão antes de consultar metadados do PR.
+          for newline in ("\n", "\r\n", "\r"):
+              sample = newline.join(f"- [x] {item}" for item in REQUIRED)
+              if checked_declarations(sample) != set(REQUIRED):
+                  fail("Falha no teste de reconhecimento das declarações.")
+              if checked_declarations("<!--" + newline + sample + newline + "-->"):
+                  fail("Falha no teste de declarações ocultas.")
+              if checked_declarations("```" + newline + sample + newline + "```"):
+                  fail("Falha no teste de declarações em código.")
+              html_example = "```html" + newline + "<!--" + newline + "```"
+              if checked_declarations(html_example + newline + sample) != set(REQUIRED):
+                  fail("Falha no teste de comentário HTML dentro de código.")
+              if checked_declarations("```text" + newline + sample):
+                  fail("Falha no teste de bloco de código sem fechamento.")
+          if checked_declarations("- [ ] " + REQUIRED[0]):
+              fail("Falha no teste de declaração não marcada.")
+
+          event = json.loads(Path(os.environ["GITHUB_EVENT_PATH"]).read_text())
+          repo = os.environ["GITHUB_REPOSITORY"]
+          number = int(event["pull_request"]["number"])
+          pr = api(f"repos/{repo}/pulls/{number}")[0]
+          if pr["head"]["sha"] != event["pull_request"]["head"]["sha"]:
+              fail("O PR mudou desde o evento. Execute novamente a validação.")
+          author = pr["user"]
+
+          # A automação oficial não fornece aceite pessoal. Limite a exceção
+          # a alterações de dependências; o restante exige revisão humana.
+          if (author["login"] == "dependabot[bot]" and author["id"] == 49699333
+                  and author["type"] == "Bot"):
+              changed = [f for page in api(f"repos/{repo}/pulls/{number}/files?per_page=100")
+                         for f in page]
+              allowed = {
+                  "exemplos/Directory.Packages.props", "package.json",
+                  "package-lock.json", "global.json",
+              }
+              if (changed and len(changed) == pr["changed_files"]
+                      and all(f["filename"] in allowed and f["status"] == "modified"
+                              for f in changed)):
+                  print("Dependabot: exceção restrita a arquivos de dependências.")
+                  sys.exit(0)
+              fail("Dependabot: alteração fora do escopo da exceção. Revisão necessária.")
+
+          checked = checked_declarations(pr.get("body"))
+          if not set(REQUIRED) <= checked:
+              fail("Marque as duas declarações dos termos vigentes na descrição do PR.")
+
+          comments = [c for page in api(f"repos/{repo}/issues/{number}/comments?per_page=100")
+                      for c in page]
+          signed = [c for c in comments if c.get("user")
+                    and c["user"]["id"] == author["id"]
+                    and (c.get("body") or "").strip() == DECLARATION]
+          if not signed:
+              fail("O autor do PR deve publicar o comentário exato de aceite previsto nos termos.")
+
+          record = max(signed, key=lambda c: c["updated_at"])
+          print(f"Versão: {VERSION}; PR: {number}; autor: {author['login']}")
+          print(f"Registro: {record['html_url']}; criado: {record['created_at']}; "
+                f"atualizado: {record['updated_at']}")
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
+              summary.write(f"## Aceite dos termos v{VERSION}\n\n"
+                            f"- Autor: {author['login']}\n"
+                            f"- PR: #{number}\n"
+                            f"- Registro: {record['html_url']}\n"
+                            f"- Data do registro: {record['created_at']}\n"
+                            f"- Última atualização: {record['updated_at']}\n")
+          PY
