@@ -246,7 +246,13 @@ def build(root, output, directory, commit):
     intro = parse(root / "scripts/livro/como-utilizar.md")["blocks"]
     intro[0]["c"][1][0] = "como-utilizar"
     intro[0]["c"][1][1].append("part")
-    blocks, assets = intro, []
+    author = parse(root / "scripts/livro/sobre-o-autor.md")["blocks"]
+    if not author or author[0]["t"] != "Header" or author[0]["c"][0] != 1:
+        raise ValueError("Página de apresentação sem título principal.")
+    author[0]["c"][1][0] = "sobre-o-autor"
+    author[0]["c"][1][1].extend(["part", "author-title"])
+    blocks = author[:1] + [{"t": "Div", "c": [["", ["author-profile"], []], author[1:]]}] + intro
+    assets = []
     for i, (title, group) in enumerate(areas + [(text_inline("Apêndices"), appendices)], 1):
         blocks.append(header(1, f"parte-{i}", title))
         for path in group:
@@ -283,7 +289,7 @@ def build(root, output, directory, commit):
                         '<header id="title-block-header"><p class="cover-label">'
                         'PUBLICAÇÃO TÉCNICA INDEPENDENTE</p>', 1)
     page = page.replace('<p class="author">',
-                        '<img class="cover-art" src="capa-arquitetura.svg" alt="">'
+                        '<img class="cover-art" src="capa-arquitetura.svg" alt="Ilustração vetorial de camadas arquiteturais interligadas sobre uma grade técnica.">'
                         '<p class="author">', 1)
     page = page.replace("</header>", '<p class="cover-free">Distribuição gratuita</p>'
                         f'<p class="edition">Revisão: {html.escape(commit[:12])}</p>'
@@ -313,11 +319,15 @@ def build(root, output, directory, commit):
         anchors = {a for p in document.pages for a in p.anchors}
         internal = {link[1] for p in document.pages for link in p.links
                     if link[0] == "internal"}
-        required = {a for m in maps.values() for a in m.values()} | {"direitos-autorais", "creditos-colaboradores", "como-utilizar", "sumario"}
+        required = {a for m in maps.values() for a in m.values()} | {"direitos-autorais", "creditos-colaboradores", "como-utilizar", "sumario", "sobre-o-autor"}
         if len(document.pages) < 3 or "direitos-autorais" not in document.pages[1].anchors:
             raise ValueError("Página de direitos autorais fora da posição editorial.")
         if not required <= anchors or not internal <= anchors or len(document.pages) < len(paths):
             raise ValueError("Âncoras, sumário ou paginação incompletos.")
+        author_pages = [i for i, p in enumerate(document.pages) if "sobre-o-autor" in p.anchors]
+        intro_pages = [i for i, p in enumerate(document.pages) if "como-utilizar" in p.anchors]
+        if len(author_pages) != 1 or len(intro_pages) != 1 or intro_pages[0] != author_pages[0] + 1:
+            raise ValueError("A apresentação do autor deve ocupar uma única página antes da introdução.")
         if errors:
             raise ValueError("Falhas de renderização: " + "; ".join(errors))
         write_checked_pdf(document, output, errors)

@@ -93,6 +93,16 @@ class LivroTests(unittest.TestCase):
             self.assertEqual(output.read_bytes(), b"anterior")
             self.assertFalse(output.with_suffix(".tmp.pdf").exists())
 
+    def test_apresentacao_do_autor(self):
+        source = SCRIPT.parent / "livro/sobre-o-autor.md"
+        document = book.parse(source)
+        self.assertEqual(document["blocks"][0]["t"], "Header")
+        self.assertEqual(document["blocks"][0]["c"][0], 1)
+        self.assertEqual(sum(h["c"][0] == 1 for h in book.nodes(
+            document["blocks"], "Header")), 1)
+        self.assertIn("https://rodri-oliveira-dev.github.io/", list(
+            book.links(document["blocks"])))
+
     def test_links_e_ancoras(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp).resolve()

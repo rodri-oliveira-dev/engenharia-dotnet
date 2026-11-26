@@ -20,7 +20,9 @@ O cabeçalho e o rodapé mantêm o nome e o endereço do projeto.
 
 ## Experiência de leitura
 
-A introdução explica os percursos de estudo. O texto principal usa corpo de
+Após o sumário, a página Sobre o autor apresenta a trajetória profissional,
+a formação e os canais públicos do autor. A introdução explica os percursos
+de estudo. O texto principal usa corpo de
 11 pontos e os blocos de código usam 9,5 pontos. Os metadados dos capítulos
 recebem tratamento visual próprio, e as tabelas se ajustam ao conteúdo.
 O PDF inclui marcação estrutural e o fluxo gera amostras das primeiras seis

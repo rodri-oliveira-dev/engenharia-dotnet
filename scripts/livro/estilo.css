@@ -81,3 +81,12 @@ figure { margin: 4mm 0; break-inside: avoid; }
 .rights { break-after: page; padding-top: 4mm; font-size: 10.5pt; line-height: 1.4; }
 .rights h1 { font-size: 24pt; margin: 0 0 8mm; }
 .rights p { margin: 0 0 3mm; }
+
+/* Apresentação do autor: uma página editorial após o sumário. */
+h1.author-title { margin-top: 0; margin-bottom: 7mm; }
+.author-profile { font-size: 11pt; line-height: 1.43; }
+.author-profile > p:first-child { font-family: "DejaVu Sans", sans-serif; font-size: 19pt; color: #10223d; margin-bottom: 1mm; }
+.author-profile > p:nth-child(2) { font-family: "DejaVu Sans", sans-serif; font-size: 12pt; color: #434b5d; border-bottom: 0.5pt solid #cbd5e1; padding-bottom: 4mm; margin-bottom: 5mm; }
+.author-profile h2 { font-size: 14pt; margin: 5mm 0 2mm; }
+.author-profile ul { padding-left: 5mm; margin: 0; }
+.author-profile li { margin-bottom: 1mm; }

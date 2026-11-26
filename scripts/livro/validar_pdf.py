@@ -42,6 +42,9 @@ def validate(pdf):
         ("Conteúdo integral", extract(pdf), (
             "MIT License",
             "Como utilizar este livro",
+            "Sobre o autor",
+            "Conhecimento compartilhado",
+            "Arquiteto de Software Sênior",
         )),
     )
     errors = []
