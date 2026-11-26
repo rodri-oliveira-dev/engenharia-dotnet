@@ -39,9 +39,19 @@ def validate(pdf):
             "distribuição gratuita",
             "CC BY-NC 4.0",
         )),
+        ("Dedicatória (página 3)", extract(pdf, "-f", "3", "-l", "3"), (
+            "À minha esposa, Rafaela, e aos nossos gatos",
+            "mais leve, afetuosa e especial.",
+        )),
+        ("Epígrafe (página 4)", extract(pdf, "-f", "4", "-l", "4"), (
+            "Todos os seres humanos desejam, por natureza, conhecer.",
+            "Aristóteles", "980a21",
+        )),
+        ("Sumário (página 5)", extract(pdf, "-f", "5", "-l", "5"), ("Sumário",)),
         ("Conteúdo integral", extract(pdf), (
             "MIT License",
             "Como utilizar este livro",
+            "Histórico de edições",
             "Sobre o autor",
             "Conhecimento compartilhado",
             "Arquiteto de Software Sênior",

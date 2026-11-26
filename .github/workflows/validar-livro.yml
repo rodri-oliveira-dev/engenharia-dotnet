@@ -52,9 +52,14 @@ jobs:
       - name: Testar regras editoriais
         run: python -m unittest discover -s scripts/tests -p "test_gerar_livro.py" -v
 
+      - name: Consultar edições oficiais
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api "repos/$GITHUB_REPOSITORY/releases?per_page=100" --paginate --slurp > "$RUNNER_TEMP/livro-releases.json"
+
       - name: Gerar livro
         id: gerar
-        run: python scripts/gerar-livro.py --format both
+        run: python scripts/gerar-livro.py --format both --release-history "$RUNNER_TEMP/livro-releases.json"
 
       - name: Disponibilizar PDF para revisão
         if: ${{ !cancelled() && hashFiles('dist/livro/engenharia-dotnet.pdf') != '' }}
@@ -85,7 +90,7 @@ jobs:
         if: ${{ !cancelled() && hashFiles('dist/livro/engenharia-dotnet.pdf') != '' }}
         run: |
           mkdir -p "$RUNNER_TEMP/livro-amostras"
-          pdftoppm -f 1 -l 6 -r 110 -png dist/livro/engenharia-dotnet.pdf "$RUNNER_TEMP/livro-amostras/pagina"
+          pdftoppm -f 1 -l 10 -r 110 -png dist/livro/engenharia-dotnet.pdf "$RUNNER_TEMP/livro-amostras/pagina"
 
       - name: Disponibilizar amostras para revisão visual
         if: ${{ !cancelled() && steps.amostras.outcome == 'success' }}

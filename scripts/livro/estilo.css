@@ -90,3 +90,42 @@ h1.author-title { margin-top: 0; margin-bottom: 7mm; }
 .author-profile h2 { font-size: 14pt; margin: 5mm 0 2mm; }
 .author-profile ul { padding-left: 5mm; margin: 0; }
 .author-profile li { margin-bottom: 1mm; }
+
+/* Seções pré-textuais: uma página por seção. */
+.front-matter { break-after: page; padding-top: 4mm; }
+.front-matter h1 { font-size: 24pt; margin: 0 0 65mm; }
+.front-matter p { font-size: 15pt; font-style: italic; line-height: 1.6; text-align: center; }
+.epigraph p:nth-of-type(2), .epigraph p:nth-of-type(3) { text-align: right; font-size: 11pt; }
+.author-profile > p:first-child { font-weight: bold; }
+
+/* Paleta clara inspirada em IDE, aplicada aos tokens do Pandoc. */
+pre, pre.sourceCode { color: #24292f; background: #f5f6f8; }
+pre code.sourceCode { color: #24292f; background: transparent; }
+pre code.sourceCode span.kw { color: #0000b5; }
+pre code.sourceCode span.cf { color: #0000b5; }
+pre code.sourceCode span.dt { color: #00676b; }
+pre code.sourceCode span.dv { color: #08753e; }
+pre code.sourceCode span.bn { color: #08753e; }
+pre code.sourceCode span.fl { color: #08753e; }
+pre code.sourceCode span.ch { color: #9b2318; }
+pre code.sourceCode span.st { color: #9b2318; }
+pre code.sourceCode span.vs { color: #9b2318; }
+pre code.sourceCode span.ss { color: #9b2318; }
+pre code.sourceCode span.sc { color: #9b2318; }
+pre code.sourceCode span.co { color: #006d00; }
+pre code.sourceCode span.do { color: #006d00; }
+pre code.sourceCode span.an { color: #006d00; }
+pre code.sourceCode span.cv { color: #006d00; }
+pre code.sourceCode span.ot { color: #684217; }
+pre code.sourceCode span.fu { color: #684217; }
+pre code.sourceCode span.bu { color: #00676b; }
+pre code.sourceCode span.va { color: #075078; }
+pre code.sourceCode span.at { color: #075078; }
+pre code.sourceCode span.pp { color: #7c248c; }
+pre code.sourceCode span.im { color: #7c248c; }
+pre code.sourceCode span.op { color: #24292f; }
+pre code.sourceCode span.cn { color: #075078; }
+pre code.sourceCode span.in { color: #006d00; }
+pre code.sourceCode span.wa { color: #8b4000; }
+pre code.sourceCode span.al { color: #a31515; }
+pre code.sourceCode span.er { color: #a31515; }

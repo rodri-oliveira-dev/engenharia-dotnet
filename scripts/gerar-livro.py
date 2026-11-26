@@ -224,6 +224,70 @@ def insert_rights(page, source):
                         + rights + "</section>", 1)
 
 
+FRONT_MATTER = (
+    ("direitos-autorais", "rights"),
+    ("dedicatoria", "dedication"),
+    ("epigrafe", "epigraph"),
+)
+
+
+def front_blocks(root, ident, css_class):
+    blocks = parse(root / f"scripts/livro/{ident}.md")["blocks"]
+    if not blocks or blocks[0]["t"] != "Header" or blocks[0]["c"][0] != 1:
+        raise ValueError(f"Seção editorial sem título: {ident}")
+    blocks[0]["c"][1][0] = ident
+    blocks[0]["c"][1][1].append(css_class)
+    return blocks
+
+
+def insert_front_matter(page, root):
+    page = insert_rights(page, root / "scripts/livro/direitos-autorais.md")
+    sections = []
+    for ident, css_class in FRONT_MATTER[1:]:
+        source = root / f"scripts/livro/{ident}.md"
+        content = run("pandoc", "--from=gfm-raw_html", "--to=html5", str(source))
+        # O identificador do título é removido para não duplicar a âncora.
+        content = re.sub(r'<h1 id="[^"]+">', "<h1>", content, count=1)
+        sections.append(f'<section class="{css_class} front-matter" id="{ident}">'
+                        + content + "</section>")
+    return page.replace('<nav id="TOC"', "".join(sections) + '<nav id="TOC"', 1)
+
+
+def official_editions(pages):
+    """Considera somente releases públicas do livro com os dois arquivos."""
+    editions = {}
+    for page in pages:
+        for release in page:
+            tag = release.get("tag_name", "")
+            published = release.get("published_at") or ""
+            assets = {a.get("name") for a in release.get("assets", [])}
+            if (re.fullmatch(r"livro-[0-9a-f]{40}", tag)
+                    and not release.get("draft") and not release.get("prerelease")
+                    and re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z", published)
+                    and {"engenharia-dotnet.pdf", "engenharia-dotnet.epub"} <= assets):
+                editions[tag] = published
+    return sorted(editions.items(), key=lambda item: (item[1], item[0]))
+
+
+def history_blocks(root, commit, release_history):
+    blocks = front_blocks(root, "historico-edicoes", "part")
+    blocks.append({"t": "Para", "c": text_inline(f"Revisão desta edição: {commit[:12]}.")})
+    if release_history is None:
+        notice = "Histórico oficial não consultado nesta geração local."
+        blocks.append({"t": "Para", "c": text_inline(notice)})
+    elif not release_history:
+        blocks.append({"t": "Para", "c": text_inline(
+            "Nenhuma edição oficial anterior registrada na data da geração.")})
+    else:
+        for number, (tag, published) in enumerate(release_history, 1):
+            day = published[:10].split("-")
+            label = f"{number}ª edição · {day[2]}/{day[1]}/{day[0]} · revisão {tag[6:18]}"
+            link = {"t": "Link", "c": [["", [], []], text_inline(label),
+                    [f"{REPO}/releases/tag/{tag}", ""]]}
+            blocks.append({"t": "Para", "c": [link]})
+    return blocks
+
+
 def write_checked_pdf(document, output, errors):
     """Só promove a saída se a escrita final não registrar erros."""
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -237,7 +301,7 @@ def write_checked_pdf(document, output, errors):
         temporary.unlink(missing_ok=True)
 
 
-def prepare(root, directory, commit):
+def prepare(root, directory, commit, release_history=None):
     """Consolida a fonte editorial e renderiza diagramas uma única vez."""
 
     api, areas, appendices = select(root)
@@ -268,6 +332,7 @@ def prepare(root, directory, commit):
             item["c"][1][0] = "creditos-colaboradores"
             item["c"][1][1].append("part")
     blocks.extend(credits)
+    blocks.extend(history_blocks(root, commit, release_history))
     blocks.append(header(1, "licenca", text_inline("Licença MIT dos exemplos de código")))
     for paragraph in (root / "LICENSE-CODE").read_text(encoding="utf-8").strip().split("\n\n"):
         blocks.append({"t": "Para", "c": text_inline(" ".join(paragraph.splitlines()))})
@@ -304,7 +369,7 @@ def build_pdf(root, output, directory, commit, payload, paths, maps):
                         f'<p class="edition">Revisão: {html.escape(commit[:12])}</p>'
                         f'<p><a href="{REPO}/tree/{commit}">Código e documentação</a></p>'
                         '<p>Conteúdo editorial: CC BY-NC 4.0 | Código: MIT</p></header>', 1)
-    page = insert_rights(page, root / "scripts/livro/direitos-autorais.md")
+    page = insert_front_matter(page, root)
     page = page.replace('<nav id="TOC"', '<h1 class="toc-title" id="sumario">Sumário</h1><nav id="TOC"', 1)
 
     def fetch(url):
@@ -328,9 +393,10 @@ def build_pdf(root, output, directory, commit, payload, paths, maps):
         anchors = {a for p in document.pages for a in p.anchors}
         internal = {link[1] for p in document.pages for link in p.links
                     if link[0] == "internal"}
-        required = {a for m in maps.values() for a in m.values()} | {"direitos-autorais", "creditos-colaboradores", "como-utilizar", "sumario", "sobre-o-autor"}
-        if len(document.pages) < 3 or "direitos-autorais" not in document.pages[1].anchors:
-            raise ValueError("Página de direitos autorais fora da posição editorial.")
+        required = {a for m in maps.values() for a in m.values()} | {"direitos-autorais", "dedicatoria", "epigrafe", "historico-edicoes", "creditos-colaboradores", "como-utilizar", "sumario", "sobre-o-autor"}
+        for index, ident in enumerate(("direitos-autorais", "dedicatoria", "epigrafe", "sumario"), 1):
+            if len(document.pages) <= index or ident not in document.pages[index].anchors:
+                raise ValueError(f"Seção editorial fora da posição: {ident}")
         if not required <= anchors or not internal <= anchors or len(document.pages) < len(paths):
             raise ValueError("Âncoras, sumário ou paginação incompletos.")
         author_pages = [i for i, p in enumerate(document.pages) if "sobre-o-autor" in p.anchors]
@@ -348,11 +414,10 @@ def build_pdf(root, output, directory, commit, payload, paths, maps):
 def epub_payload(root, payload, commit, edition_date):
     """Adiciona os direitos ao mesmo conteúdo usado no PDF."""
     result = copy.deepcopy(payload)
-    rights = parse(root / "scripts/livro/direitos-autorais.md")["blocks"]
-    if not rights or rights[0]["t"] != "Header":
-        raise ValueError("Página de direitos autorais sem título.")
-    rights[0]["c"][1][0] = "direitos-autorais"
-    result["blocks"] = rights + result["blocks"]
+    front = []
+    for ident, css_class in FRONT_MATTER:
+        front.extend(front_blocks(root, ident, css_class))
+    result["blocks"] = front + result["blocks"]
     for key, value in {
         "date": edition_date,
         "rights": "Conteúdo editorial: CC BY-NC 4.0; código: MIT.",
@@ -422,6 +487,61 @@ def check_epub_structure(path, expected):
             raise ValueError(f"Âncoras ausentes no EPUB: {sorted(missing)}")
 
 
+def reorder_epub_nav(path):
+    """Posiciona o sumário visível depois dos três capítulos pré-textuais."""
+    rewritten = path.with_suffix(".ordered.epub")
+    try:
+        with zipfile.ZipFile(path) as source:
+            container = ET.fromstring(source.read("META-INF/container.xml"))
+            opf_path = container.find(".//{*}rootfile").attrib["full-path"]
+            data = source.read(opf_path).decode("utf-8")
+            opf = ET.fromstring(data)
+            items = opf.findall(".//{*}manifest/{*}item")
+            nav = next(i.attrib["id"] for i in items
+                       if "nav" in i.get("properties", "").split())
+            spine = opf.findall(".//{*}spine/{*}itemref")
+            order = [i.attrib["idref"] for i in spine]
+            front = {}
+            for item in items:
+                if item.get("media-type") != "application/xhtml+xml":
+                    continue
+                name = str(Path(opf_path).parent / unquote(item.attrib["href"]))
+                page = ET.fromstring(source.read(name))
+                for node in page.iter():
+                    ident = node.get("id")
+                    if ident in {i for i, _ in FRONT_MATTER} | {"sobre-o-autor"}:
+                        front[ident] = item.attrib["id"]
+            expected = [front[i] for i, _ in FRONT_MATTER]
+            if len(set(expected)) != 3 or [i for i in order if i in expected] != expected:
+                raise ValueError("Ordem pré-textual EPUB inválida.")
+            if order.index(nav) < order.index(expected[-1]):
+                # Pandoc emite itemref vazio; mova somente esse elemento, sem
+                # reserializar namespaces ou metadados do manifesto.
+                pattern = r'<itemref\b(?=[^>]*\bidref="' + re.escape(nav) + r'")[^>]*/>'
+                match = re.search(pattern, data)
+                if match is None:
+                    raise ValueError("Referência de navegação EPUB não encontrada.")
+                itemref = match.group()
+                data = data[:match.start()] + data[match.end():]
+                anchor = re.compile(r'<itemref\b(?=[^>]*\bidref="'
+                                    + re.escape(expected[-1]) + r'")[^>]*/>')
+                data, count = anchor.subn(lambda m: m.group() + itemref, data)
+                if count != 1:
+                    raise ValueError("Não foi possível posicionar o sumário EPUB.")
+            ordered = [i.attrib["idref"] for i in
+                       ET.fromstring(data).findall(".//{*}spine/{*}itemref")]
+            sequence = expected + [nav, front["sobre-o-autor"]]
+            if [i for i in ordered if i in sequence] != sequence:
+                raise ValueError("Sumário EPUB fora da posição editorial.")
+            with zipfile.ZipFile(rewritten, "w") as target:
+                for info in source.infolist():
+                    target.writestr(info, data.encode("utf-8") if info.filename == opf_path
+                                    else source.read(info.filename))
+        rewritten.replace(path)
+    finally:
+        rewritten.unlink(missing_ok=True)
+
+
 def build_epub(root, output, directory, commit, payload, maps, edition_date):
     edition = epub_payload(root, payload, commit, edition_date)
     for image in nodes(edition, "Image"):
@@ -441,7 +561,9 @@ def build_epub(root, output, directory, commit, payload, maps, edition_date):
             "--epub-cover-image=" + str(cover),
             "--output=" + str(temporary), input=json.dumps(edition))
         required = {a for m in maps.values() for a in m.values()} | {
-            "direitos-autorais", "creditos-colaboradores", "sobre-o-autor", "como-utilizar"}
+            "direitos-autorais", "dedicatoria", "epigrafe", "historico-edicoes",
+            "creditos-colaboradores", "sobre-o-autor", "como-utilizar"}
+        reorder_epub_nav(temporary)
         check_epub_structure(temporary, required)
         print(run("epubcheck", str(temporary)), end="")
         temporary.replace(output)
@@ -455,12 +577,15 @@ def main():
     parser.add_argument("--output", type=Path, default=Path("dist/livro/engenharia-dotnet.pdf"))
     parser.add_argument("--format", choices=("pdf", "epub", "both"), default="pdf")
     parser.add_argument("--epub-output", type=Path, default=Path("dist/livro/engenharia-dotnet.epub"))
+    parser.add_argument("--release-history", type=Path, help="JSON paginado de releases oficiais")
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     commit = run("git", "-C", str(root), "rev-parse", "HEAD").strip()
     with tempfile.TemporaryDirectory(prefix="engenharia-livro-") as temporary:
         directory = Path(temporary).resolve()
-        payload, paths, maps, edition_date = prepare(root, directory, commit)
+        history = (official_editions(json.loads(args.release_history.read_text(encoding="utf-8")))
+                   if args.release_history else None)
+        payload, paths, maps, edition_date = prepare(root, directory, commit, history)
         if args.format in ("pdf", "both"):
             build_pdf(root, args.output.resolve(), directory, commit, payload, paths, maps)
         if args.format in ("epub", "both"):

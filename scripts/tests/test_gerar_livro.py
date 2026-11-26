@@ -33,6 +33,40 @@ class LivroTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             book.insert_rights("<html></html>", source)
 
+    def test_ordem_pre_textual_pdf(self):
+        root = SCRIPT.parents[1]
+        page = '<header>Capa</header><nav id="TOC">Sumário</nav>'
+        rendered = book.insert_front_matter(page, root)
+        positions = [rendered.index(f'id="{name}"') for name in
+                     ("direitos-autorais", "dedicatoria", "epigrafe", "TOC")]
+        self.assertEqual(positions, sorted(positions))
+        self.assertIn("Rafaela", rendered)
+        self.assertIn("980a21", rendered)
+
+    def test_historico_somente_edicoes_oficiais(self):
+        valid = {"tag_name": "livro-" + "a" * 40,
+                 "published_at": "2026-11-25T20:00:00Z",
+                 "draft": False, "prerelease": False,
+                 "assets": [{"name": "engenharia-dotnet.pdf"},
+                            {"name": "engenharia-dotnet.epub"}]}
+        self.assertEqual(book.official_editions([[valid, dict(valid, tag_name="1.0.0"),
+            dict(valid, draft=True), dict(valid, assets=[]), dict(valid, prerelease=True)]]),
+            [(valid["tag_name"], valid["published_at"])])
+
+    def test_ordem_pre_textual_epub(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / "teste.md"
+            source.write_text("# Direitos {#direitos-autorais}\n\nTexto.\n\n"
+                              "# Dedicatória {#dedicatoria}\n\nTexto.\n\n"
+                              "# Epígrafe {#epigrafe}\n\nTexto.\n\n"
+                              "# Autor {#sobre-o-autor}\n\nTexto.\n", encoding="utf-8")
+            output = root / "teste.epub"
+            book.run("pandoc", str(source), "--to=epub3", "--toc",
+                     "--metadata=title:Teste", "--split-level=2", "--output=" + str(output))
+            book.reorder_epub_nav(output)
+            book.reorder_epub_nav(output)
+
     def test_metadados_e_avisos_editoriais(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "a.md"

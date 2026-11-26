@@ -259,3 +259,7 @@ Dapper
 FluentMap
 newsletter
 Sênior
+Rafaela
+Aristóteles
+Metafísica
+fallback

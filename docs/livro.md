@@ -8,7 +8,8 @@ livro nos formatos PDF e EPUB 3. Os arquivos Markdown continuam sendo a fonte de
 A edição oficial é gratuita. O conteúdo editorial original e as edições PDF e EPUB seguem
 [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/deed.pt).
 Os trechos de código mantêm a [licença MIT](../LICENSE-CODE).
-No PDF, a página de direitos autorais precede o sumário. A
+Após a capa, seguem os direitos autorais, a dedicatória, a epígrafe e o sumário.
+O histórico de edições fica após os créditos e antes da licença de código. A
 [política de licenciamento](../LICENSE) preserva permissões anteriores e
 licenças de terceiros.
 
@@ -27,7 +28,10 @@ de estudo. O texto principal usa corpo de
 11 pontos e os blocos de código usam 9,5 pontos. Os metadados dos capítulos
 recebem tratamento visual próprio, e as tabelas se ajustam ao conteúdo.
 O EPUB usa diagramação fluida, com fontes ajustáveis pelo leitor e sumário
-navegável. O PDF inclui marcação estrutural e o fluxo gera amostras das primeiras seis
+navegável. Os exemplos de código usam uma paleta clara inspirada em IDE.
+No EPUB, leitores compatíveis com a preferência de tema escuro recebem
+uma paleta escura; os demais usam a paleta clara de contraste definido.
+O código permanece texto selecionável. O PDF inclui marcação estrutural e o fluxo gera amostras das primeiras dez
 páginas para revisão visual. A marcação não comprova conformidade com PDF/UA.
 
 ## Decisão arquitetural
@@ -83,6 +87,12 @@ Também é possível iniciar pelo GitHub CLI:
 ~~~sh
 gh workflow run publicar-livro.yml --ref main
 ~~~
+
+O histórico consulta releases públicas com a tag do livro e os dois arquivos.
+Versões de código, testes, rascunhos e publicações incompletas não são
+considerados edições oficiais. Gerações locais sem o JSON de releases
+informam que a consulta não ocorreu. A revisão atual é identificada
+separadamente, sem antecipar a data de publicação.
 
 A edição recebe uma tag específica do commit. A publicação não substitui
 edições anteriores nem altera a release principal de código. O PDF e o EPUB ficam

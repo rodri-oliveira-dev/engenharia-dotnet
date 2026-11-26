@@ -1,6 +1,6 @@
 # Sobre o autor
 
-**Rodrigo de Oliveira**
+Rodrigo de Oliveira
 
 Arquiteto de Software Sênior
 
