@@ -1,8 +1,13 @@
 $ErrorActionPreference = "Stop"
 
 $raiz = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
-$arquivos = Get-ChildItem -Path $raiz -Recurse -Filter "*.md" -File |
-    Where-Object { $_.FullName -notmatch "[\\/]\.git[\\/]" }
+$caminhos = & git -C $raiz ls-files --cached --others --exclude-standard -- "*.md"
+if ($LASTEXITCODE -ne 0) {
+    throw "Não foi possível listar os arquivos Markdown pelo Git."
+}
+$arquivos = $caminhos | ForEach-Object {
+    Get-Item -LiteralPath (Join-Path $raiz $_)
+}
 $falhas = [System.Collections.Generic.List[string]]::new()
 $verificados = 0
 
