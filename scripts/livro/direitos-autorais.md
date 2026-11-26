@@ -9,7 +9,7 @@ de engenharia de software.
 **Esta publicação é de distribuição gratuita. A comercialização do conteúdo
 editorial não é autorizada por esta licença.**
 
-O conteúdo editorial original e o livro em PDF são disponibilizados sob a
+O conteúdo editorial original e as edições PDF e EPUB são disponibilizados sob a
 licença Creative Commons Atribuição-NãoComercial 4.0 Internacional
 (CC BY-NC 4.0).
 

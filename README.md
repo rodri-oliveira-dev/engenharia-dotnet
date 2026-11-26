@@ -13,7 +13,7 @@ A ideia não é decorar padrões ou acumular respostas prontas para entrevistas.
 
 Todo o conteúdo está em português e pode ser consultado diretamente pelo GitHub. Você não precisa ler tudo em sequência: pode começar pelo assunto que faz sentido para você agora.
 
-## Livro em PDF
+## Livro em PDF e EPUB
 
 O conteúdo também pode ser lido como um livro único, com sumário navegável,
 capítulos e materiais complementares. As edições publicadas ficam nas
@@ -189,7 +189,7 @@ A autoria é reconhecida nos [créditos do projeto](CONTRIBUTORS.md).
 O projeto utiliza [licenças distintas](LICENSE) para código e conteúdo editorial:
 
 - Código-fonte, laboratórios e trechos de código: [MIT](LICENSE-CODE).
-- Conteúdo editorial original e livro em PDF: [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/deed.pt).
+- Conteúdo editorial original e livro em PDF e EPUB: [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/deed.pt).
 
 A edição oficial do livro é gratuita. O uso comercial do conteúdo editorial
 exige autorização, ressalvados os direitos anteriormente concedidos e as

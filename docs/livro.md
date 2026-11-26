@@ -1,14 +1,14 @@
 # Livro Engenharia .NET
 
 O livro reúne os capítulos publicados e os materiais complementares em um
-único PDF. Os arquivos Markdown continuam sendo a fonte de verdade.
+livro nos formatos PDF e EPUB 3. Os arquivos Markdown continuam sendo a fonte de verdade.
 
 ## Distribuição e licença
 
-A edição oficial é gratuita. O conteúdo editorial original e o PDF seguem
+A edição oficial é gratuita. O conteúdo editorial original e as edições PDF e EPUB seguem
 [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/deed.pt).
 Os trechos de código mantêm a [licença MIT](../LICENSE-CODE).
-A página de direitos autorais precede o sumário. A
+No PDF, a página de direitos autorais precede o sumário. A
 [política de licenciamento](../LICENSE) preserva permissões anteriores e
 licenças de terceiros.
 
@@ -16,7 +16,8 @@ licenças de terceiros.
 
 A capa usa uma composição vetorial inspirada em desenho arquitetural, com
 textos em português, identificação da edição e revisão obtidas do commit.
-O cabeçalho e o rodapé mantêm o nome e o endereço do projeto.
+No PDF, o cabeçalho e o rodapé mantêm o nome e o endereço do projeto.
+O EPUB usa uma capa vertical com a mesma identidade visual.
 
 ## Experiência de leitura
 
@@ -25,8 +26,13 @@ a formação e os canais públicos do autor. A introdução explica os percursos
 de estudo. O texto principal usa corpo de
 11 pontos e os blocos de código usam 9,5 pontos. Os metadados dos capítulos
 recebem tratamento visual próprio, e as tabelas se ajustam ao conteúdo.
-O PDF inclui marcação estrutural e o fluxo gera amostras das primeiras seis
+O EPUB usa diagramação fluida, com fontes ajustáveis pelo leitor e sumário
+navegável. O PDF inclui marcação estrutural e o fluxo gera amostras das primeiras seis
 páginas para revisão visual. A marcação não comprova conformidade com PDF/UA.
+
+## Decisão arquitetural
+
+Consulte o [registro da decisão multiformato](planejamento/adr-publicacao-multiformato.md).
 
 ## Organização
 
@@ -36,7 +42,7 @@ de capítulo e inclui os materiais complementares, guias de compatibilidade
 e a trilha de estudos como apêndices. Os documentos de planejamento,
 contribuição e manutenção ficam no repositório.
 
-As referências entre capítulos apontam para o próprio PDF. Referências a
+As referências entre capítulos apontam para o próprio livro em ambos os formatos. Referências a
 arquivos não incluídos apontam para o commit de origem no GitHub.
 Os diagramas Mermaid são convertidos em imagens de alta resolução.
 Os comentários internos não fazem parte da edição publicada.
@@ -45,7 +51,8 @@ Os comentários internos não fazem parte da edição publicada.
 
 Em Linux, instale Python 3.13 (versão usada no CI), Pandoc, Node.js 22,
 Chrome ou Chromium, as fontes DejaVu e as bibliotecas nativas do WeasyPrint
-68.0. Instale também `poppler-utils`, que fornece `pdftotext` e `pdfinfo`. O arquivo
+68.0. Instale também `poppler-utils`, que fornece `pdftotext` e `pdfinfo`,
+`epubcheck` e `librsvg2-bin`, que fornece `rsvg-convert`. O arquivo
 [de validação](../.github/workflows/validar-livro.yml) registra os comandos
 usados no CI, incluindo as versões das ferramentas de renderização.
 
@@ -53,12 +60,15 @@ Execute a partir da raiz do repositório:
 
 ~~~sh
 python -m unittest discover -s scripts/tests -p "test_gerar_livro.py" -v
-python scripts/gerar-livro.py
+python scripts/gerar-livro.py --format both
 python scripts/livro/validar_pdf.py dist/livro/engenharia-dotnet.pdf
 ~~~
 
-O resultado fica em `dist/livro/engenharia-dotnet.pdf`.
-O fluxo de validação disponibiliza o mesmo PDF como artefato de cada PR
+Os resultados ficam em `dist/livro/engenharia-dotnet.pdf` e
+`dist/livro/engenharia-dotnet.epub`. Use `--format pdf` ou `--format epub`
+para gerar somente um formato. A geração do EPUB verifica as âncoras e
+executa o EPUBCheck antes de promover o arquivo final.
+O fluxo de validação disponibiliza os livros gerados como artefatos de cada PR
 relevante, mesmo se a validação editorial posterior falhar. O artefato de
 revisão não equivale a uma edição aprovada: a publicação exige sucesso de
 todas as verificações. Confira a capa, o sumário, as tabelas, os blocos de código e os
@@ -67,7 +77,7 @@ diagramas antes de aprovar uma mudança editorial.
 ## Publicar
 
 Após o merge e a conferência do PDF, execute manualmente o fluxo
-[Publicar livro PDF](../.github/workflows/publicar-livro.yml) na branch main.
+[Publicar livro PDF e EPUB](../.github/workflows/publicar-livro.yml) na branch main.
 Também é possível iniciar pelo GitHub CLI:
 
 ~~~sh
@@ -75,14 +85,15 @@ gh workflow run publicar-livro.yml --ref main
 ~~~
 
 A edição recebe uma tag específica do commit. A publicação não substitui
-edições anteriores nem altera a release principal de código. O PDF fica
-disponível nos arquivos anexos da edição na página de releases.
+edições anteriores nem altera a release principal de código. O PDF e o EPUB ficam
+disponíveis nos arquivos anexos da edição na página de releases.
 Se a edição já existir, a publicação falha em vez de sobrescrever o arquivo.
 
 ## Limitações
 
 A geração não comprova conformidade com PDF/UA nem acessibilidade integral
-do PDF. O Markdown continua disponível como alternativa. Os diagramas são
+do livro. O EPUBCheck verifica a conformidade estrutural do EPUB, não a
+qualidade visual em todos os dispositivos. O Markdown continua disponível como alternativa. Os diagramas são
 imagens, acompanhadas pelas explicações dos capítulos. A validação automática
 não substitui uma revisão visual. O ambiente do sistema e as dependências
 transitivas podem mudar, portanto não há garantia de igualdade binária

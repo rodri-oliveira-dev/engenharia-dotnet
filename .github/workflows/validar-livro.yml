@@ -1,4 +1,4 @@
-name: Validar livro PDF
+name: Validar livro PDF e EPUB
 
 on:
   pull_request:
@@ -41,7 +41,7 @@ jobs:
           PUPPETEER_SKIP_DOWNLOAD: "true"
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends pandoc fonts-dejavu libpango-1.0-0 libpangoft2-1.0-0 libharfbuzz-subset0 poppler-utils
+          sudo apt-get install -y --no-install-recommends pandoc fonts-dejavu libpango-1.0-0 libpangoft2-1.0-0 libharfbuzz-subset0 poppler-utils epubcheck librsvg2-bin
           python -m pip install "weasyprint==68.0"
           npm install --prefix "$RUNNER_TEMP/livro-tools" --no-audit --no-fund @mermaid-js/mermaid-cli@11.4.2
           echo "$RUNNER_TEMP/livro-tools/node_modules/.bin" >> "$GITHUB_PATH"
@@ -54,9 +54,10 @@ jobs:
 
       - name: Gerar livro
         id: gerar
-        run: python scripts/gerar-livro.py
+        run: python scripts/gerar-livro.py --format both
 
       - name: Disponibilizar PDF para revisão
+        if: ${{ !cancelled() && hashFiles('dist/livro/engenharia-dotnet.pdf') != '' }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: engenharia-dotnet-livro
@@ -64,14 +65,24 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+      - name: Disponibilizar EPUB para revisão
+        if: ${{ !cancelled() && hashFiles('dist/livro/engenharia-dotnet.epub') != '' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: engenharia-dotnet-epub
+          path: dist/livro/engenharia-dotnet.epub
+          if-no-files-found: error
+          retention-days: 14
+
       - name: Verificar PDF
+        if: ${{ !cancelled() && hashFiles('dist/livro/engenharia-dotnet.pdf') != '' }}
         run: |
           pdfinfo dist/livro/engenharia-dotnet.pdf
           python scripts/livro/validar_pdf.py dist/livro/engenharia-dotnet.pdf
 
       - name: Gerar amostras para revisão visual
         id: amostras
-        if: ${{ !cancelled() && steps.gerar.outcome == 'success' }}
+        if: ${{ !cancelled() && hashFiles('dist/livro/engenharia-dotnet.pdf') != '' }}
         run: |
           mkdir -p "$RUNNER_TEMP/livro-amostras"
           pdftoppm -f 1 -l 6 -r 110 -png dist/livro/engenharia-dotnet.pdf "$RUNNER_TEMP/livro-amostras/pagina"

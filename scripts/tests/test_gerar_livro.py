@@ -103,6 +103,31 @@ class LivroTests(unittest.TestCase):
         self.assertIn("https://rodri-oliveira-dev.github.io/", list(
             book.links(document["blocks"])))
 
+    def test_epub_compartilha_conteudo_sem_alterar_payload_pdf(self):
+        root = SCRIPT.parents[1]
+        source = book.parse(root / "scripts/livro/sobre-o-autor.md")
+        original = book.copy.deepcopy(source)
+        edition = book.epub_payload(root, source, "sha", "2026-11-25")
+        self.assertEqual(source, original)
+        self.assertEqual(edition["blocks"][0]["c"][1][0], "direitos-autorais")
+        self.assertEqual(edition["blocks"][-len(source["blocks"]):], source["blocks"])
+        self.assertEqual(edition["meta"]["identifier"]["c"], f"{book.REPO}/tree/sha")
+
+    def test_estrutura_epub_e_ancoras(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / "teste.md"
+            source.write_text("# Capítulo {#doc-c01}\n\nTexto.\n", encoding="utf-8")
+            cover = root / "capa.svg"
+            cover.write_text('<svg xmlns="http://www.w3.org/2000/svg" width="100" height="150"><rect width="100" height="150"/></svg>', encoding="utf-8")
+            output = root / "teste.epub"
+            book.run("pandoc", str(source), "--to=epub3", "--toc",
+                     "--metadata=title:Teste", "--epub-cover-image=" + str(cover),
+                     "--output=" + str(output))
+            book.check_epub_structure(output, {"doc-c01"})
+            with self.assertRaisesRegex(ValueError, "Âncoras ausentes"):
+                book.check_epub_structure(output, {"doc-ausente"})
+
     def test_links_e_ancoras(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp).resolve()

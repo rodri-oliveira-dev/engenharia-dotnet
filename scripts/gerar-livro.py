@@ -1,5 +1,6 @@
-"""Gera a edição PDF a partir dos índices editoriais, sem alterar os Markdown."""
+"""Gera as edições PDF e EPUB a partir dos índices editoriais."""
 import argparse
+import copy
 import html
 import json
 import logging
@@ -9,6 +10,8 @@ import re
 import subprocess
 import tempfile
 from urllib.parse import quote, unquote, urlsplit
+import zipfile
+import xml.etree.ElementTree as ET
 
 REPO = "https://github.com/rodri-oliveira-dev/engenharia-dotnet"
 CHAPTER = re.compile(r"c\d{2,}-.*\.md$")
@@ -234,8 +237,8 @@ def write_checked_pdf(document, output, errors):
         temporary.unlink(missing_ok=True)
 
 
-def build(root, output, directory, commit):
-    from weasyprint import HTML, default_url_fetcher
+def prepare(root, directory, commit):
+    """Consolida a fonte editorial e renderiza diagramas uma única vez."""
 
     api, areas, appendices = select(root)
     paths = [p for _, group in areas for p in group] + appendices
@@ -277,6 +280,12 @@ def build(root, output, directory, commit):
         "lang": "pt-BR",
     }.items()}
     payload = {"pandoc-api-version": api, "meta": metadata, "blocks": blocks}
+    return payload, paths, maps, edition_date
+
+
+def build_pdf(root, output, directory, commit, payload, paths, maps):
+    from weasyprint import HTML, default_url_fetcher
+
     page = run("pandoc", "--from=json", "--to=html5", "--standalone", "--toc",
                "--toc-depth=2", "--highlight-style=tango", input=json.dumps(payload))
     css = (root / "scripts/livro/estilo.css").read_text(encoding="utf-8")
@@ -336,14 +345,126 @@ def build(root, output, directory, commit):
     print(f"{len(paths)} documentos, {len(document.pages)} páginas: {output}")
 
 
+def epub_payload(root, payload, commit, edition_date):
+    """Adiciona os direitos ao mesmo conteúdo usado no PDF."""
+    result = copy.deepcopy(payload)
+    rights = parse(root / "scripts/livro/direitos-autorais.md")["blocks"]
+    if not rights or rights[0]["t"] != "Header":
+        raise ValueError("Página de direitos autorais sem título.")
+    rights[0]["c"][1][0] = "direitos-autorais"
+    result["blocks"] = rights + result["blocks"]
+    for key, value in {
+        "date": edition_date,
+        "rights": "Conteúdo editorial: CC BY-NC 4.0; código: MIT.",
+        "identifier": f"{REPO}/tree/{commit}",
+        "toc-title": "Sumário",
+    }.items():
+        result["meta"][key] = {"t": "MetaString", "c": value}
+    return result
+
+
+def epub_cover(root, directory, edition_date):
+    """Reutiliza a arte da capa em uma composição vertical."""
+    artwork = (root / "scripts/livro/capa-arquitetura.svg").read_text(encoding="utf-8")
+    art = ET.fromstring(artwork)
+    art.set("x", "60")
+    art.set("y", "480")
+    art.set("width", "1080")
+    art.set("height", "590")
+    svg = directory / "capa-epub.svg"
+    png = directory / "capa-epub.png"
+    svg.write_text(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1800" '
+        'viewBox="0 0 1200 1800">'
+        '<rect width="1200" height="1800" fill="#10223d"/>'
+        '<g font-family="DejaVu Sans" fill="#f0f6ff">'
+        '<path d="M90 130H1110" stroke="#8cadd4" stroke-width="3"/>'
+        '<text x="90" y="195" font-size="31" fill="#b7cce5">PUBLICAÇÃO TÉCNICA INDEPENDENTE</text>'
+        '<text x="90" y="345" font-size="92" font-weight="bold">Engenharia .NET</text>'
+        '<text x="90" y="425" font-size="40" fill="#d7e5f7">Da linguagem à arquitetura de software</text>'
+        + ET.tostring(art, encoding="unicode") +
+        '<text x="90" y="1250" font-size="57" font-weight="bold">Rodrigo de Oliveira</text>'
+        f'<text x="90" y="1335" font-size="36">Edição {html.escape(edition_date[:4])}</text>'
+        '<text x="90" y="1455" font-size="40" fill="#d6c8ff">Distribuição gratuita</text>'
+        '<text x="90" y="1630" font-size="28" fill="#d7e5f7">Conteúdo editorial: CC BY-NC 4.0 | Código: MIT</text>'
+        '</g></svg>', encoding="utf-8")
+    run("rsvg-convert", "--output", str(png), str(svg))
+    return png
+
+
+def check_epub_structure(path, expected):
+    """Confere âncoras editoriais, capa e navegação do EPUB."""
+    with zipfile.ZipFile(path) as archive:
+        if archive.read("mimetype") != b"application/epub+zip":
+            raise ValueError("Formato EPUB inválido.")
+        package = ET.fromstring(archive.read("META-INF/container.xml"))
+        rootfile = package.find(".//{*}rootfile")
+        if rootfile is None:
+            raise ValueError("Pacote EPUB sem manifesto.")
+        opf_path = rootfile.attrib["full-path"]
+        opf = ET.fromstring(archive.read(opf_path))
+        if not opf.get("version", "").startswith("3."):
+            raise ValueError("A edição precisa usar EPUB 3.")
+        manifest = opf.findall(".//{*}manifest/{*}item")
+        if not any("cover-image" in item.get("properties", "").split() for item in manifest):
+            raise ValueError("Capa EPUB ausente.")
+        nav = [item for item in manifest if "nav" in item.get("properties", "").split()]
+        if len(nav) != 1:
+            raise ValueError("Documento de navegação EPUB ausente ou duplicado.")
+        anchors = set()
+        for item in manifest:
+            if item.get("media-type") == "application/xhtml+xml":
+                name = str(Path(opf_path).parent / unquote(item.attrib["href"]))
+                page = ET.fromstring(archive.read(name))
+                anchors.update(e.get("id") for e in page.iter() if e.get("id"))
+        missing = set(expected) - anchors
+        if missing:
+            raise ValueError(f"Âncoras ausentes no EPUB: {sorted(missing)}")
+
+
+def build_epub(root, output, directory, commit, payload, maps, edition_date):
+    edition = epub_payload(root, payload, commit, edition_date)
+    for image in nodes(edition, "Image"):
+        name = image["c"][-1][0]
+        if Path(name).name != name or not (directory / name).is_file():
+            raise ValueError(f"Imagem EPUB não preparada: {name}")
+    if list(nodes(edition, "RawBlock")) or list(nodes(edition, "RawInline")):
+        raise ValueError("Conteúdo bruto não permitido no EPUB.")
+    cover = epub_cover(root, directory, edition_date)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    temporary = output.with_suffix(".tmp.epub")
+    try:
+        run("pandoc", "--from=json", "--to=epub3", "--toc", "--toc-depth=2",
+            "--split-level=2", "--highlight-style=tango",
+            "--resource-path=" + str(directory),
+            "--css=" + str(root / "scripts/livro/estilo-epub.css"),
+            "--epub-cover-image=" + str(cover),
+            "--output=" + str(temporary), input=json.dumps(edition))
+        required = {a for m in maps.values() for a in m.values()} | {
+            "direitos-autorais", "creditos-colaboradores", "sobre-o-autor", "como-utilizar"}
+        check_epub_structure(temporary, required)
+        print(run("epubcheck", str(temporary)), end="")
+        temporary.replace(output)
+    finally:
+        temporary.unlink(missing_ok=True)
+    print(f"EPUB 3 validado: {output}")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, default=Path("dist/livro/engenharia-dotnet.pdf"))
+    parser.add_argument("--format", choices=("pdf", "epub", "both"), default="pdf")
+    parser.add_argument("--epub-output", type=Path, default=Path("dist/livro/engenharia-dotnet.epub"))
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     commit = run("git", "-C", str(root), "rev-parse", "HEAD").strip()
     with tempfile.TemporaryDirectory(prefix="engenharia-livro-") as temporary:
-        build(root, args.output.resolve(), Path(temporary).resolve(), commit)
+        directory = Path(temporary).resolve()
+        payload, paths, maps, edition_date = prepare(root, directory, commit)
+        if args.format in ("pdf", "both"):
+            build_pdf(root, args.output.resolve(), directory, commit, payload, paths, maps)
+        if args.format in ("epub", "both"):
+            build_epub(root, args.epub_output.resolve(), directory, commit, payload, maps, edition_date)
 
 
 if __name__ == "__main__":

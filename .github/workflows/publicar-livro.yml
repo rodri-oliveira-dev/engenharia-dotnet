@@ -1,4 +1,4 @@
-name: Publicar livro PDF
+name: Publicar livro PDF e EPUB
 
 on:
   workflow_dispatch:
@@ -31,6 +31,12 @@ jobs:
           name: engenharia-dotnet-livro
           path: dist/livro
 
+      - name: Obter EPUB validado
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: engenharia-dotnet-epub
+          path: dist/livro
+
       - name: Publicar edição sem alterar releases de código
         env:
           GH_TOKEN: ${{ github.token }}
@@ -38,7 +44,7 @@ jobs:
         run: |
           set -euo pipefail
           tag="livro-$GITHUB_SHA"
-          gh release create "$tag" dist/livro/engenharia-dotnet.pdf \
+          gh release create "$tag" dist/livro/engenharia-dotnet.pdf dist/livro/engenharia-dotnet.epub \
             --target "$GITHUB_SHA" --latest=false \
             --title "Engenharia .NET | Livro ${GITHUB_SHA:0:12}" \
-            --notes "Edição PDF consolidada da documentação no commit $GITHUB_SHA. Distribuição gratuita. Conteúdo editorial: CC BY-NC 4.0. Código: MIT. Consulte a política de licenciamento do repositório."
+            --notes "Edição PDF e EPUB consolidada da documentação no commit $GITHUB_SHA. Distribuição gratuita. Conteúdo editorial: CC BY-NC 4.0. Código: MIT. Consulte a política de licenciamento do repositório."

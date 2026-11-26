@@ -1,0 +1,14 @@
+/* Estilo fluido: respeita o tamanho da fonte e o tema do leitor. */
+body { line-height: 1.5; }
+h1, h2, h3, h4, h5, h6 { font-family: sans-serif; line-height: 1.25; }
+p, li { orphans: 2; widows: 2; }
+a { text-decoration: underline; overflow-wrap: break-word; }
+img, svg { max-width: 100%; height: auto; }
+img.diagram { display: block; margin: 1em auto; }
+pre, code { font-family: monospace; font-size: 0.9em; }
+pre, pre.sourceCode { white-space: pre-wrap; overflow-wrap: break-word; border: 1px solid; padding: 0.6em; }
+code, td, th { overflow-wrap: break-word; }
+table { width: 100%; border-collapse: collapse; font-size: 0.9em; }
+th, td { border: 1px solid; padding: 0.35em; vertical-align: top; text-align: left; }
+blockquote, .chapter-meta, .editorial-note { border-left: 0.2em solid; padding-left: 0.8em; margin-left: 0; }
+.author-profile > p:first-child { font-size: 1.35em; font-family: sans-serif; }
