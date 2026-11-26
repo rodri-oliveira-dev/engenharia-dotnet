@@ -1,5 +1,24 @@
 # Mapa editorial
 
+## Eixo da obra
+
+O Engenharia .NET apresenta engenharia de software como a disciplina de
+construir, evoluir e operar sistemas por decisões conscientes, evidências,
+responsabilidade técnica e compreensão de trade-offs. Os capítulos podem ser
+consultados isoladamente, mas cada agrupamento amplia as consequências das
+decisões introduzidas nos anteriores.
+
+## Ordens e identificadores
+
+- **Identificador estável:** `CXX`, preservado em links, histórico e discussões.
+- **Ordem de implementação editorial:** sequência em que o conteúdo foi
+  planejado ou produzido; não orienta necessariamente o leitor.
+- **Ordem de publicação:** agrupamentos e capítulos usados no GitHub, PDF e EPUB.
+- **Ordem recomendada de leitura:** posição da coluna `Ordem` e dos índices de
+  área, ajustada às dependências conceituais.
+- **Dependência conceitual:** pré-requisito obrigatório ou leitura complementar
+  explicitada pelo capítulo; não é inferida apenas pelo número do ID.
+
 ## Taxonomia
 
 O repositório será organizado por **trilhas de conhecimento**, não pelas categorias da entrevista. Cada capítulo possui um identificador estável, nível, dependências e um escopo que explicita também o que fica de fora.
@@ -11,7 +30,7 @@ O repositório será organizado por **trilhas de conhecimento**, não pelas cate
 - **Exemplo .NET — parcial:** snippets verificáveis ou um laboratório pequeno são úteis, mas o assunto não é predominantemente código .NET.
 - **Exemplo .NET — não:** diagramas, registros de decisão ou exemplos de configuração comunicam melhor o objetivo.
 
-## Capítulos propostos
+## Capítulos publicados e ordem recomendada
 
 | Ordem | ID | Trilha | Capítulo e escopo | Nível | Depende de | Exemplo .NET |
 |---:|---|---|---|---|---|---|
@@ -74,7 +93,12 @@ IA aplicada (C21 → C22) e estudos integrados (C31–C35)
 Aprofundamento de dados (C36)
 ```
 
-Essa é uma ordem de implementação editorial, não uma sequência obrigatória de leitura. Links de pré-requisito permitem ao leitor entrar pelo problema que precisa resolver.
+Essa é a ordem recomendada de leitura, não uma sequência obrigatória. C36 e C25
+mantêm seus agrupamentos, mas atravessam áreas: C36 é melhor compreendido depois
+de C17, e C25 depois de C27. Os índices sinalizam esses desvios e os capítulos
+fornecem contexto e referências, evitando reorganizar a taxonomia por duas
+dependências avançadas. Links de pré-requisito permitem ao leitor entrar pelo
+problema que precisa resolver.
 
 ## Agrupamentos principais
 

@@ -13,6 +13,37 @@ consistente no GitHub.
 3. Verifique se já existe um capítulo canônico ou uma proposta para o assunto.
 4. Para mudanças grandes de escopo, abra uma issue antes de escrever para alinhar
    lacuna, área, dependências e sobreposições.
+5. Para novo capítulo, ampliação substancial, mudança de ordem ou de agrupamento,
+   aplique a skill de [governança editorial](.agents/skills/governar-evolucao-editorial/SKILL.md)
+   e registre a decisão na issue ou no PR com o
+   [modelo editorial](docs/templates/registro-decisao-editorial.md).
+
+## Ambiente no Visual Studio Code
+
+Abra [`engenharia-dotnet.code-workspace`](engenharia-dotnet.code-workspace) pelo
+menu **File > Open Workspace from File** ou execute, na raiz:
+
+```sh
+code engenharia-dotnet.code-workspace
+```
+
+O workspace recomenda apenas extensões relacionadas às tecnologias usadas pelo
+projeto. A instalação é uma decisão do contribuidor e nenhuma extensão ou task é
+executada automaticamente ao abrir o repositório. A extensão oficial Python é
+necessária para as tasks que usam o interpretador selecionado no VS Code.
+
+Para as validações principais, instale o SDK definido em [`global.json`](global.json),
+Node.js 22.18 ou superior, Python 3, PowerShell 7 e execute `npm install`. Docker,
+Terraform, Ansible, Pandoc, WeasyPrint, Mermaid CLI e EPUBCheck são necessários
+somente para os laboratórios ou para a publicação que os utilizam. Consulte as
+[instruções do livro](docs/livro.md) para os pré-requisitos completos de PDF e EPUB.
+
+O menu **Terminal > Run Task** oferece restore, build e testes da solução;
+validação de snippets, Markdown, ortografia e links; verificação de segredos;
+auditoria NuGet; geração de PDF e EPUB; e a task **Projeto: validar núcleo local**.
+Essa task consolidada não substitui os jobs de Docker, Redis, Terraform, Ansible
+e publicação executados pelo GitHub Actions. Todas as tasks usam caminhos
+relativos, não publicam artefatos e não fazem deploy, push ou release.
 
 ## Ortografia em português
 
@@ -35,6 +66,9 @@ quando houver participação de terceiros e atualizar os
 
 ## Novos capítulos
 
+- Antes de redigir, compare capítulo independente, ampliação do conteúdo
+  canônico e material complementar. Registre problema educacional, competência,
+  posição de leitura, pré-requisitos, conexões e impactos de publicação.
 - Escolha um capítulo já aprovado no mapa editorial ou justifique a nova lacuna.
 - Copie o [template de capítulo](docs/templates/capitulo-tecnico.md) e nomeie o
   arquivo como `cXX-titulo-descritivo.md` na área correspondente.
@@ -132,7 +166,7 @@ e a [avaliação do .NET 11](docs/planejamento/avaliacao-dotnet-11-csharp-15.md)
 O [AGENTS.md](AGENTS.md) fornece as regras persistentes para agentes,
 incluindo a seção `Code Review Rules` usada pelo Codex no GitHub.
 
-Três skills locais aprofundam procedimentos específicos:
+Quatro skills locais aprofundam procedimentos específicos:
 
 - [Revisão de PRs](.agents/skills/revisar-pr-dotnet/SKILL.md):
   falhas, contratos, segurança e testes.
@@ -140,10 +174,24 @@ Três skills locais aprofundam procedimentos específicos:
   compilação, comportamento e resultados esperados.
 - [Revisão editorial técnica](.agents/skills/revisar-conteudo-tecnico/SKILL.md):
   conceitos, fontes, questões e gabaritos.
+- [Governança da evolução editorial](.agents/skills/governar-evolucao-editorial/SKILL.md):
+  posição, progressão, storytelling e integração ao GitHub, PDF e EPUB.
 
 Agentes compatíveis podem carregar essas skills conforme a tarefa.
 Não pressuponha que todas sejam carregadas automaticamente durante
 um review no GitHub. Instruções de IA não substituem CI nem revisão humana.
+
+### Configuração centralizada do CodeRabbit
+
+O arquivo [`.coderabbit.yaml`](.coderabbit.yaml) contém somente um
+`remote_config`. As regras efetivas ficam no template
+[`dotnet-educacional.yaml`](https://github.com/rodri-oliveira-dev/.github/blob/main/coderabbit-templates/dotnet-educacional.yaml),
+selecionado para este repositório pelo
+[`repositories.json`](https://github.com/rodri-oliveira-dev/.github/blob/main/coderabbit-templates/repositories.json).
+Como o redirecionamento substitui integralmente a configuração local, regras de
+review devem ser corrigidas no template central em vez de duplicadas neste
+repositório. Alterações nessa governança exigem validar o YAML remoto contra o
+schema V2 oficial e confirmar o mapeamento antes de revisar seus efeitos no PR.
 
 ## Modelos de pull request
 

@@ -586,8 +586,9 @@ operacional revisável, não uma constante universal.
   trata máquinas de estado sob a perspectiva de alocação, medição, JIT e AOT.
 - **Aplicações:** [C06 — Composição e pipeline no ASP.NET Core](../aplicacoes-e-dados/c06-composicao-pipeline-aspnet-core.md)
   aplica thread safety aos lifetimes; [C07 — APIs HTTP e integrações resilientes](../aplicacoes-e-dados/c07-apis-http-integracoes-resilientes.md)
-  aplica cancelamento a HTTP; C15 tratará filas externas e entrega; C32
-  investigará backlog operacional.
+  aplica cancelamento a HTTP; [C15](../sistemas-distribuidos/c15-comunicacao-mensageria-resiliente.md)
+  trata filas externas e entrega; [C32](../estudos-de-caso/c32-latencia-apos-deploy.md)
+  investiga aumento de latência após deploy.
 
 ## Referências
 

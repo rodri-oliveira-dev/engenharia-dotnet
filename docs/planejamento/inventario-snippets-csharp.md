@@ -1,7 +1,7 @@
 # Inventário de snippets C# em Markdown
 
 Este inventário registra a preparação para validar automaticamente os blocos C#
-publicados em Markdown. Ele descreve o estado em 20 de novembro de 2026 sem
+publicados em Markdown. Ele descreve o estado em 26 de novembro de 2026 sem
 reproduzir o conteúdo dos capítulos.
 
 ## Classificação e metadados
@@ -35,8 +35,12 @@ temporário.
 | `docs/aplicacoes-e-dados/c06-composicao-pipeline-aspnet-core.md` | 6 | 0 | 6 | 0 | 0 |
 | `docs/aplicacoes-e-dados/c08-consultas-ef-core.md` | 8 | 0 | 8 | 0 | 0 |
 | `docs/aplicacoes-e-dados/c09-fronteiras-concorrencia-ef-core.md` | 4 | 0 | 4 | 0 | 0 |
+| `docs/compatibilidade/compatibilidade-aspnet-core-11.md` | 2 | 0 | 1 | 1 | 0 |
+| `docs/compatibilidade/compatibilidade-csharp-15.md` | 4 | 0 | 4 | 0 | 0 |
+| `docs/compatibilidade/compatibilidade-runtime-bcl-11.md` | 3 | 0 | 2 | 1 | 0 |
 | `docs/dominio-e-arquitetura/c11-entidades-value-objects-agregados.md` | 5 | 0 | 4 | 1 | 0 |
 | `docs/dominio-e-arquitetura/c12-servicos-dominio-integracao-modelos.md` | 3 | 0 | 2 | 1 | 0 |
+| `docs/dominio-e-arquitetura/c13-dependencias-abstracoes-padroes.md` | 15 | 0 | 10 | 5 | 0 |
 | `docs/dominio-e-arquitetura/c14-cqrs-modelos-orientados-uso.md` | 1 | 0 | 1 | 0 | 0 |
 | `docs/ia-e-pratica-profissional/c21-fundamentos-llm-mcp-rag.md` | 1 | 0 | 1 | 0 | 0 |
 | `docs/linguagem-e-runtime/c01-tipos-identidade-modelagem.md` | 12 | 5 | 7 | 0 | 0 |
@@ -50,7 +54,7 @@ temporário.
 | `docs/qualidade-e-seguranca/c26-seguranca-fronteiras-aplicacao.md` | 5 | 1 | 4 | 0 | 0 |
 | `docs/sistemas-distribuidos/c16-idempotencia-entrega-confiavel.md` | 2 | 0 | 2 | 0 | 0 |
 | `docs/sistemas-distribuidos/c18-limites-microservicos-evolucao-monolitos.md` | 1 | 0 | 1 | 0 | 0 |
-| **Total** | **95** | **8** | **83** | **4** | **0** |
+| **Total** | **119** | **8** | **100** | **11** | **0** |
 
 ## Critérios de compilação e execução
 
@@ -139,8 +143,14 @@ Ainda não são compilados:
 - C06: `c06-01` a `c06-06`;
 - C08: `c08-01` a `c08-08`;
 - C09: `c09-01` a `c09-04`;
+- compatibilidade do ASP.NET Core 11: `compat-asp11-02`;
+- compatibilidade do runtime e BCL 11: `compat-bcl11-01` e
+  `compat-bcl11-02`;
+- compatibilidade do C# 15: `compat-cs15-01` a `compat-cs15-04`;
 - C11: `c11-01`, `c11-02` e `c11-05`;
 - C12: `c12-01` e `c12-03`;
+- C13: `c13-02`, `c13-03`, `c13-05`, `c13-06`, `c13-08`, `c13-09`,
+  `c13-11`, `c13-12`, `c13-14` e `c13-15`;
 - C14: `c14-01`;
 - C16: `c16-01` e `c16-02`;
 - C18: `c18-01`;
@@ -150,7 +160,9 @@ Ainda não são compilados:
 - C26: `c26-01`, `c26-02`, `c26-03` e `c26-05`;
 - C27: `c27-01`.
 
-Os fragmentos `c11-04`, `c12-02`, `c23-03` e `c23-04` são excluídos. Não há
+Os fragmentos `c11-04`, `c12-02`, `c13-01`, `c13-04`, `c13-07`, `c13-10`,
+`c13-13`, `c23-03`, `c23-04`, `compat-asp11-01` e `compat-bcl11-03` são
+excluídos. Não há
 snippet classificado como `invalido` no inventário atual. O comando abaixo
 recalcula e imprime as três listas a partir do Markdown e do manifesto:
 
@@ -169,12 +181,11 @@ python -m unittest discover -s scripts/tests -p "test_validar_snippets_csharp.py
 - A classificação foi feita por revisão estática e pelo contexto dos capítulos.
 - Com o SDK 11.0.100, os 11 snippets selecionados compilaram sem falhas; três
   tiveram o comportamento executado duas vezes e conferido. Isso cobre somente
-  os IDs listados, não os 80 snippets ainda pendentes.
-- O manifesto inicial cobre três dos 83 snippets de contexto; os demais exigem
+  os IDs listados, não os 97 snippets ainda pendentes.
+- O manifesto inicial cobre três dos 100 snippets de contexto; os demais exigem
   invólucros ou dependências proporcionais ao exemplo antes de serem incluídos.
-- A suíte .NET local aprovou 137 testes sem Docker. A execução integral encontrou
-  uma única falha no teste `Category=Docker`, porque não havia daemon disponível;
-  portanto, esse teste não foi validado localmente.
+- A suíte .NET local aprovou 198 testes, incluindo 30 do laboratório C13–C17 e
+  seis testes arquiteturais.
 - A ausência atual de snippets `invalido` não remove a categoria do contrato.
 - Metadados em comentários HTML preservam a renderização do GitHub, mas outras
   ferramentas Markdown podem optar por exibi-los ao editar a fonte.

@@ -2,7 +2,9 @@
 # The review rules are centrally maintained as YAML.
 # Do not add other top-level keys: remote_config replaces this file.
 # Selected via coderabbit-templates/repositories.json in the central repository.
-# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+# The schema V2 applies to the referenced template, not to this redirect file.
 
 remote_config:
-  url: "https://raw.githubusercontent.com/rodri-oliveira-dev/.github/main/coderabbit-templates/dotnet-educacional.yaml"
+  repository: "rodri-oliveira-dev/.github"
+  ref: "main"
+  path: "coderabbit-templates/dotnet-educacional.yaml"

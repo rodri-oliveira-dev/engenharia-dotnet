@@ -11,6 +11,12 @@ spec.loader.exec_module(module)
 
 
 class SelecionarProsaTests(unittest.TestCase):
+    def test_executa_entrypoint_do_cspell_sem_shim_de_shell(self):
+        root = Path("repo")
+        command = module.cspell_command(root, "node-test")
+        self.assertEqual(command[0], "node-test")
+        self.assertEqual(Path(command[1]), root / "node_modules/cspell/bin.mjs")
+
     def test_hunks_de_adicao_e_modificacao(self):
         diff = """--- a/docs/a.md
 +++ b/docs/a.md

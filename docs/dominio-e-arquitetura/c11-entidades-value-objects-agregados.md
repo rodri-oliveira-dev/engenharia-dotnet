@@ -412,7 +412,8 @@ O serviço do laboratório persiste primeiro e só então publica os eventos
 internos. Assim, falha ao salvar impede efeitos colaterais. Ainda existe uma
 janela: o processo pode cair depois do commit e antes da publicação. Quando a
 entrega externa precisar ser confiável, grave uma mensagem de Outbox na mesma
-transação e publique-a posteriormente. C16 tratará deduplicação, reprocessamento
+transação e publique-a posteriormente. O [C16](../sistemas-distribuidos/c16-idempotencia-entrega-confiavel.md)
+trata deduplicação, reprocessamento
 e Outbox; este capítulo não implementa mensageria distribuída.
 
 Eventos não são obrigatórios. Uma chamada direta é mais clara quando há um único
@@ -477,7 +478,9 @@ ambiguidade ou impede uma falha concreta.
   transações, constraints e isolamento.
 - [C12](c12-servicos-dominio-integracao-modelos.md) aplica serviços de aplicação,
   serviços de domínio e Anti-Corruption Layer.
-- C15 aprofundará comunicação e mensageria; C16, Outbox e entrega confiável.
+- [C15](../sistemas-distribuidos/c15-comunicacao-mensageria-resiliente.md)
+  aprofunda comunicação e mensageria; [C16](../sistemas-distribuidos/c16-idempotencia-entrega-confiavel.md),
+  Outbox e entrega confiável.
 
 ## Referências
 

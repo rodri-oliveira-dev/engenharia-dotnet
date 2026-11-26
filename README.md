@@ -11,6 +11,10 @@ Trabalho com C# e .NET há bastante tempo e sei que algumas dúvidas merecem mai
 
 A ideia não é decorar padrões ou acumular respostas prontas para entrevistas. É entender o que acontece por trás do código, quais alternativas existem, onde cada escolha pode falhar e o que vale a pena testar ou medir.
 
+O fio que conecta os temas é a engenharia de software como disciplina de
+construir, evoluir e operar sistemas por decisões conscientes, evidências,
+responsabilidade técnica e compreensão de trade-offs.
+
 Todo o conteúdo está em português e pode ser consultado diretamente pelo GitHub. Você não precisa ler tudo em sequência: pode começar pelo assunto que faz sentido para você agora.
 
 ## Livro em PDF e EPUB

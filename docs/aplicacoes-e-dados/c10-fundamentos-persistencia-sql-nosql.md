@@ -20,7 +20,10 @@ Este capítulo apresenta os mecanismos que sustentam essas decisões. O uso do
 Entity Framework Core para tradução, projeção e tracking está no
 [C08](c08-consultas-ef-core.md); unidade de trabalho e tokens de concorrência no
 [C09](c09-fronteiras-concorrencia-ef-core.md). Saga, entrega de mensagens e
-implementação completa de Outbox terão capítulos próprios.
+implementação completa de Outbox estão nos capítulos
+[C17](../sistemas-distribuidos/c17-consistencia-eventual-sagas.md),
+[C15](../sistemas-distribuidos/c15-comunicacao-mensageria-resiliente.md) e
+[C16](../sistemas-distribuidos/c16-idempotencia-entrega-confiavel.md).
 
 ## Comece por invariantes e padrões de acesso
 
@@ -472,8 +475,10 @@ planos do PostgreSQL.
 - [C11](../dominio-e-arquitetura/c11-entidades-value-objects-agregados.md)
   define invariantes e limites de consistência dos agregados que a persistência
   precisa sustentar.
-- C16 aprofundará idempotência, consumidores e Outbox; C17 aprofundará
-  consistência eventual e Sagas; C24 tratará testes com banco real; C29,
+- [C16](../sistemas-distribuidos/c16-idempotencia-entrega-confiavel.md) aprofunda
+  idempotência, consumidores e Outbox; [C17](../sistemas-distribuidos/c17-consistencia-eventual-sagas.md),
+  consistência eventual e Sagas; [C24](../qualidade-e-seguranca/c24-integracao-real-testes-legado.md),
+  testes com banco real; [C29](../operacao-entrega-e-plataforma/c29-entrega-compativel-risco-pipeline.md),
   evolução compatível de schema.
 
 ## Referências

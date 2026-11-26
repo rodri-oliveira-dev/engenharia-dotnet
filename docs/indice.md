@@ -3,6 +3,11 @@
 Este é o ponto central de navegação do Engenharia .NET. A estrutura reflete os
 oito agrupamentos definidos no mapa editorial e os 36 capítulos publicados.
 
+Os identificadores `C01` a `C36` são estáveis e servem para referência; não são
+uma promessa de sequência numérica. A ordem das áreas abaixo é a ordem de
+publicação no livro, e a ordem dentro de cada índice é a recomendação principal
+de leitura. Pré-requisitos nos capítulos permitem percursos não lineares.
+
 ## Áreas de conhecimento
 
 1. [Linguagem e runtime](linguagem-e-runtime/indice.md) — C01 a C05.
@@ -16,7 +21,11 @@ oito agrupamentos definidos no mapa editorial e os 36 capítulos publicados.
    C30.
 8. [Estudos de caso](estudos-de-caso/indice.md) — C31 a C35.
 
-## Capítulos publicados
+## Catálogo por identificador estável
+
+A lista abaixo facilita localizar um ID e não substitui a ordem recomendada nos
+índices das áreas. C10, C19, C20, C25 e C36 exemplificam por que identificação,
+implementação editorial e posição de leitura precisam permanecer distintas.
 
 - [C01 — Tipos, identidade e modelagem em C#](linguagem-e-runtime/c01-tipos-identidade-modelagem.md)
 - [C02 — Nulabilidade, falhas e exceções](linguagem-e-runtime/c02-nulabilidade-falhas-excecoes.md)
@@ -76,6 +85,7 @@ oito agrupamentos definidos no mapa editorial e os 36 capítulos publicados.
 
 - [Guia de estilo editorial](guia-de-estilo.md)
 - [Template de capítulo técnico](templates/capitulo-tecnico.md)
+- [Modelo de decisão editorial](templates/registro-decisao-editorial.md)
 - [Checklist de code review](templates/checklist-code-review.md)
 - [Modelo de decisão técnica](templates/registro-decisao-tecnica.md)
 - [Estratégia para exemplos compiláveis](exemplos-compilaveis.md)
@@ -85,6 +95,7 @@ oito agrupamentos definidos no mapa editorial e os 36 capítulos publicados.
 - [Mapa editorial](planejamento/mapa-editorial.md)
 - [Diretrizes editoriais originais](planejamento/diretrizes-editoriais.md)
 - [Relatório final de auditoria](planejamento/relatorio-final.md)
+- [Relatório de governança e continuidade editorial](planejamento/relatorio-governanca-editorial.md)
 - [Guia de contribuição](../CONTRIBUTING.md)
 
 ## Status editorial

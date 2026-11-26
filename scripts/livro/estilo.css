@@ -41,6 +41,7 @@ header a { color: #d7e5f7; }
 h1, h2, h3, h4, h5, h6 { font-family: "DejaVu Sans", sans-serif; color: #34216e; break-after: avoid; line-height: 1.25; }
 h1.part { break-before: page; font-size: 23pt; border-bottom: 2pt solid #7665ae; padding-bottom: 3mm; }
 h2.chapter { break-before: page; font-size: 22pt; margin-bottom: 5mm; }
+.part-intro { font-size: 11pt; line-height: 1.55; max-width: 155mm; }
 .chapter-meta { background: #f1eff8; border-left: 3pt solid #7665ae; margin: 0 0 5mm; padding: 3mm 4mm; break-inside: avoid; }
 .chapter-meta blockquote { border: 0; margin: 0; padding: 0; font-family: "DejaVu Sans"; font-size: 10pt; }
 .chapter-meta p:last-child, .editorial-note p:last-child { margin-bottom: 0; }

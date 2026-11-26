@@ -462,8 +462,8 @@ de state e procedimento de emergência.
   definir limites de módulos e ownership.
 - [C24](../qualidade-e-seguranca/c24-integracao-real-testes-legado.md) trata
   ambientes isolados e reproduzíveis para testes.
-- C29 — Entrega compatível e gestão de risco no pipeline aprofundará promoção,
-  rollback e políticas quando publicado.
+- [C29 — Entrega compatível e gestão de risco no pipeline](c29-entrega-compativel-risco-pipeline.md)
+  aprofunda promoção, rollback e políticas.
 
 ## Referências
 

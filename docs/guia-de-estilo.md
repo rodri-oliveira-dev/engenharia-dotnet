@@ -26,6 +26,25 @@ revisão. Em caso de dúvida de escopo, prevalecem o
 - Comece pelo problema e pelo contexto antes de apresentar soluções.
 - Declare nível, objetivo, pré-requisitos, escopo e última revisão.
 
+## Continuidade e progressão
+
+O eixo da obra é a engenharia de software como disciplina de construir, evoluir
+e operar sistemas por meio de decisões conscientes, evidências, responsabilidade
+técnica e compreensão de trade-offs. Preserve esse eixo sem transformar o texto
+em narrativa ficcional ou motivacional.
+
+- Retome apenas o conhecimento anterior necessário ao problema atual.
+- Mostre qual limite da solução conhecida exige um novo conceito.
+- Prepare aplicações posteriores sem prometer conteúdo ou forçar links.
+- Varie as transições; evite fórmulas repetidas sobre capítulo anterior e próximo.
+- Reutilize cenários quando isso reduzir carga cognitiva, mantendo laboratórios
+  independentes e contratos de negócio consistentes.
+- Preserve contexto suficiente para leitura não linear.
+
+Identificador, ordem de implementação, publicação e leitura são dimensões
+distintas. O ID `CXX` permanece estável; a posição recomendada é definida nos
+índices e no mapa editorial a partir das dependências conceituais.
+
 ## Nomes e organização de arquivos
 
 - Use nomes em português, sem acentos e em `kebab-case`.
@@ -119,3 +138,6 @@ Confirme que o texto:
 - está integralmente revisado em português e, quando houver alterações,
   passa pelo [verificador ortográfico pt-BR](ortografia.md);
 - passa pela validação automatizada de Markdown e links internos.
+
+Mudanças estruturais também devem passar pela skill
+`governar-evolucao-editorial` e ser conferidas no GitHub, PDF e EPUB.

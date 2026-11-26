@@ -1,7 +1,18 @@
 # IA e prática profissional
 
-Uso responsável de IA aplicada e práticas para decisões, revisão e crescimento
-técnico de equipes.
+Esta parte trata IA como mais uma fronteira de engenharia: probabilística,
+dependente de contexto e sujeita a permissões, custo e avaliação. Depois dos
+fundamentos de LLM, recuperação e ferramentas, o percurso examina agentes e
+orquestração; encerra com práticas de decisão e revisão aplicáveis a toda a obra.
+
+Pressupõe documentação arquitetural, segurança e testes. Ao final, o leitor deve
+conseguir delimitar autoridade de sistemas de IA, construir avaliações e
+comunicar decisões sob incerteza sem transferir responsabilidade à ferramenta.
+C30 é fundamental em nível conceitual, embora apareça depois de C21 e C22 porque
+sintetiza evidências e trade-offs já encontrados nas partes anteriores.
+
+Essa síntese prepara a leitura dos estudos de caso, nos quais nenhum mecanismo
+isolado resolve o problema e a qualidade da decisão depende de contexto.
 
 ## Capítulos publicados
 

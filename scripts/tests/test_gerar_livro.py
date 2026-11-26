@@ -97,6 +97,24 @@ class LivroTests(unittest.TestCase):
             self.assertEqual(blocks[2]["c"][0][1], ["editorial-note"])
             self.assertEqual(blocks[3]["t"], "BlockQuote")
 
+    def test_introducao_de_parte_vem_antes_da_primeira_secao(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "indice.md"
+            path.write_text("# Área\n\nPropósito.\n\nSegundo parágrafo.\n\n"
+                            "## Capítulos\n\n- item\n", encoding="utf-8")
+            intro = book.part_intro_blocks(book.parse(path))
+            text = " ".join(item["c"] for item in book.nodes(intro, "Str"))
+            self.assertIn("Propósito", text)
+            self.assertIn("Segundo", text)
+            self.assertNotIn("Capítulos", text)
+
+    def test_indice_de_area_exige_introducao(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "indice.md"
+            path.write_text("# Área\n\n## Capítulos\n", encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "sem introdução"):
+                book.part_intro_blocks(book.parse(path))
+
     def test_validacao_textual_tolera_quebras_sem_ignorar_ausencias(self):
         path = SCRIPT.parent / "livro/validar_pdf.py"
         spec = importlib.util.spec_from_file_location("validar_pdf", path)

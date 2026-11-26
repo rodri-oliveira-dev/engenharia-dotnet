@@ -42,7 +42,9 @@ Consulte o [registro da decisão multiformato](planejamento/adr-publicacao-multi
 ## Organização
 
 O índice central define as áreas. Os índices de cada área definem a ordem
-de leitura dos capítulos. A geração verifica a cobertura de todos os arquivos
+de leitura dos capítulos e fornecem as introduções das partes no PDF e EPUB.
+Essas introduções explicam propósito, conhecimentos necessários, competências e
+exceções de percurso sem duplicar os capítulos. A geração verifica a cobertura de todos os arquivos
 de capítulo e inclui os materiais complementares, guias de compatibilidade
 e a trilha de estudos como apêndices. Os documentos de planejamento,
 contribuição e manutenção ficam no repositório.

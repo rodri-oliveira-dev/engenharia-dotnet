@@ -5,7 +5,7 @@
 > **Objetivo:** separar orquestração de casos de uso, regras de negócio e
 > adaptação de integrações sem criar services que esvaziam o modelo.
 >
-> **Pré-requisito:** [C11 — Entidades, value objects e agregados](c11-entidades-value-objects-agregados.md).
+> **Pré-requisitos:** [C11 — Entidades, value objects e agregados](c11-entidades-value-objects-agregados.md).
 >
 > **Última revisão:** 2026-11-18
 
@@ -156,7 +156,8 @@ Transações locais envolvem a alteração persistida. Chamada HTTP ou e-mail n�
 desfeita por rollback. No laboratório, eventos internos são publicados após
 `SalvarAlteracoesAsync`; uma falha no save impede a publicação e é coberta por
 teste. A queda depois do commit ainda pode perder o efeito. Outbox resolve essa
-janela quando entrega confiável é requisito e será aprofundada no C16.
+janela quando entrega confiável é requisito, como aprofundado no
+[C16](../sistemas-distribuidos/c16-idempotencia-entrega-confiavel.md).
 
 ## Anti-Corruption Layer: tradução entre linguagens
 

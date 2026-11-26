@@ -130,6 +130,7 @@ LTS
 Markdown
 MaxBy
 MCP
+mensageria
 mentoria
 Metrics
 Microservice
@@ -328,3 +329,5 @@ slots
 hashes
 manifesto
 SLOWLOG
+evolucao
+librsvg

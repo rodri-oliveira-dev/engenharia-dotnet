@@ -1,7 +1,19 @@
 # Estudos de caso
 
-Sínteses práticas que conectam conceitos já apresentados sem repetir seus
-fundamentos.
+Esta parte integra a obra por problemas observáveis: duplicidade, latência,
+legado, migração e dependências vulneráveis. Os casos não acrescentam uma nova
+camada de padrões; eles obrigam a selecionar, combinar e limitar mecanismos
+apresentados nas partes anteriores.
+
+Cada caso declara seus pré-requisitos e pode ser consultado isoladamente, mas a
+leitura ganha profundidade depois dos capítulos canônicos referenciados. Ao
+concluir o percurso, o leitor deve conseguir separar sintoma de causa, formular
+hipóteses, escolher evidências e registrar uma decisão reversível com riscos
+explícitos.
+
+Os cenários são fictícios e preservam alternativas defensáveis. O encerramento
+da obra, portanto, não oferece respostas universais: demonstra como construir,
+evoluir e operar sistemas por decisões conscientes e verificáveis.
 
 ## Casos publicados
 

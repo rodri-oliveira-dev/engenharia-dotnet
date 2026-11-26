@@ -1,5 +1,6 @@
 /* Estilo fluido: respeita o tamanho da fonte e o tema do leitor. */
 body { line-height: 1.5; }
+.part-intro { font-size: 1.05em; }
 h1, h2, h3, h4, h5, h6 { font-family: sans-serif; line-height: 1.25; }
 p, li { orphans: 2; widows: 2; }
 a { text-decoration: underline; overflow-wrap: break-word; }

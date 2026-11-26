@@ -1,7 +1,21 @@
 # Aplicações e dados
 
-Composição de aplicações .NET, fronteiras HTTP, persistência e concorrência de
-dados.
+Esta parte transforma contratos da linguagem em aplicações que recebem trabalho,
+coordenam dependências e preservam dados. O percurso parte da composição do host
+e das fronteiras HTTP, apresenta as garantias da persistência antes do uso do
+ORM e termina com decisões que combinam concorrência, consistência e capacidade.
+
+Pressupõe principalmente C02 e C05; cada capítulo declara as dependências
+adicionais. C10 aparece antes de C08 e C09 porque SQL, transações, índices e
+isolamento explicam o comportamento que o EF Core apenas intermedeia. Ao final,
+o leitor deve conseguir distinguir contrato HTTP, unidade de trabalho, garantia
+do banco e detalhe do provider.
+
+C36 é um aprofundamento opcional adicionado depois dos demais capítulos. Seu ID
+permanece estável, mas a leitura é recomendada após C17, que desenvolve
+consistência distribuída. Quem seguir o livro linearmente pode retornar a C36
+depois da parte de sistemas distribuídos. A modelagem das regras que esses
+mecanismos sustentam começa em Domínio e arquitetura.
 
 ## Capítulos publicados
 
