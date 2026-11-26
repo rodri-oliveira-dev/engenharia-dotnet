@@ -19,10 +19,28 @@ Todo o conteúdo está em português e pode ser consultado diretamente pelo GitH
 
 ## Livro em PDF e EPUB
 
-O conteúdo também pode ser lido como um livro único, com sumário navegável,
-capítulos e materiais complementares. As edições publicadas ficam nas
-[releases do projeto](https://github.com/rodri-oliveira-dev/engenharia-dotnet/releases).
-Consulte as [instruções de geração e publicação](docs/livro.md).
+**Engenharia .NET: Da linguagem à arquitetura de software** também está
+disponível gratuitamente como livro digital em português. Os dois formatos
+reúnem o mesmo conteúdo editorial, com capítulos, exemplos de código,
+diagramas, sumário navegável e materiais complementares.
+
+### Baixe o livro
+
+| Formato | Experiência de leitura | Download gratuito |
+|---|---|---|
+| PDF | Diagramação fixa, ideal para consulta no computador e impressão. | [Baixar PDF](https://github.com/rodri-oliveira-dev/engenharia-dotnet/releases/download/livro-091c81bc3a62ab274b8b60828bd247be9ef9f5f2/engenharia-dotnet.pdf) |
+| EPUB | Texto adaptável ao tamanho da tela e às preferências de leitura, ideal para celulares, tablets e leitores digitais compatíveis. | [Baixar EPUB](https://github.com/rodri-oliveira-dev/engenharia-dotnet/releases/download/livro-091c81bc3a62ab274b8b60828bd247be9ef9f5f2/engenharia-dotnet.epub) |
+
+Edição de referência: [26/11/2026](https://github.com/rodri-oliveira-dev/engenharia-dotnet/releases/tag/livro-091c81bc3a62ab274b8b60828bd247be9ef9f5f2).
+Consulte o [histórico de edições publicadas](https://github.com/rodri-oliveira-dev/engenharia-dotnet/releases)
+para encontrar novas versões.
+
+O livro é distribuído sob a licença [CC BY-NC 4.0](LICENSE), e os exemplos
+de código mantêm a licença [MIT](LICENSE-CODE). As edições oficiais incluem
+atestação de procedência e somas SHA-256 para verificação de integridade.
+
+Consulte as [instruções de geração e publicação](docs/livro.md) e o
+[guia de verificação de autenticidade](docs/livro.md#autenticidade-e-procedência).
 
 ## Por onde começar
 
