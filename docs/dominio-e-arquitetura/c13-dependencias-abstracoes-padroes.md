@@ -771,6 +771,9 @@ solução nem mede performance.
   serviços e ACL.
 - [C14](c14-cqrs-modelos-orientados-uso.md) aplica separação de modelos sem
   pressupor bancos distintos.
+- [C15](../sistemas-distribuidos/c15-comunicacao-mensageria-resiliente.md) e
+  [C16](../sistemas-distribuidos/c16-idempotencia-entrega-confiavel.md) mostram
+  por que Observer local não substitui mensageria e entrega persistente.
 
 ## Referências
 

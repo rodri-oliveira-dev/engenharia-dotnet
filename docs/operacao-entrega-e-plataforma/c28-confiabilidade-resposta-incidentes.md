@@ -6,7 +6,7 @@
 > objetivos em decisões operacionais e responder a incidentes com mitigação,
 > comunicação e aprendizado verificáveis.
 >
-> **Pré-requisito:** [C27 — Telemetria e diagnóstico distribuído](c27-telemetria-diagnostico-distribuido.md).
+> **Pré-requisitos:** [C27 — Telemetria e diagnóstico distribuído](c27-telemetria-diagnostico-distribuido.md).
 >
 > **Última revisão:** 2026-11-18
 
@@ -276,8 +276,8 @@ o método, não prova comportamento de produção.
   explicita o custo operacional e as falhas parciais de serviços distribuídos.
 - [C20](c20-infraestrutura-como-codigo-drift.md) trata mudanças e reconciliação da
   infraestrutura durante operação normal e emergencial.
-- C29 — Entrega compatível e gestão de risco aprofundará canary, compatibilidade e
-  rollback quando publicado.
+- [C29 — Entrega compatível e gestão de risco](c29-entrega-compativel-risco-pipeline.md)
+  aprofunda canary, compatibilidade e rollback.
 
 ## Referências
 

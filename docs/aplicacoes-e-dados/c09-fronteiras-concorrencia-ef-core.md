@@ -320,8 +320,10 @@ ou unidade de trabalho próprios somente quando expressarem uma regra que
 - [C10](c10-fundamentos-persistencia-sql-nosql.md) trata transações, índices,
   constraints e isolamento.
 - [C11](../dominio-e-arquitetura/c11-entidades-value-objects-agregados.md) trata
-  entidades, agregados e invariantes; C13 tratará dependências e abstrações.
-- C16 tratará idempotência e Outbox em efeitos distribuídos.
+  entidades, agregados e invariantes; [C13](../dominio-e-arquitetura/c13-dependencias-abstracoes-padroes.md)
+  trata dependências e abstrações.
+- [C16](../sistemas-distribuidos/c16-idempotencia-entrega-confiavel.md) trata
+  idempotência e Outbox em efeitos distribuídos.
 
 ## Referências
 
