@@ -18,6 +18,32 @@ consistente no GitHub.
    e registre a decisão na issue ou no PR com o
    [modelo editorial](docs/templates/registro-decisao-editorial.md).
 
+## Ambiente no Visual Studio Code
+
+Abra [`engenharia-dotnet.code-workspace`](engenharia-dotnet.code-workspace) pelo
+menu **File > Open Workspace from File** ou execute, na raiz:
+
+```sh
+code engenharia-dotnet.code-workspace
+```
+
+O workspace recomenda apenas extensões relacionadas às tecnologias usadas pelo
+projeto. A instalação é uma decisão do contribuidor e nenhuma extensão ou task é
+executada automaticamente ao abrir o repositório.
+
+Para as validações principais, instale o SDK definido em [`global.json`](global.json),
+Node.js 22.18 ou superior, Python 3, PowerShell 7 e execute `npm install`. Docker,
+Terraform, Ansible, Pandoc, WeasyPrint, Mermaid CLI e EPUBCheck são necessários
+somente para os laboratórios ou para a publicação que os utilizam. Consulte as
+[instruções do livro](docs/livro.md) para os pré-requisitos completos de PDF e EPUB.
+
+O menu **Terminal > Run Task** oferece restore, build e testes da solução;
+validação de snippets, Markdown, ortografia e links; verificação de segredos;
+auditoria NuGet; geração de PDF e EPUB; e a task **Projeto: validar núcleo local**.
+Essa task consolidada não substitui os jobs de Docker, Redis, Terraform, Ansible
+e publicação executados pelo GitHub Actions. Todas as tasks usam caminhos
+relativos, não publicam artefatos e não fazem deploy, push ou release.
+
 ## Ortografia em português
 
 Os PRs com documentação passam pelo [guia de validação pt-BR](docs/ortografia.md).
@@ -153,6 +179,18 @@ Quatro skills locais aprofundam procedimentos específicos:
 Agentes compatíveis podem carregar essas skills conforme a tarefa.
 Não pressuponha que todas sejam carregadas automaticamente durante
 um review no GitHub. Instruções de IA não substituem CI nem revisão humana.
+
+### Configuração centralizada do CodeRabbit
+
+O arquivo [`.coderabbit.yaml`](.coderabbit.yaml) contém somente um
+`remote_config`. As regras efetivas ficam no template
+[`dotnet-educacional.yaml`](https://github.com/rodri-oliveira-dev/.github/blob/main/coderabbit-templates/dotnet-educacional.yaml),
+selecionado para este repositório pelo
+[`repositories.json`](https://github.com/rodri-oliveira-dev/.github/blob/main/coderabbit-templates/repositories.json).
+Como o redirecionamento substitui integralmente a configuração local, regras de
+review devem ser corrigidas no template central em vez de duplicadas neste
+repositório. Alterações nessa governança exigem validar o YAML remoto contra o
+schema V2 oficial e confirmar o mapeamento antes de revisar seus efeitos no PR.
 
 ## Modelos de pull request
 

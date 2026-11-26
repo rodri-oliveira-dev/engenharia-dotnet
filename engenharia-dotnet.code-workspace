@@ -1,0 +1,231 @@
+{
+  "folders": [
+    {
+      "name": "Engenharia .NET",
+      "path": "."
+    }
+  ],
+  "settings": {
+    "files.encoding": "utf8",
+    "files.eol": "\n",
+    "files.insertFinalNewline": true,
+    "files.trimTrailingWhitespace": true,
+    "files.watcherExclude": {
+      "**/.terraform/**": true,
+      "**/__pycache__/**": true,
+      "**/bin/**": true,
+      "**/node_modules/**": true,
+      "**/obj/**": true,
+      "**/TestResults/**": true,
+      "**/dist/livro/**": true
+    },
+    "search.exclude": {
+      "**/.cspell-mudancas-*/**": true,
+      "**/.terraform/**": true,
+      "**/__pycache__/**": true,
+      "**/bin/**": true,
+      "**/node_modules/**": true,
+      "**/obj/**": true,
+      "**/TestResults/**": true,
+      "**/dist/livro/**": true
+    },
+    "dotnet.defaultSolution": "exemplos/EngenhariaDotnet.slnx",
+    "python.testing.pytestEnabled": false,
+    "python.testing.unittestEnabled": true,
+    "python.testing.unittestArgs": [
+      "-v",
+      "-s",
+      "scripts/tests",
+      "-p",
+      "test_*.py"
+    ],
+    "[markdown]": {
+      "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "ms-dotnettools.csdevkit",
+      "DavidAnson.vscode-markdownlint",
+      "streetsidesoftware.code-spell-checker",
+      "ms-python.python",
+      "ms-vscode.powershell",
+      "redhat.vscode-yaml",
+      "HashiCorp.terraform",
+      "redhat.ansible",
+      "ms-azuretools.vscode-docker",
+      "GitHub.vscode-github-actions",
+      "CodeRabbit.coderabbit-vscode"
+    ]
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": ".NET: restaurar solução",
+        "type": "process",
+        "command": "dotnet",
+        "args": [
+          "restore",
+          "exemplos/EngenhariaDotnet.slnx"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder}"
+        },
+        "problemMatcher": "$msCompile"
+      },
+      {
+        "label": ".NET: compilar solução",
+        "type": "process",
+        "command": "dotnet",
+        "args": [
+          "build",
+          "exemplos/EngenhariaDotnet.slnx",
+          "--configuration",
+          "Release",
+          "--no-restore"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder}"
+        },
+        "dependsOn": ".NET: restaurar solução",
+        "dependsOrder": "sequence",
+        "group": "build",
+        "problemMatcher": "$msCompile"
+      },
+      {
+        "label": ".NET: executar testes",
+        "type": "process",
+        "command": "dotnet",
+        "args": [
+          "test",
+          "exemplos/EngenhariaDotnet.slnx",
+          "--configuration",
+          "Release",
+          "--no-build"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder}"
+        },
+        "dependsOn": ".NET: compilar solução",
+        "dependsOrder": "sequence",
+        "group": "test",
+        "problemMatcher": "$msCompile"
+      },
+      {
+        "label": "C#: validar snippets",
+        "type": "process",
+        "command": "${command:python.interpreterPath}",
+        "args": [
+          "scripts/validar-snippets-csharp.py"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder}"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Documentação: validar Markdown",
+        "type": "shell",
+        "command": "npx",
+        "args": [
+          "--yes",
+          "markdownlint-cli2@0.20.0",
+          "**/*.md",
+          "#node_modules"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder}"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Documentação: validar ortografia das mudanças",
+        "type": "process",
+        "command": "${command:python.interpreterPath}",
+        "args": [
+          "scripts/validar-portugues-pr.py",
+          "--base",
+          "origin/main",
+          "--head",
+          "HEAD"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder}"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Documentação: validar links internos",
+        "type": "process",
+        "command": "pwsh",
+        "args": [
+          "-NoProfile",
+          "-File",
+          "scripts/validar-links-internos.ps1"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder}"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Segurança: verificar segredos",
+        "type": "process",
+        "command": "pwsh",
+        "args": [
+          "-NoProfile",
+          "-File",
+          "scripts/verificar-segredos.ps1"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder}"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Dependências: auditar vulnerabilidades",
+        "type": "process",
+        "command": "pwsh",
+        "args": [
+          "-NoProfile",
+          "-Command",
+          "$report = Join-Path ([IO.Path]::GetTempPath()) ('engenharia-dotnet-nuget-' + [Guid]::NewGuid().ToString('N') + '.json'); try { & dotnet restore 'exemplos/EngenhariaDotnet.slnx' '-p:NuGetAudit=true' '-p:NuGetAuditMode=all' '-p:NuGetAuditLevel=low'; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; & dotnet package list --project 'exemplos/EngenhariaDotnet.slnx' --vulnerable --include-transitive --no-restore --format json --output-version 1 | Set-Content -LiteralPath $report -Encoding utf8; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; & $args[0] 'scripts/verificar-vulnerabilidades-nuget.py' $report; exit $LASTEXITCODE } finally { Remove-Item -LiteralPath $report -Force -ErrorAction SilentlyContinue }",
+          "${command:python.interpreterPath}"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder}"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Livro: gerar PDF e EPUB",
+        "type": "process",
+        "command": "${command:python.interpreterPath}",
+        "args": [
+          "scripts/gerar-livro.py",
+          "--format",
+          "both"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder}"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Projeto: validar núcleo local",
+        "dependsOn": [
+          ".NET: executar testes",
+          "C#: validar snippets",
+          "Documentação: validar Markdown",
+          "Documentação: validar ortografia das mudanças",
+          "Documentação: validar links internos",
+          "Segurança: verificar segredos",
+          "Dependências: auditar vulnerabilidades"
+        ],
+        "dependsOrder": "sequence",
+        "problemMatcher": []
+      }
+    ]
+  }
+}

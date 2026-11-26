@@ -4,7 +4,7 @@
   "private": true,
   "description": "Validação ortográfica pt-BR da documentação Markdown.",
   "scripts": {
-    "ortografia": "cspell lint --config cspell.json --no-progress --no-summary 'docs/**/*.md' README.md CONTRIBUTING.md",
+    "ortografia": "cspell lint --config cspell.json --no-progress --no-summary \"docs/**/*.md\" README.md CONTRIBUTING.md",
     "ortografia:pr": "python scripts/validar-portugues-pr.py"
   },
   "devDependencies": {
