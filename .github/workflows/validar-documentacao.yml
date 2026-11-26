@@ -8,6 +8,7 @@ on:
       - "**/*.csproj"
       - "**/*.props"
       - "**/*.ps1"
+      - "exemplos/c36-cache/**"
       - "**/Dockerfile"
       - ".dockerignore"
       - "**/*.py"
@@ -35,6 +36,7 @@ on:
       - "**/*.csproj"
       - "**/*.props"
       - "**/*.ps1"
+      - "exemplos/c36-cache/**"
       - "**/Dockerfile"
       - ".dockerignore"
       - "**/*.py"
@@ -157,6 +159,22 @@ jobs:
       - name: Construir imagem e executar smoke tests
         shell: pwsh
         run: ./scripts/testar-container-observabilidade.ps1
+
+  laboratorio-redis:
+    name: Validar laboratório Redis C36
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Obter repositório
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Validar publicação condicional no Redis
+        shell: bash
+        run: |
+          bash -n exemplos/c36-cache/validar-redis.sh
+          bash exemplos/c36-cache/validar-redis.sh
 
   snippets-csharp:
     name: Compilar snippets C#
