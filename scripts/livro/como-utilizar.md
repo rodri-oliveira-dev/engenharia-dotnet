@@ -2,6 +2,8 @@
 
 Este livro pode ser lido em sequência ou consultado conforme a necessidade.
 Os capítulos conectam conceitos, exemplos de código e decisões de engenharia.
+Os identificadores `CXX` permanecem estáveis para referência e não determinam,
+por si só, a posição de leitura.
 
 ## Escolha seu percurso
 
@@ -14,6 +16,11 @@ Os capítulos conectam conceitos, exemplos de código e decisões de engenharia.
 
 Os níveis indicados nos capítulos orientam a leitura, não classificam a
 experiência profissional do leitor.
+
+Cada parte abre com seu propósito, conhecimentos necessários, competências e a
+ponte para o percurso seguinte. Quando um aprofundamento depende de uma parte
+posterior, como C25 e C36, a introdução indica o desvio; os pré-requisitos do
+capítulo continuam sendo a fonte canônica para uma consulta não linear.
 
 ## Aprenda com os exemplos
 

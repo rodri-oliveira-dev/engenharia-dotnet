@@ -19,5 +19,9 @@ override.tf.json
 node_modules/
 .cspell-mudancas-*/
 
+# Python: caches locais dos validadores e do gerador do livro.
+__pycache__/
+*.py[cod]
+
 # Arquivo gerado para publicação do livro.
 /dist/livro/

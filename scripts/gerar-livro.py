@@ -5,7 +5,7 @@ import html
 import json
 import logging
 import os
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import re
 import subprocess
 import tempfile
@@ -207,6 +207,21 @@ def editorial_blocks(document):
     return blocks
 
 
+def part_intro_blocks(document):
+    """Seleciona a introdução do índice de área, antes da primeira seção."""
+    blocks = document["blocks"]
+    if not blocks or blocks[0]["t"] != "Header" or blocks[0]["c"][0] != 1:
+        raise ValueError("Índice de área sem título principal.")
+    intro = []
+    for block in blocks[1:]:
+        if block["t"] == "Header":
+            break
+        intro.append(block)
+    if not intro:
+        raise ValueError("Índice de área sem introdução editorial.")
+    return intro
+
+
 def header(level, ident, inline):
     return {"t": "Header", "c": [level, [ident, ["part"], []], inline]}
 
@@ -325,6 +340,11 @@ def prepare(root, directory, commit, release_history=None):
     assets = []
     for i, (title, group) in enumerate(areas + [(text_inline("Apêndices"), appendices)], 1):
         blocks.append(header(1, f"parte-{i}", title))
+        if i <= len(areas):
+            index = group[0].parent / "indice.md"
+            intro = part_intro_blocks(parse(index))
+            converted = convert(intro, root, index, maps, commit, directory, assets)
+            blocks.append({"t": "Div", "c": [["", ["part-intro"], []], converted]})
         for path in group:
             print(f"Preparando {path.relative_to(root)}", flush=True)
             blocks.extend(convert(editorial_blocks(documents[path]), root, path, maps,
@@ -483,7 +503,8 @@ def check_epub_structure(path, expected):
         anchors = set()
         for item in manifest:
             if item.get("media-type") == "application/xhtml+xml":
-                name = str(Path(opf_path).parent / unquote(item.attrib["href"]))
+                name = str(PurePosixPath(opf_path).parent /
+                           unquote(item.attrib["href"]))
                 page = ET.fromstring(archive.read(name))
                 anchors.update(e.get("id") for e in page.iter() if e.get("id"))
         missing = set(expected) - anchors
@@ -509,7 +530,8 @@ def reorder_epub_nav(path):
             for item in items:
                 if item.get("media-type") != "application/xhtml+xml":
                     continue
-                name = str(Path(opf_path).parent / unquote(item.attrib["href"]))
+                name = str(PurePosixPath(opf_path).parent /
+                           unquote(item.attrib["href"]))
                 page = ET.fromstring(source.read(name))
                 for node in page.iter():
                     ident = node.get("id")
