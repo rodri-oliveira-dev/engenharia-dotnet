@@ -149,7 +149,7 @@ A separação de responsabilidades ficou documentada:
 - Skill validada pelo `quick_validate.py` do criador de skills.
 - 18 testes do gerador do livro aprovados com Pandoc portátil 3.14.
 - Markdownlint 0.20.0: 97 arquivos, nenhuma ocorrência.
-- Links internos: 719 destinos, nenhuma falha.
+- Links internos: 718 destinos, nenhuma falha.
 - Verificação de segredos: nenhuma ocorrência.
 - Validador ortográfico: 724 linhas novas em 33 arquivos, nenhuma ocorrência;
   11 testes do seletor aprovados.

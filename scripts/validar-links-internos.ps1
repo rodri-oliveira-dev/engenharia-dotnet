@@ -1,12 +1,16 @@
 $ErrorActionPreference = "Stop"
 
 $raiz = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
-$caminhos = & git -C $raiz ls-files --cached --others --exclude-standard -- "*.md"
+$saida = & git -C $raiz ls-files -z --cached --others --exclude-standard -- "*.md"
 if ($LASTEXITCODE -ne 0) {
     throw "Não foi possível listar os arquivos Markdown pelo Git."
 }
+$caminhos = (($saida -join "") -split "`0") | Where-Object { $_ }
 $arquivos = $caminhos | ForEach-Object {
-    Get-Item -LiteralPath (Join-Path $raiz $_)
+    $caminho = Join-Path $raiz $_
+    if (Test-Path -LiteralPath $caminho -PathType Leaf) {
+        Get-Item -LiteralPath $caminho
+    }
 }
 $falhas = [System.Collections.Generic.List[string]]::new()
 $verificados = 0

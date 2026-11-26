@@ -35,7 +35,7 @@ Issue relacionada: <!-- #numero ou "Não há" -->
 <!-- Inclua efeitos sobre capítulos, índices, dependências, CI e leitores. Escreva "Nenhum" quando não houver. -->
 
 Para novo capítulo, ampliação substancial ou mudança estrutural, inclua o
-[registro de decisão editorial](../docs/templates/registro-decisao-editorial.md)
+[registro de decisão editorial](https://github.com/rodri-oliveira-dev/engenharia-dotnet/blob/main/docs/templates/registro-decisao-editorial.md)
 na issue ou na descrição do PR.
 
 ## Checklist

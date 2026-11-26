@@ -588,7 +588,7 @@ operacional revisável, não uma constante universal.
   aplica thread safety aos lifetimes; [C07 — APIs HTTP e integrações resilientes](../aplicacoes-e-dados/c07-apis-http-integracoes-resilientes.md)
   aplica cancelamento a HTTP; [C15](../sistemas-distribuidos/c15-comunicacao-mensageria-resiliente.md)
   trata filas externas e entrega; [C32](../estudos-de-caso/c32-latencia-apos-deploy.md)
-  investiga backlog operacional.
+  investiga aumento de latência após deploy.
 
 ## Referências
 
