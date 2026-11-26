@@ -1,7 +1,19 @@
 # Sistemas distribuídos
 
-Comunicação, entrega confiável, consistência e evolução de limites entre
-serviços.
+Distribuir um sistema troca chamadas locais e transações únicas por comunicação,
+entrega repetida, consistência temporal e operação de vários componentes. Esta
+parte acompanha essa mudança em ordem: primeiro o transporte e seus modos de
+falha, depois a entrega confiável, a coordenação de processos e, por fim, a
+decisão econômica de criar ou extrair limites de serviço.
+
+Pressupõe contratos HTTP, persistência e limites de domínio, especialmente C07,
+C10 e C12–C13. Ao concluir o percurso, o leitor deve conseguir modelar retries,
+duplicidade, Outbox, compensações e migração incremental sem prometer garantias
+que a rede não oferece.
+
+As falhas parciais introduzidas aqui criam a necessidade de evidência, proteção
+e operação tratada nas duas partes seguintes. C17 também fornece o contexto de
+consistência recomendado antes do aprofundamento opcional C36.
 
 ## Capítulos publicados
 

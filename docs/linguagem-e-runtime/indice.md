@@ -1,6 +1,20 @@
 # Linguagem e runtime
 
-Base conceitual para escrever código C# correto, previsível e eficiente.
+Esta parte estabelece a semântica sobre a qual o restante da obra raciocina:
+tipos, ausência, coleções, execução, memória e concorrência. O objetivo não é
+colecionar recursos da linguagem, mas compreender contratos que permanecem
+válidos quando o código passa a atender requisições, persistir dados e operar sob
+carga.
+
+Não há pré-requisito obrigatório. Ao concluir o percurso, o leitor deve conseguir
+explicar identidade e igualdade, representar falhas, reconhecer execução
+diferida, controlar trabalho concorrente e medir custos do runtime. C05 antecede
+C04 na leitura porque concorrência e assincronismo são necessárias em várias
+partes da obra, enquanto performance exige uma base mais ampla e evidência.
+
+Esses fundamentos reaparecem nas fronteiras HTTP e de dados da próxima parte.
+Quem consultar um capítulo isoladamente pode seguir apenas os pré-requisitos
+indicados nele.
 
 ## Capítulos publicados
 

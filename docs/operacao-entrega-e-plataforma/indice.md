@@ -1,7 +1,19 @@
 # Operação, entrega e plataforma
 
-Diagnóstico, confiabilidade, evolução segura e gestão declarativa de
-infraestrutura.
+Esta parte acompanha o sistema depois que ele encontra produção. Sinais
+observáveis sustentam objetivos de confiabilidade e resposta a incidentes; essas
+evidências orientam exposição, rollback e evolução de contratos; por fim, a
+infraestrutura passa a ser tratada como estado versionado e reconciliável.
+
+Pressupõe aplicações integradas, modos de falha distribuídos, testes e segurança.
+Ao concluir o percurso, o leitor deve conseguir ligar telemetria a decisões,
+definir objetivos acionáveis, reduzir risco de entrega e controlar drift sem
+confundir automação com ausência de responsabilidade operacional.
+
+C20 tem identificador anterior porque foi planejado em outra fase, mas encerra
+a leitura desta parte: sua aplicação depende das decisões de documentação e
+entrega de C19 e C29. C27 também completa o contexto necessário para retornar ao
+aprofundamento C25. A governança dessas decisões conduz à prática profissional.
 
 ## Capítulos publicados
 
